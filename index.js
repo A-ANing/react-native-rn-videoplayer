@@ -184,13 +184,16 @@ class VideoPlayer extends React.Component {
     changeAllBox = () => {
         Platform.OS === "android" && NativeModules.HideBottomNa.hide();
         Orientation.lockToLandscape()
-
+        this.props.onWindowChange&&this.props.onWindowChange("full")
     }
     //小屏
     changeSmallBox = () => {
-
+        
         Orientation.lockToPortrait()
+        this.props.onWindowChange&&this.props.onWindowChange("small")
         Platform.OS === "android" && NativeModules.HideBottomNa.show();
+    
+    
     }
 
     componentDidMount() {
@@ -693,7 +696,7 @@ class VideoPlayer extends React.Component {
                         activeOpacity={1}
                     >
                         <Video
-
+                            
                             source={{ uri: this.props.url }}
                             ref={(ref) => {
                                 this.player = ref
