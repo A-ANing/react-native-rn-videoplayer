@@ -3,10 +3,17 @@
 
 ## Getting started
 
-`$ npm install react-native-videoplayer --save`
+`$ npm install react-native-rn-videoplayer react-native-linear-gradient@2.5.6 react-native-orientation@3.1.3 react-native-svg@9.5.1 react-native-system-setting@1.7.2 react-native-video@4.4.4 --save`
 
 ### Mostly automatic installation
+import com.ngxu.videoplayer.RNVideoplayerPackage;
 
+new RNVideoplayerPackage(),
+
+implementation project(':react-native-rn-videoplayer')
+
+include ':react-native-rn-videoplayer'
+project(':react-native-rn-videoplayer').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-rn-videoplayer/android')
 `$ react-native link react-native-videoplayer`
 
 ### Manual installation

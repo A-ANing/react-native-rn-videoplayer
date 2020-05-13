@@ -59,7 +59,7 @@ class VideoPlayer extends React.Component {
                 goSpeedTime: "00:00",//想要拖动改变的进度时常
                 smallP: true,//当前是否是小屏
                 statusBarH: 44,
-
+                isEnd:false,//是否播放完了
                 dotStart: false,//是否按住了进度条上的点
                 showVolume: false,
                 showBrightness: false,
@@ -319,10 +319,10 @@ class VideoPlayer extends React.Component {
                 this.recordHandeY = []; this.recordHandeX = [];
 
                 // 开始手势操作。给用户一些视觉反馈，让他们知道发生了什么事情！
-                this.startX = evt.nativeEvent.locationX;
+                this.startX = evt.nativeEvent.pageX;
 
-                this.startY = evt.nativeEvent.locationY;
-
+                this.startY = evt.nativeEvent.pageY;
+                console.log("startY",this.startY)
                 //获取当前音量
                 SystemSetting.getVolume().then((volume) => {
                     this.volume = volume
@@ -345,14 +345,14 @@ class VideoPlayer extends React.Component {
             onPanResponderMove: (evt, gestureState) => {
 
                 if (this.recordHandeY.length < 10) {
-                    this.recordHandeY.push(evt.nativeEvent.locationY)
+                    this.recordHandeY.push(evt.nativeEvent.pageY)
 
-                    this.recordHandeX.push(evt.nativeEvent.locationX)
+                    this.recordHandeX.push(evt.nativeEvent.pageX)
                 }
-
-                this.moveYData = this.startY - evt.nativeEvent.locationY
+                console.log("locationY",evt.nativeEvent.pageY)
+                this.moveYData = this.startY - evt.nativeEvent.pageY
                 // console.log("moveYData",)
-                this.moveXData = this.startX - evt.nativeEvent.locationX
+                this.moveXData = this.startX - evt.nativeEvent.pageX
                 this.soundDataY = (this.startY + 30 - gestureState.moveY) / (this.state.height)
                 this.BrightnessY = (this.startY + 30 - gestureState.moveY) / (this.state.height)
 
@@ -555,8 +555,10 @@ class VideoPlayer extends React.Component {
                 } else {
                     this.player.seek(this.state.duration * speedB)
                 }
-
-                this.setState({ dotStart: false })
+               
+                    this.setState({ dotStart: false })
+              
+                
             },
             onPanResponderTerminate: (evt, gestureState) => {
                 this.activateAutoHide()//激活自动隐藏
@@ -658,14 +660,14 @@ class VideoPlayer extends React.Component {
 
     //播放完重制播放进度等状态
     reVideo = () => {
-        this.setState({ showConts: true, opacity: 1, paused: true, nowTime: "00:00" }, () => {
-            this.player.seek(0)
-            this.refs.speed.setNativeProps({
+        this.setState({ showConts: true, opacity: 1, paused: true,isEnd:true }, () => {
+            // this.player.seek(0)
+            // this.refs.speed.setNativeProps({
 
-                style: {
-                    width: 0
-                }
-            })
+            //     style: {
+            //         width: 0
+            //     }
+            // })
         })
 
 
@@ -691,7 +693,7 @@ class VideoPlayer extends React.Component {
         const { allTime, nowTime, goSpeedTime, LinearGradientHeight, showOpenVip, topContsTop, bottomContsBottom } = this.state
         return (
             <View>
-                <View>
+                <View >
                     <View  {...this._panResponder.panHandlers} style={{ height: this.state.height, width: this.state.width }}
                         activeOpacity={1}
                     >
@@ -706,6 +708,7 @@ class VideoPlayer extends React.Component {
                                 type: "title",
                                 value: "English Subtitles"
                             }}
+                            onSeek={()=>{this.setState({paused:false,isEnd:false})}}
                             posterResizeMode={"cover"}//封面大小
                             playWhenInactive={true}//确定当通知或控制中心在视频前面时，媒体是否应继续播放。
                             paused={this.state.paused}//暂停
@@ -782,7 +785,20 @@ class VideoPlayer extends React.Component {
                                 {
                                     this.state.paused
                                         ?
-                                        <TouchableOpacity activeOpacity={1} style={{ bottom: 0, left: 5, padding: 10, zIndex: 999, }} onPress={() => { !showOpenVip && this.setState({ paused: false }) }}>
+                                        <TouchableOpacity activeOpacity={1} style={{ bottom: 0, left: 5, padding: 10, zIndex: 999, }} onPress={() => {if(!showOpenVip){
+                                            
+                                            if(this.state.isEnd){
+                                                this.player.seek(0)
+                                                setTimeout(()=>{
+                                                    this.setState({ paused: false,isEnd:false });
+                                                    
+                                                },300)
+                                               
+                                            }else{
+                                                this.setState({ paused: false });
+                                            }
+                                         
+                                            }}}>
 
                                             <SvgVideoPlay height="20" width="20" />
                                         </TouchableOpacity>
