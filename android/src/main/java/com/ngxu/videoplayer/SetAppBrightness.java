@@ -12,7 +12,7 @@ import android.view.Window;
 public class SetAppBrightness {
 
 private static WeakReference<Activity> mActivity;
-public static void goSetAppBrightness(Activity activity, float brightnessPercent)
+public static void goSetAppBrightness(Activity activity, final float brightnessPercent)
 {
 
         mActivity=new WeakReference<Activity>(activity);
@@ -27,7 +27,7 @@ public static void goSetAppBrightness(Activity activity, float brightnessPercent
         if (activity == null) return;
 
         final Activity _activity = activity;
-
+       
         _activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {

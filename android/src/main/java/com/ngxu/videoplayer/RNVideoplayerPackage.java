@@ -10,16 +10,22 @@ import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
 import com.facebook.react.bridge.JavaScriptModule;
+import java.util.ArrayList;
 public class RNVideoplayerPackage implements ReactPackage {
+   
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
-      return Arrays.<NativeModule>asList(
-        new RNVideoplayerModule(reactContext),
-        new AnExampleReactPackage(),
-        new AnBrightness()
-        
-        );
+        List<NativeModule> modules = new ArrayList<>();
+
+        modules.add(
+          new AppBrightness(reactContext)
+          );
+modules.add(
+          new HideBottomNa(reactContext)
+          );
+        return modules;
     }
+
 
     // Deprecated from RN 0.47
     public List<Class<? extends JavaScriptModule>> createJSModules() {
