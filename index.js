@@ -513,7 +513,9 @@ class VideoPlayer extends React.Component {
                 // this.props.navigation.setParams({ enableGestures: false });
                 if (this.state.showOpenVip) return//需要权限时停止不允许滑动进度条
                 
-               
+                this.refs.dotspeed.setNativeProps({
+                    style: { borderColor: "rgba(255,255,255,0.5)" }
+                })
 
                 clearTimeout(this.TimeHideConts)//拖动进度条时禁止隐藏控件
 

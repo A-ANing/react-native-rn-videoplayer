@@ -1,30 +1,6 @@
 
 # react-native-rn-videoplayer
 
-# 使用方法
-`import VideoPlayer,{NgxuSetting} from 'react-native-rn-videoplayer'`
-##  你可以不使用NgxuSetting， NgxuSetting是改变音量 显示隐藏Android底部虚拟按键 以及改变屏幕亮度的方法，如果你只是为了播放视频你完全可以不使用。
-`import VideoPlayer from 'react-native-rn-videoplayer'`
-
-# 显示或者隐藏安卓底部虚拟按键
-```javascript
-NgxuSetting.hideAndroidBottom()
-NgxuSetting.showAndroidBottom()
-```
-
-# 获取手机系统亮度
-```javascript
-NgxuSetting.getBrightness((e)=>{consoloe.log(e)})
-```
-
-
-
-# 改变ios系统亮度 android 当前app亮度
- - android仅仅只改变当前active亮度，不会修改系统亮度，修改系统亮度是非常麻烦的事情，需要用户手动打开手机设置，app权限设置，手动打开“允许修改系统设置“的高级权限
- - ios则是改变系统亮度你可以
- ```javascript
-    NgxuSetting.SetBrightness(1)//0-1之间
-  ```
 ## Getting started
 
 1. 
@@ -77,7 +53,9 @@ public class MainActivity extends ReactActivity {
 #### iOS
 
 No need to do anything, because no ios native code is used
+这些功能ios不需要用到原生方法，至少我这个react-native-rn-videoplayer不需要link，但是react-native-videoplayerreact-native-linear-gradient react-native-orientation react-native-svg react-native-system-setting react-native-video这些库你需要自行查看，如果link好这些库，ios是没问题的。
 
+ios我目前不知道效果怎么样，前段时间我在ios上运行过，很完美，只是现在我优化添加了一些功能，只在Android上调试了，所以我也不知道ios效果怎么样，等我有时间了再调试下ios。
 
 
 
@@ -117,3 +95,29 @@ Example:
 <VideoPlayer ref={(ref)=>this.player=ref}/>
 this.player.changeWindows(true); // 全屏
 ```
+
+
+
+# 暴露方法
+`import {NgxuSetting} from 'react-native-rn-videoplayer'`
+##  你可以不使用NgxuSetting， NgxuSetting是我暴露除了自己封装以及其他库的原生方法如改变音量 显示隐藏Android底部虚拟按键 以及改变屏幕亮度的方法，如果你在其他地方需要用到你可以引用进来。
+
+# 显示或者隐藏安卓底部虚拟按键
+```javascript
+NgxuSetting.hideAndroidBottom()
+NgxuSetting.showAndroidBottom()
+```
+
+# 获取手机系统亮度
+```javascript
+NgxuSetting.getBrightness((e)=>{consoloe.log(e)})
+```
+
+
+
+# 改变ios系统亮度 android 当前app亮度
+ - android仅仅只改变当前active亮度，不会修改系统亮度，修改系统亮度是非常麻烦的事情，需要用户手动打开手机设置，app权限设置，手动打开“允许修改系统设置“的高级权限
+ - ios则是改变系统亮度你可以
+ ```javascript
+    NgxuSetting.SetBrightness(1)//0-1之间
+  ```
