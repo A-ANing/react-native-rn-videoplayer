@@ -6,7 +6,7 @@
 
 
 - gif预览Android
-![demo_android.gif](https://upload-images.jianshu.io/upload_images/13322668-74619523474b0bcf.gif?imageMogr2/auto-orient/strip)  
+![demo_android.gif](https://github.com/ngxu/ngxu.github.io/blob/master/img/VEditor_20200514220024.gif)  
 
 ## Getting started
 
