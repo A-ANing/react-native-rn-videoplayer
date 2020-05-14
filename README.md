@@ -1,19 +1,13 @@
 
-# react-native-videoplayer
+# react-native-rn-videoplayer
 
 ## Getting started
 
 `$ npm install react-native-rn-videoplayer react-native-linear-gradient@2.5.6 react-native-orientation@3.1.3 react-native-svg@9.5.1 react-native-system-setting@1.7.2 react-native-video@4.4.4 --save`
 
-### Mostly automatic installation
-import com.ngxu.videoplayer.RNVideoplayerPackage;
+### Anderiod add manully MainActivity.java
 
-new RNVideoplayerPackage(),
 
-implementation project(':react-native-rn-videoplayer')
-
-include ':react-native-rn-videoplayer'
-project(':react-native-rn-videoplayer').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-rn-videoplayer/android')
 `$ react-native link react-native-videoplayer`
 
 ### Manual installation
@@ -21,32 +15,51 @@ project(':react-native-rn-videoplayer').projectDir = new File(rootProject.projec
 
 #### iOS
 
-1. In XCode, in the project navigator, right click `Libraries` ➜ `Add Files to [your project's name]`
-2. Go to `node_modules` ➜ `react-native-videoplayer` and add `RNVideoplayer.xcodeproj`
-3. In XCode, in the project navigator, select your project. Add `libRNVideoplayer.a` to your project's `Build Phases` ➜ `Link Binary With Libraries`
-4. Run your project (`Cmd+R`)<
+No need to do anything, because no ios native code is used
 
 #### Android
 
 1. Open up `android/app/src/main/java/[...]/MainActivity.java`
-  - Add `import com.ngxu.videoplayer.RNVideoplayerPackage;` to the imports at the top of the file
-  - Add `new RNVideoplayerPackage()` to the list returned by the `getPackages()` method
+
+- Add 
+  
+```java
+import android.content.Intent; // <--- import`
+import android.content.res.Configuration; // <--- import
+public class MainActivity extends ReactActivity {
+
+   ...
+         
+ @Override
+      public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        Intent intent = new Intent("onConfigurationChanged");
+        intent.putExtra("newConfig", newConfig);
+        this.sendBroadcast(intent);
+    }
+    ...
+}
+```
+  
 2. Append the following lines to `android/settings.gradle`:
-  	```
-  	include ':react-native-videoplayer'
-  	project(':react-native-videoplayer').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-videoplayer/android')
+  	``` javascript
+  	include ':react-native-rn-videoplayer'
+  	project(':react-native-rn-videoplayer').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-rn-videoplayer/android')
   	```
 3. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
   	```
-      compile project(':react-native-videoplayer')
+      compile project(':react-native-rn-videoplayer')
   	```
 
+4. Open up `android/app/src/main/java/[...]/MainApplication.java`
 
+	- Add `import com.ngxu.videoplayer.RNVideoplayerPackage;`
+  - Add `new RNVideoplayerPackage()` to the list returned by the `getPackages()` method
 ## Usage
 ```javascript
-import RNVideoplayer from 'react-native-videoplayer';
+import Videoplayer from 'react-native-videoplayer';
 
 // TODO: What to do with the module?
-RNVideoplayer;
+Videoplayer;
 ```
   
