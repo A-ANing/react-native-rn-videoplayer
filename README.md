@@ -9,9 +9,8 @@
 # 显示或者隐藏安卓底部虚拟按键
 ```javascript
     NgxuSetting.hideAndroidBottom()
-	
-	NgxuSetting.showAndroidBottom()
-	```
+    NgxuSetting.showAndroidBottom()
+```
 
 # 获取手机系统亮度
 ```javascript
@@ -89,26 +88,25 @@ import Videoplayer from 'react-native-videoplayer';
 <VideoPlayer
 url={"https://xxxxx.mp4"}
 ref={(ref)=>this.player=ref}/>
-// TODO: What to do with the module?
-Videoplayer;
 ```
-url 视频地址
-onSmallBack 当视频是小窗口时 点击返回按钮的回调 可以在此添加返回上个页面的功能  
-onStore 点击右上角收藏按钮的回调
-onMoreFun 点击右上角更多按钮的回调
-onWindowChange 窗口改变的回调 (e)=>{} e:"full"大 "small"小
+# api
+- url 视频地址
+- onSmallBack 当视频是小窗口时 点击返回按钮的回调 可以在此添加返回上个页面的功能  
+- onStore 点击右上角收藏按钮的回调
+- onMoreFun 点击右上角更多按钮的回调
+- onWindowChange 窗口改变的回调 (e)=>{} e:"full"大 "small"小
 
 
-onLoad 视频加载成功可以开始播放的回调 继承react-native-veideo
-onSeek 继承react-native-video的onSeek
-onEnd  继承react-native-video的onSeek
-onBuffer 继承react-native-video的onBuffer
-..... 继承全部的react-native-video的方法
+- onLoad 视频加载成功可以开始播放的回调 继承react-native-veideo
+- onSeek 继承react-native-video的onSeek
+- onEnd  继承react-native-video的onSeek
+- onBuffer 继承react-native-video的onBuffer
+- ..... 继承全部的react-native-video的方法
 
-- 自己的方法
-# changeWindows() 切换全屏或者小屏
+# 自己的方法
+- changeWindows() 切换全屏或者小屏
 
-changeWindows(boolean)  true 全屏， false 小屏
+- changeWindows(boolean)  true 全屏， false 小屏
 
 Example:
 ```javascript
