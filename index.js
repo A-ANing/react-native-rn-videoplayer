@@ -1,6 +1,3 @@
-/**
- * 首页顶部导航
- */
 import React, { Component } from 'react';
 import {
     Text,
