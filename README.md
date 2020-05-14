@@ -6,6 +6,7 @@
 ### [简书地址](https://www.jianshu.com/p/a6f09d2ab09c)
 
 - gif预览Android
+
 ![demo_android.gif](https://github.com/ngxu/ngxu.github.io/blob/master/img/VEditor_20200514220024.gif)  
 
 ## Getting started
