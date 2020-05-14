@@ -17,6 +17,7 @@ import {
     SafeAreaView,
     Platform
 } from 'react-native';
+
 import SystemSetting from 'react-native-system-setting'
 import Orientation from 'react-native-orientation';
 import LinearGradient from 'react-native-linear-gradient';
@@ -24,10 +25,9 @@ import Video from 'react-native-video';
 import { SvgVideoLoading, SvgVideoBrightness, SvgVideoSetting, SvgVideoNoSound, SvgVideoStop, SvgVideoPlay, SvgVideoAllBox, SvgVideoSmallBox, SvgVideoBack, SvgVideoScang, SvgVideoSound } from './component/svg'
 const { height, width } = Dimensions.get('screen');
 
-
-
 class VideoPlayer extends React.Component {
 
+    // VideoPlayer.changeWindows=this.changeWindows.bind(this)
     constructor(props) {
         super(props)
         this.noVipSecond = this.props.noVipSecond || 5//没有vip可观看的分钟数
@@ -59,7 +59,7 @@ class VideoPlayer extends React.Component {
                 goSpeedTime: "00:00",//想要拖动改变的进度时常
                 smallP: true,//当前是否是小屏
                 statusBarH: 44,
-                isEnd:false,//是否播放完了
+                isEnd: false,//是否播放完了
                 dotStart: false,//是否按住了进度条上的点
                 showVolume: false,
                 showBrightness: false,
@@ -77,7 +77,9 @@ class VideoPlayer extends React.Component {
         this.goLogin = this.goLogin.bind(this)
         this.animatedonBuffer = this.animatedonBuffer.bind(this)
 
+
     }
+
     _press = (name) => {
 
         this.props.navigation.navigate('Detail', { transition: 'default', name: name })
@@ -118,6 +120,7 @@ class VideoPlayer extends React.Component {
                 outputRange: [0, height],
                 extrapolate: 'clamp'
             })
+            this.props.navigation && this.props.navigation.setParams({ enableGestures: false });
             this.setState({
                 width: height + 0,//StatusBar.currentHeight
                 height: width,
@@ -150,6 +153,8 @@ class VideoPlayer extends React.Component {
                 outputRange: [0, width],
                 extrapolate: 'clamp'
             })
+            this.props.navigation && this.props.navigation.setParams({ enableGestures: true });
+
             this.setState({
                 width: width,
                 height: width * 210 / 375,
@@ -184,16 +189,16 @@ class VideoPlayer extends React.Component {
     changeAllBox = () => {
         Platform.OS === "android" && NativeModules.HideBottomNa.hide();
         Orientation.lockToLandscape()
-        this.props.onWindowChange&&this.props.onWindowChange("full")
+        this.props.onWindowChange && this.props.onWindowChange("full")
     }
     //小屏
     changeSmallBox = () => {
-        
+
         Orientation.lockToPortrait()
-        this.props.onWindowChange&&this.props.onWindowChange("small")
+        this.props.onWindowChange && this.props.onWindowChange("small")
         Platform.OS === "android" && NativeModules.HideBottomNa.show();
-    
-    
+
+
     }
 
     componentDidMount() {
@@ -207,6 +212,7 @@ class VideoPlayer extends React.Component {
 
     //控制loading加载器的显示隐藏
     animatedonBuffer(event) {
+        this.props.onBuffer && this.props.onBuffer(event)
         console.log("在加载", event)
         if (event.isBuffering) {
             this.setState({
@@ -222,7 +228,7 @@ class VideoPlayer extends React.Component {
 
     //播放进度  包含进度条  以及当前播放时间
     animatedDot = (e) => {
-
+        this.props.onProgress && this.props.onProgress(e)
 
         //console.log("进度", parseInt(e.currentTime))
         if (!this.state.showOpenVip && this.props.VIPCONTS) {
@@ -322,7 +328,7 @@ class VideoPlayer extends React.Component {
                 this.startX = evt.nativeEvent.pageX;
 
                 this.startY = evt.nativeEvent.pageY;
-                console.log("startY",this.startY)
+                console.log("startY", this.startY)
                 //获取当前音量
                 SystemSetting.getVolume().then((volume) => {
                     this.volume = volume
@@ -349,7 +355,7 @@ class VideoPlayer extends React.Component {
 
                     this.recordHandeX.push(evt.nativeEvent.pageX)
                 }
-                console.log("locationY",evt.nativeEvent.pageY)
+                console.log("locationY", evt.nativeEvent.pageY)
                 this.moveYData = this.startY - evt.nativeEvent.pageY
                 // console.log("moveYData",)
                 this.moveXData = this.startX - evt.nativeEvent.pageX
@@ -358,7 +364,7 @@ class VideoPlayer extends React.Component {
 
                 if (this.recordHandeY.length === 10) {
 
-                    
+
                     if (Math.abs(this.recordHandeY[9] - this.recordHandeY[0]) > Math.abs(this.recordHandeX[9] - this.recordHandeX[0])) {
                         //console.log("上下滑动")
                         if (Math.abs(this.moveYData) > 5) {
@@ -422,7 +428,7 @@ class VideoPlayer extends React.Component {
                                         })
                                     }
                                     if (this.brightnessData >= 0 && this.brightnessData <= 1) {
-                                        
+
                                         Platform.OS === "android" ?
                                             NativeModules.AppBrightness.setAppBrightness(this.brightnessData)
                                             :
@@ -508,7 +514,7 @@ class VideoPlayer extends React.Component {
                 if (this.state.showOpenVip) return//需要权限时停止不允许滑动进度条
 
                 this.refs.dotspeed.setNativeProps({
-                    style:{borderColor:"rgba(255,255,255,.5)"}
+                    style: { borderColor: "rgba(255,255,255,.5)" }
                 })
 
                 clearTimeout(this.TimeHideConts)//拖动进度条时禁止隐藏控件
@@ -550,7 +556,7 @@ class VideoPlayer extends React.Component {
                 // this.props.navigation.setParams({ enableGestures: true });
                 if (this.state.showOpenVip) return//需要权限时停止不允许滑动进度条
                 this.refs.dotspeed.setNativeProps({
-                    style:{borderColor:"rgba(255,255,255,0)"}
+                    style: { borderColor: "rgba(255,255,255,0)" }
                 })
                 this.activateAutoHide()//手指离开后激活自动隐藏
 
@@ -560,14 +566,14 @@ class VideoPlayer extends React.Component {
                 } else {
                     this.player.seek(this.state.duration * speedB)
                 }
-               
-                    this.setState({ dotStart: false })
-              
-                
+
+                this.setState({ dotStart: false })
+
+
             },
             onPanResponderTerminate: (evt, gestureState) => {
                 this.refs.dotspeed.setNativeProps({
-                    style:{borderColor:"rgba(255,255,255,0)"}
+                    style: { borderColor: "rgba(255,255,255,0)" }
                 })
                 this.activateAutoHide()//激活自动隐藏
                 return true;
@@ -639,6 +645,7 @@ class VideoPlayer extends React.Component {
 
 
     onLoad = (data) => {
+        this.props.onLoad && this.props.onLoad(data)
         //console.log("总", this.formatSeconds(data.duration))
         //视频总长度
         this.setState({ duration: data.duration, allTime: this.formatSeconds(data.duration) });
@@ -668,7 +675,9 @@ class VideoPlayer extends React.Component {
 
     //播放完重制播放进度等状态
     reVideo = () => {
-        this.setState({ showConts: true, opacity: 1, paused: true,isEnd:true }, () => {
+        this.props.onEnd && this.props.onEnd()
+
+        !this.props.repeat && this.setState({ showConts: true, opacity: 1, paused: true, isEnd: true }, () => {
             // this.player.seek(0)
             // this.refs.speed.setNativeProps({
 
@@ -691,6 +700,18 @@ class VideoPlayer extends React.Component {
             useNativeDriver: true
         }).start(() => this.spin())
     }
+
+    videoError = (e) => {
+        this.props.onError && this.props.onError(e)
+    }
+    changeWindows = (e) => {
+        if (e) {
+            this.changeAllBox()
+        } else {
+            this.changeSmallBox()
+        }
+    }
+
     render() {
         console.log("调用次数")
         const spin = this.spinValue.interpolate({
@@ -706,29 +727,31 @@ class VideoPlayer extends React.Component {
                         activeOpacity={1}
                     >
                         <Video
-                            
                             source={{ uri: this.props.url }}
                             ref={(ref) => {
                                 this.player = ref
                             }}
                             {...this.props}
-                            selectedTextTrack={{
-                                type: "title",
-                                value: "English Subtitles"
+                            repeat={this.props.repeat ? this.props.repeat : false}
+                            onSeek={(e) => {
+                                this.props.onSeek && this.props.onSeek(e)
+                                this.setState({ paused: false, isEnd: false })
                             }}
-                            onSeek={()=>{this.setState({paused:false,isEnd:false})}}
                             posterResizeMode={"cover"}//封面大小
                             playWhenInactive={true}//确定当通知或控制中心在视频前面时，媒体是否应继续播放。
-                            paused={this.state.paused}//暂停
+                            paused={this.props.paused ? this.props.paused : this.state.paused}//暂停
                             onLoad={this.onLoad}
                             onEnd={this.reVideo}
                             resizeMode={"contain"}
-                            onReadyForDisplay={() => { this.setState({ showLoading: false }) }}//每次需要缓冲，正要播放时调用，可以隐藏loading
+                            onReadyForDisplay={(e) => {
+                                this.props.onReadyForDisplay && this.props.onReadyForDisplay(e)
+                                this.setState({ showLoading: false })
+                            }}//每次需要缓冲，正要播放时调用，可以隐藏loading
                             controls={false}
                             onProgress={this.animatedDot}                              // Store reference
                             onBuffer={(e) => this.animatedonBuffer(e)}                // Callback when remote video is buffering
                             onError={this.videoError}
-                            width={this.state.width}
+                            width={this.props.width ? this.props.width : this.state.width}
                             // Callback when video cannot be loaded
                             style={{ height: this.state.height, backgroundColor: "#000000" }} />
 
@@ -743,16 +766,26 @@ class VideoPlayer extends React.Component {
                                 {/* 返回键 */}
                                 <TouchableOpacity style={{ position: "absolute", top: topContsTop, left: 5, padding: 10, zIndex: 999 }}
                                     //如果是全屏 点击返回键是切换到小屏  反之返回上个页面
-                                    onPress={() => { if (this.state.smallP) { this.props.navigation.goBack() } else { this.changeSmallBox() } }}
+                                    onPress={() => {
+                                        if (this.state.smallP) {
+                                            this.props.onSmallBack && this.props.onSmallBack()
+                                            // this.props.navigation.goBack() 
+
+                                        } else { this.changeSmallBox() }
+                                    }}
                                 >
                                     <SvgVideoBack height="20" width="20" />
                                 </TouchableOpacity>
                                 {/* 收藏|更多 */}
                                 <View style={{ position: "absolute", top: topContsTop, right: 5, flexWrap: "nowrap", flexDirection: "row", zIndex: 10, }}>
-                                    <TouchableOpacity style={{ padding: 8 }}>
+                                    <TouchableOpacity style={{ padding: 8 }}
+                                        onPress={this.props.onStore && this.props.onStore()}
+                                    >
                                         <SvgVideoScang height="20" width="20" />
                                     </TouchableOpacity>
-                                    <TouchableOpacity style={{ padding: 8, marginLeft: 1, }}>
+                                    <TouchableOpacity style={{ padding: 8, marginLeft: 1, }}
+                                        onPress={this.props.onMoreFun && this.props.onMoreFun()}
+                                    >
                                         <SvgVideoSetting height="20" width="20" />
                                     </TouchableOpacity>
                                 </View>
@@ -791,22 +824,24 @@ class VideoPlayer extends React.Component {
                             <Animated.View style={{ width: this.state.width, bottom: bottomContsBottom, opacity: this.state.opacity, zIndex: 999, position: "absolute", flexDirection: "row", flexWrap: "nowrap" }}>
                                 {/* 播放暂停 */}
                                 {
-                                    this.state.paused
+                                    this.state.paused || this.props.paused
                                         ?
-                                        <TouchableOpacity activeOpacity={1} style={{ bottom: 0, left: 5, padding: 10, zIndex: 999, }} onPress={() => {if(!showOpenVip){
-                                            
-                                            if(this.state.isEnd){
-                                                this.player.seek(0)
-                                                setTimeout(()=>{
-                                                    this.setState({ paused: false,isEnd:false });
-                                                    
-                                                },300)
-                                               
-                                            }else{
-                                                this.setState({ paused: false });
+                                        <TouchableOpacity activeOpacity={1} style={{ bottom: 0, left: 5, padding: 10, zIndex: 999, }} onPress={() => {
+                                            if (!showOpenVip) {
+
+                                                if (this.state.isEnd) {
+                                                    this.player.seek(0)
+                                                    setTimeout(() => {
+                                                        this.setState({ paused: false, isEnd: false });
+
+                                                    }, 300)
+
+                                                } else {
+                                                    this.setState({ paused: false });
+                                                }
+
                                             }
-                                         
-                                            }}}>
+                                        }}>
 
                                             <SvgVideoPlay height="20" width="20" />
                                         </TouchableOpacity>
@@ -818,24 +853,24 @@ class VideoPlayer extends React.Component {
                                 }
 
                                 {/* 进度条 缓存条*/}
-                                <View style={{elevation:10, flex: 1, alignItems: "center", zIndex: 9999, justifyContent: "space-around", flexDirection: "row", flexWrap: "nowrap", bottom: 0 }}>
+                                <View style={{ elevation: 10, flex: 1, alignItems: "center", zIndex: 9999, justifyContent: "space-around", flexDirection: "row", flexWrap: "nowrap", bottom: 0 }}>
                                     <View>
                                         <Text style={{ color: "#ffffff" }}>{nowTime}</Text>
                                     </View>
 
-                                     <View style={{width: this.state.width - 180,paddingHorizontal:10, flexDirection: "row", flexWrap: "nowrap",  zIndex: 10,alignItems:"center",position:"relative"}}>
+                                    <View style={{ width: this.state.width - 180, paddingHorizontal: 10, flexDirection: "row", flexWrap: "nowrap", zIndex: 10, alignItems: "center", position: "relative" }}>
                                         {/* 进度条*/}
                                         <Animated.View ref="speed" style={{ zIndex: 12, width: this.state.dotStart ? this.state.dotWidth : (this.playDotX === null ? 0 : this.playDotX), height: 2, backgroundColor: "#e54602" }}></Animated.View>
                                         {/* 缓存条*/}
-                                        <Animated.View style={{ zIndex: 11, width: this.playBufferX === null ? 0 : this.playBufferX, height: 2, backgroundColor: "rgba(225,225,225,1)", position: "absolute", left:10}}></Animated.View>
+                                        <Animated.View style={{ zIndex: 11, width: this.playBufferX === null ? 0 : this.playBufferX, height: 2, backgroundColor: "rgba(225,225,225,1)", position: "absolute", left: 10 }}></Animated.View>
                                         {/* 进度条上的点 */}
-                                        <View style={{ zIndex: 9999,  padding: 12, left: -14, backgroundColor: "rgba(0,0,0,0)"}} {...this._panSpeeDot.panHandlers}>
-                                            <View ref={"dotspeed"} style={{ height: 10, width: 10, borderRadius: 10, backgroundColor: "#e54602" ,borderWidth:4,padding:4,left:-2,borderColor:"rgba(255,255,255,0)"}}></View>
+                                        <View style={{ zIndex: 9999, padding: 12, left: -14, backgroundColor: "rgba(0,0,0,0)" }} {...this._panSpeeDot.panHandlers}>
+                                            <View ref={"dotspeed"} style={{ height: 10, width: 10, borderRadius: 10, backgroundColor: "#e54602", borderWidth: 4, padding: 4, left: -2, borderColor: "rgba(255,255,255,0)" }}></View>
                                         </View>
                                         {/* 总进度 */}
-                                        <View style={{ height: 2, backgroundColor: "rgba(0,0,0,0.4)", position: "absolute", width: this.state.width - 200, zIndex: 9 ,left:10}}></View>
+                                        <View style={{ height: 2, backgroundColor: "rgba(0,0,0,0.4)", position: "absolute", width: this.state.width - 200, zIndex: 9, left: 10 }}></View>
                                     </View>
-                                  
+
                                     <View style={{}}>
                                         <Text style={{ color: "#ffffff" }}>{allTime}</Text>
                                     </View>
@@ -874,22 +909,22 @@ class VideoPlayer extends React.Component {
                 {/* 音量 this.state.height / 2 - 20 + this.state.statusBarH / 2*/}
                 {
                     this.state.showVolume ?
-                    <View
-                    style={{
-                            left: this.state.width / 2 - 80, position: "absolute",
-                            top:0,bottom:0,justifyContent:"center",
-                        }}>
-                        <View style={{
+                        <View
+                            style={{
+                                left: this.state.width / 2 - 80, position: "absolute",
+                                top: 0, bottom: 0, justifyContent: "center",
+                            }}>
+                            <View style={{
                                 flexDirection: "row", flexWrap: "nowrap", justifyContent: "center", alignItems: 'center', backgroundColor: "rgba(0,0,0,0.7)", paddingHorizontal: 10,
                                 paddingVertical: 11, borderRadius: 6,
                             }}>
-                            {
-                                this.state.soundWidth > 0 ? <SvgVideoSound width="20" height="20" /> : <SvgVideoNoSound width="20" height="20" />
-                            }
-                            <View style={{ backgroundColor: "rgba(255,255,255,0.5)", height: 2, width: 100, marginLeft: 8 }}>
-                                <Animated.View style={{ backgroundColor: "#ea7a99", width: this.state.soundWidth && this.state.soundWidth, zIndex: 99999, height: 2 }}></Animated.View>
+                                {
+                                    this.state.soundWidth > 0 ? <SvgVideoSound width="20" height="20" /> : <SvgVideoNoSound width="20" height="20" />
+                                }
+                                <View style={{ backgroundColor: "rgba(255,255,255,0.5)", height: 2, width: 100, marginLeft: 8 }}>
+                                    <Animated.View style={{ backgroundColor: "#ea7a99", width: this.state.soundWidth && this.state.soundWidth, zIndex: 99999, height: 2 }}></Animated.View>
+                                </View>
                             </View>
-                        </View>
                         </View>
                         :
                         null
@@ -898,24 +933,24 @@ class VideoPlayer extends React.Component {
                 {/* 亮度*/}
                 {
                     this.state.showBrightness ?
-                    <View
-                    style={{
-                            left: this.state.width / 2 - 80, position: "absolute",
-                            top:0,bottom:0,justifyContent:"center",
-                        }}>
-                        <View style={
-                            {
-                                flexDirection: "row", flexWrap: "nowrap", justifyContent: "center", alignItems: 'center', backgroundColor: "rgba(0,0,0,0.7)", paddingHorizontal: 10,
-                                paddingVertical: 11, borderRadius: 6,
-                                
-                                
-                            }
-                        }>
-                            <SvgVideoBrightness width="20" height="20" />
-                            <View style={{ backgroundColor: "rgba(255,255,255,0.5)", height: 2, width: 100, marginLeft: 8 }}>
-                                <Animated.View style={{ backgroundColor: "#ea7a99", width: this.state.brightnessWidth && this.state.brightnessWidth, zIndex: 99999, height: 2 }}></Animated.View>
+                        <View
+                            style={{
+                                left: this.state.width / 2 - 80, position: "absolute",
+                                top: 0, bottom: 0, justifyContent: "center",
+                            }}>
+                            <View style={
+                                {
+                                    flexDirection: "row", flexWrap: "nowrap", justifyContent: "center", alignItems: 'center', backgroundColor: "rgba(0,0,0,0.7)", paddingHorizontal: 10,
+                                    paddingVertical: 11, borderRadius: 6,
+
+
+                                }
+                            }>
+                                <SvgVideoBrightness width="20" height="20" />
+                                <View style={{ backgroundColor: "rgba(255,255,255,0.5)", height: 2, width: 100, marginLeft: 8 }}>
+                                    <Animated.View style={{ backgroundColor: "#ea7a99", width: this.state.brightnessWidth && this.state.brightnessWidth, zIndex: 99999, height: 2 }}></Animated.View>
+                                </View>
                             </View>
-                        </View>
                         </View>
                         :
                         null
@@ -926,42 +961,42 @@ class VideoPlayer extends React.Component {
                     //拖动进度条展示拖动当前时时间
                     this.state.dotStart &&
                     <View
-                    style={{
-                        left: this.state.width / 2 - 45, position: "absolute",
-                            top:0,bottom:0,justifyContent:"center",
+                        style={{
+                            left: this.state.width / 2 - 45, position: "absolute",
+                            top: 0, bottom: 0, justifyContent: "center",
                         }}>
-                    <View style={{
+                        <View style={{
                             flexDirection: "row", justifyContent: "center", alignItems: 'center', backgroundColor: "rgba(0,0,0,0.7)", paddingHorizontal: 10,
                             paddingVertical: 6, borderRadius: 4,
                         }}>
-                        <View><Text style={{ color: "#fff" }}>{goSpeedTime}</Text></View>
-                        <View><Text style={{ color: "#fff" }}>/</Text></View>
-                        <View><Text style={{ color: "#fff" }}>{allTime}</Text></View>
-                    </View>
+                            <View><Text style={{ color: "#fff" }}>{goSpeedTime}</Text></View>
+                            <View><Text style={{ color: "#fff" }}>/</Text></View>
+                            <View><Text style={{ color: "#fff" }}>{allTime}</Text></View>
+                        </View>
                     </View>
 
                 }
                 {
                     /* loading */
                     this.state.showLoading ?
-                    <View
-                    style={{
-                            left: this.state.width / 2 - 45, position: "absolute",
-                            top:0,bottom:0,justifyContent:"center",
-                        }}>
-                        <View style={
-                            {
-                                justifyContent: "center", alignItems: 'center', backgroundColor: "rgba(0,0,0,0.7)", paddingHorizontal: 10,
-                                paddingVertical: 11, borderRadius: 6,
-                                
-                            }
-                        }>
-                            <Animated.View style={{ transform: [{ rotate: spin }] }} >
-                                <SvgVideoLoading height="30" width="30" />
-                            </Animated.View>
+                        <View
+                            style={{
+                                left: this.state.width / 2 - 45, position: "absolute",
+                                top: 0, bottom: 0, justifyContent: "center",
+                            }}>
+                            <View style={
+                                {
+                                    justifyContent: "center", alignItems: 'center', backgroundColor: "rgba(0,0,0,0.7)", paddingHorizontal: 10,
+                                    paddingVertical: 11, borderRadius: 6,
 
-                            <View><Text style={{ color: "#fff" }}>正在缓冲...</Text></View>
-                        </View>
+                                }
+                            }>
+                                <Animated.View style={{ transform: [{ rotate: spin }] }} >
+                                    <SvgVideoLoading height="30" width="30" />
+                                </Animated.View>
+
+                                <View><Text style={{ color: "#fff" }}>正在缓冲...</Text></View>
+                            </View>
                         </View>
                         :
                         null
@@ -971,12 +1006,26 @@ class VideoPlayer extends React.Component {
         )
     }
 
-
 }
 
 const styles = StyleSheet.create({
-addStyleDot:{borderColor:"rgba(255,255,255,.5)",borderWidth:4,padding:4,left:-2}
+    addStyleDot: { borderColor: "rgba(255,255,255,.5)", borderWidth: 4, padding: 4, left: -2 }
 
 });
 
+const NgxuSetting = {
+    hideAndroidBottom: () => { Platform.OS === "android" && NativeModules.HideBottomNa.hide(); }
+    , showAndroidBottom: () => { Platform.OS === "android" && NativeModules.HideBottomNa.show(); }
+    , SetBrightness: (e, callback) => {
+        Platform.OS === "android" ?
+            NativeModules.AppBrightness.setAppBrightness(e) :
+            SystemSetting.setBrightnessForce(e)
+    }
+    ,getBrightness:(callback)=>{SystemSetting.getBrightness().then((brightness) => {
+        callback(brightness)
+    });
+    }
+}
+
+export { NgxuSetting }
 export default VideoPlayer
