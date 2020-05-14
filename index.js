@@ -512,10 +512,8 @@ class VideoPlayer extends React.Component {
             onPanResponderGrant: (evt, gestureState) => {
                 // this.props.navigation.setParams({ enableGestures: false });
                 if (this.state.showOpenVip) return//需要权限时停止不允许滑动进度条
-
-                this.refs.dotspeed.setNativeProps({
-                    style: { borderColor: "rgba(255,255,255,.5)" }
-                })
+                
+               
 
                 clearTimeout(this.TimeHideConts)//拖动进度条时禁止隐藏控件
 
@@ -523,7 +521,7 @@ class VideoPlayer extends React.Component {
                 // 开始手势操作。给用户一些视觉反馈，让他们知道发生了什么事情！
                 this.touchX = evt.nativeEvent.locationX;
 
-                this.setState({ dotStart: true, dotWidth: evt.nativeEvent.pageX - 100, })
+                this.setState({ dotStart: true, dotWidth: evt.nativeEvent.pageX - 100, },()=>{this.refs.gotimeSpeed.setNativeProps({style:{opacity:1}})})
                 // this.playDotX=null
                 // gestureState.{x,y} 现在会被设置为0
             },
@@ -567,11 +565,12 @@ class VideoPlayer extends React.Component {
                     this.player.seek(this.state.duration * speedB)
                 }
 
-                this.setState({ dotStart: false })
+                this.refs.gotimeSpeed.setNativeProps({style:{opacity:0}})
 
 
             },
             onPanResponderTerminate: (evt, gestureState) => {
+                this.refs.gotimeSpeed.setNativeProps({style:{opacity:0}})
                 this.refs.dotspeed.setNativeProps({
                     style: { borderColor: "rgba(255,255,255,0)" }
                 })
@@ -735,7 +734,7 @@ class VideoPlayer extends React.Component {
                             repeat={this.props.repeat ? this.props.repeat : false}
                             onSeek={(e) => {
                                 this.props.onSeek && this.props.onSeek(e)
-                                this.setState({ paused: false, isEnd: false })
+                                this.setState({ paused: false, isEnd: false  })
                             }}
                             posterResizeMode={"cover"}//封面大小
                             playWhenInactive={true}//确定当通知或控制中心在视频前面时，媒体是否应继续播放。
@@ -745,7 +744,7 @@ class VideoPlayer extends React.Component {
                             resizeMode={"contain"}
                             onReadyForDisplay={(e) => {
                                 this.props.onReadyForDisplay && this.props.onReadyForDisplay(e)
-                                this.setState({ showLoading: false })
+                                this.setState({ showLoading: false,dotStart: false })
                             }}//每次需要缓冲，正要播放时调用，可以隐藏loading
                             controls={false}
                             onProgress={this.animatedDot}                              // Store reference
@@ -781,12 +780,18 @@ class VideoPlayer extends React.Component {
                                     <TouchableOpacity style={{ padding: 8 }}
                                         onPress={this.props.onStore && this.props.onStore()}
                                     >
-                                        <SvgVideoScang height="20" width="20" />
+                                    {
+                                        this.props.storeComponent?this.props.storeComponent():<SvgVideoScang height="20" width="20" />
+                                    }
+                                        
                                     </TouchableOpacity>
                                     <TouchableOpacity style={{ padding: 8, marginLeft: 1, }}
                                         onPress={this.props.onMoreFun && this.props.onMoreFun()}
                                     >
-                                        <SvgVideoSetting height="20" width="20" />
+                                    {
+                                        this.props.moreSetting?this.props.moreSetting(): <SvgVideoSetting height="20" width="20" />
+                                    }
+                                       
                                     </TouchableOpacity>
                                 </View>
                             </Animated.View >
@@ -961,6 +966,7 @@ class VideoPlayer extends React.Component {
                     //拖动进度条展示拖动当前时时间
                     this.state.dotStart &&
                     <View
+                    ref={"gotimeSpeed"}
                         style={{
                             left: this.state.width / 2 - 45, position: "absolute",
                             top: 0, bottom: 0, justifyContent: "center",

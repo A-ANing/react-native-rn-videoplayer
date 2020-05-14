@@ -3,7 +3,7 @@
 
 # 使用方法
 `import VideoPlayer,{NgxuSetting} from 'react-native-rn-videoplayer'`
- - 你可以不使用{NgxuSetting},
+##  你可以不使用NgxuSetting， NgxuSetting是改变音量 显示隐藏Android底部虚拟按键 以及改变屏幕亮度的方法，如果你只是为了播放视频你完全可以不使用。
 `import VideoPlayer from 'react-native-rn-videoplayer'`
 
 # 显示或者隐藏安卓底部虚拟按键
@@ -91,17 +91,21 @@ ref={(ref)=>this.player=ref}/>
 ```
 # api
 - url 视频地址
-- onSmallBack 当视频是小窗口时 点击返回按钮的回调 可以在此添加返回上个页面的功能  
-- onStore 点击右上角收藏按钮的回调
-- onMoreFun 点击右上角更多按钮的回调
-- onWindowChange 窗口改变的回调 (e)=>{} e:"full"大 "small"小
+- storeComponent 右上角收藏按钮的图标 eg:storeComponent={()=><MySvg height="20" width="20"/>}
+- moreSetting 右上角更多按钮的图标 eg:storeComponent={()=><MySvg height="20" width="20"/>}
+- onSmallBack 当视频是小窗口时 点击返回按钮的回调 可以在此添加返回上个页面的功能  func
+- onStore 点击右上角收藏按钮的回调 func
+- onMoreFun 点击右上角更多按钮的回调 func
+- onWindowChange 窗口改变的回调 (e)=>{} e:"full"大 "small"小 func
 
 
 - onLoad 视频加载成功可以开始播放的回调 继承react-native-veideo
-- onSeek 继承react-native-video的onSeek
-- onEnd  继承react-native-video的onSeek
-- onBuffer 继承react-native-video的onBuffer
-- ..... 继承全部的react-native-video的方法
+- onSeek 调整进度后的回调 继承react-native-video的onSeek
+- onEnd  播放完的回调 继承react-native-video的onSeek
+- onBuffer 是否处于等待加载时 这里可以取到视频卡住展示loading或者是视频可以播放隐藏loading的回调 继承react-native-video的onBuffer
+- poster 视频封面图 视频还不能播放的时候展示的封面图 并不是loading框  继承react-native-video的poster eg:poster={"http://i1.hdslb.com/bfs/archive/784013a39c59aede1ee9e775ec271790dfd7dc4b.jpg@320w_200h.jpg"}
+
+- ..... 继承全部的react-native-video的方法及属性
 
 # 自己的方法
 - changeWindows() 切换全屏或者小屏
