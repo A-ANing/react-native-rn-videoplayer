@@ -5,9 +5,12 @@
 
 ### [简书地址](https://www.jianshu.com/p/a6f09d2ab09c)
 
-- gif预览Android
+- gif预览 ios 和 android
 
-![demo_android.gif](https://github.com/ngxu/ngxu.github.io/blob/master/img/VEditor_20200514220024.gif?raw=true)  
+<img src="https://github.com/ngxu/ngxu.github.io/blob/master/img/ios_demo.gif?raw=true" width=320 height=693/>&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="https://github.com/ngxu/ngxu.github.io/blob/master/img/VEditor_20200514220024.gif?raw=true" width=320 height=693 />
+
+
 
 ## Getting started
 
@@ -71,8 +74,6 @@ public class MainActivity extends ReactActivity {
 
 No need to do anything, because no ios native code is used
 这些功能ios不需要用到原生方法，至少我这个react-native-rn-videoplayer不需要link，但是react-native-videoplayerreact-native-linear-gradient react-native-orientation react-native-svg react-native-system-setting react-native-video这些库你需要自行查看，如果link好这些库，ios是没问题的。
-
-ios我目前不知道效果怎么样，前段时间我在ios上运行过，很完美，只是现在我优化添加了一些功能，只在Android上调试了，所以我也不知道ios效果怎么样，等我有时间了再调试下ios。
 
 
 
