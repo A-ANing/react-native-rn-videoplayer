@@ -7,7 +7,7 @@
 
 - gif预览Android
 
-![demo_android.gif](https://github.com/ngxu/ngxu.github.io/blob/master/img/VEditor_20200514220024.gif)  
+![demo_android.gif](https://github.com/ngxu/ngxu.github.io/blob/master/img/VEditor_20200514220024.gif?raw=true)  
 
 ## Getting started
 
