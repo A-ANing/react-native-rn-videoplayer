@@ -12,16 +12,17 @@
 ## Getting started
 
 1. 
-`npm install react-native-rn-videoplayer`
-
+```shell
+npm install react-native-rn-videoplayer
+```
 2. 
-
-`react-native link react-native-linear-gradient `
-`react-native link react-native-orientation` 
-`react-native link react-native-svg `
-`react-native link react-native-system-setting `
-`react-native link react-native-video`
-
+```shell
+react-native link react-native-linear-gradient
+react-native link react-native-orientation
+react-native link react-native-svg
+react-native link react-native-system-setting
+react-native link react-native-video
+```
 
 #### Android
 
