@@ -1,7 +1,7 @@
 {
   "name": "react-native-rn-videoplayer",
   "version": "1.1.1",
-  "description": "",
+  "description": "A customisable React Native video player for Android and IOS",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -9,16 +9,14 @@
   "keywords": [
     "react-native",
     "react-native-video",
-    "react-native-videoplayer",
-    "react-native-ngxu-video",
-    "react-native-rn-videoplayer"
+    "videoplayer",
+    "video",
+    "player"
   ],
   "author": "",
   "license": "",
   "homepage": "https://github.com/ngxu/react-native-rn-videoplayer#readme",
-  "peerDependencies": {
-    "react": "*",
-    "react-native": "*",
+  "dependencies": {
     "react-native-linear-gradient": "^2.5.6",
     "react-native-orientation": "^3.1.3",
     "react-native-svg": "^9.5.1",
