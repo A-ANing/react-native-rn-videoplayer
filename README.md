@@ -13,7 +13,7 @@
 
 1. 
 ```shell
-npm install react-native-rn-videoplayer
+npm install react-native-rn-videoplayer --save
 ```
 2. 
 ```shell
