@@ -60,8 +60,12 @@ public class MainActivity extends ReactActivity {
 
 4. Open up `android/app/src/main/java/[...]/MainApplication.java`
 
-	- Add `import com.ngxu.videoplayer.RNVideoplayerPackage;`
-  - Add `new RNVideoplayerPackage()` to the list returned by the `getPackages()` method
+	- Add 
+  ```java
+  import com.ngxu.videoplayer.RNVideoplayerPackage;
+
+  new RNVideoplayerPackage() //to the list returned by the `getPackages()` method
+ ```
 
 #### iOS
 
