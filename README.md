@@ -79,7 +79,7 @@ No need to do anything, because no ios native code is used
 
 ## Usage
 ```javascript
-import Videoplayer from 'react-native-videoplayer';
+import Videoplayer from 'react-native-rn-videoplayer';
 
 <VideoPlayer
 url={"https://xxxxx.mp4"}
