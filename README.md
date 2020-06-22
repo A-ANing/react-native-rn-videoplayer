@@ -87,8 +87,14 @@ ref={(ref)=>this.player=ref}/>
 ```
 # api
 - url 视频地址
-- storeComponent 右上角收藏按钮的图标 eg:storeComponent={()=><MySvg height="20" width="20"/>}
-- moreSetting 右上角更多按钮的图标 eg:storeComponent={()=><MySvg height="20" width="20"/>}
+- storeComponent 右上角收藏按钮的图标 
+  ```javascript
+    storeComponent={()=><Image/>}
+  ```
+- moreSetting 右上角更多按钮的图标 
+  ```javascript
+    moreSetting={()=><Image/>}
+  ```
 - setPaused 播放暂停   
   ```javascript
     this.player.setPaused(true)//true暂停；false播放；
@@ -110,8 +116,14 @@ ref={(ref)=>this.player=ref}/>
 - onSmallBack 当视频是小窗口时 点击返回按钮的回调 可以在此添加返回上个页面的功能  func
 - onStore 点击右上角收藏按钮的回调 func
 - onMoreFun 点击右上角更多按钮的回调 func
-- onWindowChange 窗口改变的回调 (e)=>{} e:"full"大 "small"小 func
+- onWindowChange 窗口改变的回调 func
+  ```javascript
 
+    <VideoPlayer
+      onWindowChange={(e)=>{}}//e:"full"全屏 "small"小屏 
+    >
+
+  ```
 
 - onLoad 视频加载成功可以开始播放的回调 继承react-native-veideo
 - onSeek 调整进度后的回调 继承react-native-video的onSeek
