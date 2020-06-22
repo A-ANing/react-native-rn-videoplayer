@@ -541,7 +541,7 @@ class VideoPlayer extends React.Component {
                 this.refs.dotspeed.setNativeProps({
                     style: { borderColor: "rgba(255,255,255,0.5)" }
                 })
-                this.refs.gotimeSpeed.setNativeProps({style:{opacity:1,display:null}})
+                this.refs.gotimeSpeed.setNativeProps({style:{opacity:1,display:null,width:null}})
                 clearTimeout(this.TimeHideConts)//拖动进度条时禁止隐藏控件
 
                 this.ismoveDot=true
@@ -591,12 +591,12 @@ class VideoPlayer extends React.Component {
                     this.player.seek(this.state.duration * speedB)
                 }
 
-                this.refs.gotimeSpeed.setNativeProps({style:{opacity:0,display:"none"}})
+                this.refs.gotimeSpeed.setNativeProps({style:{opacity:0,display:"none",width:0}})
                 this.ismoveDot=false
                 
             },
             onPanResponderTerminate: (evt, gestureState) => {
-                this.refs.gotimeSpeed.setNativeProps({style:{opacity:0,display:"none"}})
+                this.refs.gotimeSpeed.setNativeProps({style:{opacity:0,display:"none",width:0}})
                 this.refs.dotspeed.setNativeProps({
                     style: { borderColor: "rgba(255,255,255,0)" }
                 })
