@@ -89,9 +89,18 @@ ref={(ref)=>this.player=ref}/>
 - url 视频地址
 - storeComponent 右上角收藏按钮的图标 eg:storeComponent={()=><MySvg height="20" width="20"/>}
 - moreSetting 右上角更多按钮的图标 eg:storeComponent={()=><MySvg height="20" width="20"/>}
-- setPaused 播放暂停   true暂停；false播放；
+- setPaused 播放暂停   
   ```javascript
-    this.player.setPaused(true)//暂停
+    this.player.setPaused(true)//true暂停；false播放；
+
+    <VideoPlayer
+     ref={(ref)=>this.player=ref}
+    >
+
+  ```
+- reLoad 重新加载
+  ```javascript
+    this.player.reLoad()
 
     <VideoPlayer
      ref={(ref)=>this.player=ref}
