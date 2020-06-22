@@ -501,7 +501,7 @@ class VideoPlayer extends React.Component {
                 }
 
                 //如果滑动距离小于2 就是展示隐藏空间
-                if (Math.abs(this.moveYData) < 2) {
+                if (Math.abs(this.moveYData) < 5) {
                     this.showConts()
                 }
 
@@ -622,7 +622,19 @@ class VideoPlayer extends React.Component {
         this.TimeHideConts = setTimeout(this.fastHideConts, 5000);
     }
 
+//重置播放
+rePlay=()=>{
+    if (this.state.isEnd) {
+        this.player.seek(0)
+        setTimeout(() => {
+            this.setState({ paused: false, isEnd: false ,showConts:true});
 
+        }, 300)
+
+    } else {
+        this.setState({ paused: false });
+    }
+}
 
     //显示控件
     showConts = () => {
@@ -630,7 +642,7 @@ class VideoPlayer extends React.Component {
         //当提示要vip 暂停播放时 禁止双击暂停播放
         if (!this.state.showOpenVip) {
             if (this.lastBackPressed && this.lastBackPressed + 300 >= Date.now()) {
-                this.state.paused ? this.setState({ paused: false, showConts: true }) : this.setState({ paused: true, showConts: true })
+                this.state.paused ? this.rePlay() : this.setState({ paused: true, showConts: true })
                 this.AnimatedOp.start()
                 clearTimeout(this.Timeout)
                 return
@@ -647,9 +659,10 @@ class VideoPlayer extends React.Component {
             } else {
                 this.hide.stop();
                 //点击视频显示控件
-                this.AnimatedOp.start(() => { this.setState({ showConts: true }); this.hide.stop(); this.AnimatedOp.stop(); this.fastHide && this.fastHide.stop(); }); // 开始执行动画
+               
+                this.AnimatedOp.start(() => { this.setState({ showConts: true });  this.hide.stop(); this.AnimatedOp.stop(); this.fastHide && this.fastHide.stop(); }); // 开始执行动画
             }
-        }, 350)
+        }, 300)
 
 
         this.activateAutoHide()//激活控件自动隐藏
@@ -748,6 +761,13 @@ class VideoPlayer extends React.Component {
         const { allTime, nowTime, goSpeedTime, LinearGradientHeight, showOpenVip, topContsTop, bottomContsBottom } = this.state
         return (
             <View>
+                {
+               this.state.width===width&& Platform.OS==="android"?
+                <View style={{height:StatusBar.currentHeight,backgroundColor:"#000"}}></View>
+                :
+                <SafeAreaView style={{backgroundColor:"#000"}}/>
+            }
+            <StatusBar barStyle={"light-content"}/>
                 <View >
                     <View  {...this._panResponder.panHandlers} style={{ height: this.state.height, width: this.state.width, }}
                         activeOpacity={1}
