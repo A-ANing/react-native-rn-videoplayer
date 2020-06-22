@@ -636,6 +636,34 @@ rePlay=()=>{
     }
 }
 
+    //暴露方法 设置播放暂停
+    setPaused = (e) =>{
+        if(e){
+            this.setState({
+                paused:true
+            })
+        }else{
+            this.setState({
+                paused:false
+
+            })
+        }
+    }
+
+
+
+    //重新加载 暴露方法
+    
+    reLoad = ()=>{
+      const {paused} = this.state
+        if(!paused){this.setState({paused:true})}
+        
+        this.player.seek(0)
+            setTimeout(() => {
+                this.setState({ paused: false, showConts: true });
+
+            }, 300)
+    }
     //显示控件
     showConts = () => {
         clearTimeout(this.TimeHideConts)

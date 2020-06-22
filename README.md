@@ -89,6 +89,15 @@ ref={(ref)=>this.player=ref}/>
 - url 视频地址
 - storeComponent 右上角收藏按钮的图标 eg:storeComponent={()=><MySvg height="20" width="20"/>}
 - moreSetting 右上角更多按钮的图标 eg:storeComponent={()=><MySvg height="20" width="20"/>}
+- setPaused 播放暂停   true暂停；false播放；
+  ```javascript
+    this.player.setPaused(true)//暂停
+
+    <VideoPlayer
+     ref={(ref)=>this.player=ref}
+    >
+
+  ```
 - onSmallBack 当视频是小窗口时 点击返回按钮的回调 可以在此添加返回上个页面的功能  func
 - onStore 点击右上角收藏按钮的回调 func
 - onMoreFun 点击右上角更多按钮的回调 func
