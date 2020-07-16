@@ -1,3 +1,14 @@
+/**
+ * 视频
+ * props:
+ *     continuous为是否是连续剧，可以选集数的视频，为true时，播放暂停，全屏键在进度条下方，展示选集按钮，为false，播放暂停，全屏按钮在进度条左右两边展示
+ *     renderAllSeenList，fun,返回一个Component,渲染全屏时的选集框
+ * 
+ * 
+ */    
+
+
+//修复播放不同分辨率视频，不会重新测量分辨率的问题https://github.com/react-native-community/react-native-video/pull/2053
 import React, { Component } from 'react';
 import {
     Text,
@@ -14,13 +25,24 @@ import {
     SafeAreaView,
     Platform
 } from 'react-native';
-
 import SystemSetting from 'react-native-system-setting'
 import Orientation from 'react-native-orientation';
 import LinearGradient from 'react-native-linear-gradient';
 import Video from 'react-native-video';
-import { SvgVideoLoading, SvgVideoBrightness, SvgVideoSetting, SvgVideoNoSound, SvgVideoStop, SvgVideoPlay, SvgVideoAllBox, SvgVideoSmallBox, SvgVideoBack, SvgVideoScang, SvgVideoSound } from './component/svg'
+
+
+
+
+// 
+import Alipay from '@0x5e/react-native-alipay';
+
+
+import { SvgVideoNextBtn, SvgVideoLoading, SvgVideoBrightness, SvgVideoSetting, SvgVideoNoSound, SvgVideoStop, SvgVideoPlay, SvgVideoAllBox, SvgVideoSmallBox, SvgVideoDotJd, SvgVideoBack, SvgVideoScang, SvgVideoSound } from '../svg/svg'
 const { height, width } = Dimensions.get('screen');
+
+
+
+
 
 class VideoPlayer extends React.Component {
 
@@ -69,7 +91,9 @@ class VideoPlayer extends React.Component {
                 showOpenVip: false,//是否显示开通vip提示
                 currentTime: 0.0,
                 showLoading: false,//是否显示正在加载
-                showConts: true
+                showConts: true,
+                showDrTime: false,//拖动进度条时显示的时间进度
+                showChangeList: false,//控制是否显示全屏选集
             }
         this.goLogin = this.goLogin.bind(this)
         this.animatedonBuffer = this.animatedonBuffer.bind(this)
@@ -126,8 +150,8 @@ class VideoPlayer extends React.Component {
                 showConts: false,
                 LinearGradientHeight: 100,
                 topContsTop: 30,
-                bottomContsBottom: 30,
-                dotStart:false
+                bottomContsBottom:this.props.continuous?10:0,
+                dotStart: false
             }, () => {
                 StatusBar.setHidden(true)
                 // 更新播放进度
@@ -162,7 +186,7 @@ class VideoPlayer extends React.Component {
                 LinearGradientHeight: 60,
                 topContsTop: 0,
                 bottomContsBottom: 0,
-                dotStart:false
+                dotStart: false
             }, () => {
                 StatusBar.setHidden(false)
                 // 更新播放进度
@@ -212,30 +236,30 @@ class VideoPlayer extends React.Component {
     //控制loading加载器的显示隐藏
     animatedonBuffer(event) {
         this.props.onBuffer && this.props.onBuffer(event)
-        
-       
-        if(Platform.OS==="android"){
+
+
+        if (Platform.OS === "android") {
             if (event.isBuffering) {
                 this.setState({
                     showLoading: true
                 })
             } else {
-                
+
                 this.setState({
                     showLoading: false,
-                    
+
                 })
             }
-        }else{
-           
-                this.setState({
-                    showLoading: true,
-                    
-                })
-            
-            
+        } else {
+
+            this.setState({
+                showLoading: true,
+
+            })
+
+
         }
-        
+
 
     }
 
@@ -252,22 +276,22 @@ class VideoPlayer extends React.Component {
         }
         if (this.nowTime != parseInt(e.currentTime)) {
             this.nowTime = parseInt(e.currentTime)
-            
-            this.ismoveDot?
-            this.setState({
-                nowTime: this.formatSeconds(e.currentTime),
-                
-            })
-            :
-            this.setState({
-                nowTime: this.formatSeconds(e.currentTime),
-                dotStart:false
-            })
+
+            this.ismoveDot ?
+                this.setState({
+                    nowTime: this.formatSeconds(e.currentTime),
+
+                })
+                :
+                this.setState({
+                    nowTime: this.formatSeconds(e.currentTime),
+                    dotStart: false
+                })
         }
-        if(this.state.showLoading){
-            Platform.OS==="ios"&&this.setState({showLoading: false})
+        if (this.state.showLoading) {
+            Platform.OS === "ios" && this.setState({ showLoading: false })
         }
-        
+
         Animated.timing(
             // timing方法使动画值随时间变化
             this.dotX, // 要变化的动画值
@@ -535,19 +559,19 @@ class VideoPlayer extends React.Component {
 
             onPanResponderGrant: (evt, gestureState) => {
                 // this.props.navigation.setParams({ enableGestures: false });
-                
+
                 if (this.state.showOpenVip) return//需要权限时停止不允许滑动进度条
-                
+
                 this.refs.dotspeed.setNativeProps({
                     style: { borderColor: "rgba(255,255,255,0.5)" }
                 })
-                this.refs.gotimeSpeed.setNativeProps({style:{opacity:1,display:null,width:null}})
+                this.refs.gotimeSpeed.setNativeProps({ style: { opacity: 1, display: null, width: null } })
                 clearTimeout(this.TimeHideConts)//拖动进度条时禁止隐藏控件
 
-                this.ismoveDot=true
+                this.ismoveDot = true
                 // 开始手势操作。给用户一些视觉反馈，让他们知道发生了什么事情！
                 this.touchX = evt.nativeEvent.locationX;
-                this.setState({ dotStart: true, dotWidth: evt.nativeEvent.pageX - 100, })        
+                this.setState({ dotStart: true, dotWidth: evt.nativeEvent.pageX - 100, })
                 // this.playDotX=null
                 // gestureState.{x,y} 现在会被设置为0
             },
@@ -568,6 +592,7 @@ class VideoPlayer extends React.Component {
                 // console.log("当前",)
                 if (this.realMarginLeft > 0) {
                     this.setState({
+                        showDrTime: false,
                         dotWidth: this.realMarginLeft,
                         //想要拖动快进的时间
                         goSpeedTime: this.formatSeconds((this.realMarginLeft) / (this.state.width - 200) * this.state.duration)
@@ -591,16 +616,16 @@ class VideoPlayer extends React.Component {
                     this.player.seek(this.state.duration * speedB)
                 }
 
-                this.refs.gotimeSpeed.setNativeProps({style:{opacity:0,display:"none",width:0}})
-                this.ismoveDot=false
-                
+                this.refs.gotimeSpeed.setNativeProps({ style: { opacity: 0, display: "none", width: 0 } })
+                this.ismoveDot = false
+
             },
             onPanResponderTerminate: (evt, gestureState) => {
-                this.refs.gotimeSpeed.setNativeProps({style:{opacity:0,display:"none",width:0}})
+                this.refs.gotimeSpeed.setNativeProps({ style: { opacity: 0, display: "none", width: 0 } })
                 this.refs.dotspeed.setNativeProps({
                     style: { borderColor: "rgba(255,255,255,0)" }
                 })
-                this.ismoveDot=false
+                this.ismoveDot = false
                 this.activateAutoHide()//激活自动隐藏
                 return true;
             },
@@ -622,29 +647,36 @@ class VideoPlayer extends React.Component {
         this.TimeHideConts = setTimeout(this.fastHideConts, 5000);
     }
 
-//重置播放
-rePlay=()=>{
-    if (this.state.isEnd) {
-        this.player.seek(0)
-        setTimeout(() => {
-            this.setState({ paused: false, isEnd: false ,showConts:true});
+    //重置播放
+    rePlay = () => {
+        if (this.state.isEnd) {
+            this.player.seek(0)
+            setTimeout(() => {
+                this.setState({ paused: true, isEnd: false, showConts: true },()=>{this.setState({paused:false})});
 
-        }, 300)
+            }, 300)
 
-    } else {
-        this.setState({ paused: false });
+        } else {
+            if(!this.state.paused){
+                this.setState({ paused: true },()=>{this.setState({paused:false})});
+            }
+            
+        }
+        if(this.state.paused){
+            this.setState({ paused: false });
+        }
+        
     }
-}
 
     //暴露方法 设置播放暂停
-    setPaused = (e) =>{
-        if(e){
+    setPaused = (e) => {
+        if (e) {
             this.setState({
-                paused:true
+                paused: true
             })
-        }else{
+        } else {
             this.setState({
-                paused:false
+                paused: false
 
             })
         }
@@ -653,16 +685,15 @@ rePlay=()=>{
 
 
     //重新加载 暴露方法
-    
-    reLoad = ()=>{
-      const {paused} = this.state
-        if(!paused){this.setState({paused:true})}
-        
-        this.player.seek(0)
-            setTimeout(() => {
-                this.setState({ paused: false, showConts: true });
 
-            }, 300)
+    reLoad = () => {
+        const { paused } = this.state
+        if (!paused) { this.setState({ paused: true }) }
+        this.player.seek(0)
+        setTimeout(() => {
+            this.setState({ paused: false, showConts: true,showLoading:true });
+
+        })
     }
     //显示控件
     showConts = () => {
@@ -670,25 +701,22 @@ rePlay=()=>{
         //当提示要vip 暂停播放时 禁止双击暂停播放
         if (!this.state.showOpenVip) {
             if (this.lastBackPressed && this.lastBackPressed + 300 >= Date.now()) {
-                this.state.paused ? this.rePlay() : this.setState({ paused: true, showConts: true })
-                this.AnimatedOp.start()
                 clearTimeout(this.Timeout)
+                this.state.paused ? this.rePlay() : this.setState({ paused: true, showConts: true })
+                this.state.opacity.setValue(1)
                 return
             } else {
                 this.lastBackPressed = Date.now();
             }
         }
         this.Timeout = setTimeout(() => {
-
             if (this.state.showConts) {//立即消失
-
                 this.hide.stop()
                 this.fastHideConts()
             } else {
                 this.hide.stop();
                 //点击视频显示控件
-               
-                this.AnimatedOp.start(() => { this.setState({ showConts: true });  this.hide.stop(); this.AnimatedOp.stop(); this.fastHide && this.fastHide.stop(); }); // 开始执行动画
+                this.AnimatedOp.start(() => { this.setState({ showConts: true, showChangeList: false }); this.hide.stop(); this.AnimatedOp.stop(); this.fastHide && this.fastHide.stop(); }); // 开始执行动画
             }
         }, 300)
 
@@ -712,10 +740,11 @@ rePlay=()=>{
 
 
     onLoad = (data) => {
+        console.log("onload",data)
         this.props.onLoad && this.props.onLoad(data)
         //console.log("总", this.formatSeconds(data.duration))
         //视频总长度
-        this.setState({ duration: data.duration, allTime: this.formatSeconds(data.duration) });
+        this.setState({ duration: data.duration, allTime: this.formatSeconds(data.duration),showChangeList:false });
         //进度条动画
         this.playDotX = this.dotX.interpolate({
             inputRange: [0, data.duration],
@@ -742,7 +771,9 @@ rePlay=()=>{
 
     //播放完重制播放进度等状态
     reVideo = () => {
-        this.props.onEnd && this.props.onEnd()
+        if (!this.state.paused) {
+            this.props.onEnd && this.props.onEnd()
+        }
 
         !this.props.repeat && this.setState({ showConts: true, opacity: 1, paused: true, isEnd: true }, () => {
             // this.player.seek(0)
@@ -770,6 +801,8 @@ rePlay=()=>{
 
     videoError = (e) => {
         this.props.onError && this.props.onError(e)
+        this.setState({showLoading:false,paused:true})
+        this.onError=true
     }
     changeWindows = (e) => {
         if (e) {
@@ -786,30 +819,32 @@ rePlay=()=>{
             outputRange: ["0deg", "360deg"] //输出值
         })
 
-        const { allTime, nowTime, goSpeedTime, LinearGradientHeight, showOpenVip, topContsTop, bottomContsBottom } = this.state
+        const { smallP, allTime, nowTime, goSpeedTime, LinearGradientHeight, showOpenVip, topContsTop, bottomContsBottom } = this.state
         return (
-            <View>
+            <View style={{ backgroundColor: "#000" }}>
                 {
-               this.state.width===width&& Platform.OS==="android"?
-                <View style={{height:StatusBar.currentHeight,backgroundColor:"#000"}}></View>
-                :
-                <SafeAreaView style={{backgroundColor:"#000"}}/>
-            }
-            <StatusBar barStyle={"light-content"}/>
+                    this.state.width === width && Platform.OS === "android" ?
+                        <View style={{ height: StatusBar.currentHeight, backgroundColor: "#000" }}></View>
+                        :
+                        <SafeAreaView style={{ backgroundColor: "#000" }} />
+                }
+                <StatusBar barStyle={"light-content"} />
                 <View >
                     <View  {...this._panResponder.panHandlers} style={{ height: this.state.height, width: this.state.width, }}
                         activeOpacity={1}
                     >
                         <Video
+                        
                             source={{ uri: this.props.url }}
                             ref={(ref) => {
                                 this.player = ref
                             }}
+                            continuous={this.props.continuous ? true : false}//是否是连续剧，用来全屏展示选集，下一集按钮    重新加载Video标签，防止出现上个视频和下个视频分辨率不切换的问题　
                             {...this.props}
                             repeat={this.props.repeat ? this.props.repeat : false}
                             onSeek={(e) => {
                                 this.props.onSeek && this.props.onSeek(e)
-                                this.setState({ paused: false, isEnd: false  })
+                                this.setState({  isEnd: false })
                                 // this.setState({ dotStart: false })
                             }}
                             posterResizeMode={"cover"}//封面大小
@@ -817,12 +852,12 @@ rePlay=()=>{
                             paused={this.props.paused ? this.props.paused : this.state.paused}//暂停
                             onLoad={this.onLoad}
                             onEnd={this.reVideo}
-                            resizeMode={"contain"}
+                            resizeMode={"none"}
                             onReadyForDisplay={(e) => {
                                 this.props.onReadyForDisplay && this.props.onReadyForDisplay(e)
-                                
+
                                 // this.setState({ showLoading: false,dotStart: false })
-                                
+
                             }}//
                             controls={false}
                             onProgress={this.animatedDot}                              // Store reference
@@ -835,18 +870,18 @@ rePlay=()=>{
                     </View>
                     {
                         this.state.showConts ?
-                            <Animated.View style={{ position: "absolute", left: 0, right: 0, top: 0, opacity: this.state.opacity, height: 30, }}
+                            <Animated.View style={{ position: "absolute", left: 0, right: 0, top: 0, opacity: this.state.opacity, height: 30 }}
 
                             >
                                 {/* 阴影 */}
                                 <LinearGradient colors={['rgba(0,0,0,0.4)', 'rgba(0,0,0,0.1)', 'rgba(0,0,0,0)']} style={{ height: LinearGradientHeight, width: this.state.width }}></LinearGradient>
                                 {/* 返回键 */}
-                                <TouchableOpacity style={{ position: "absolute", top: topContsTop, left: 5, padding: 10, zIndex: 999 }}
+                                <TouchableOpacity style={{ position: "absolute", top: topContsTop, left: smallP ? 5 :this.props.continuous?45: 5, padding: 10, zIndex: 999, }}
                                     //如果是全屏 点击返回键是切换到小屏  反之返回上个页面
                                     onPress={() => {
                                         if (this.state.smallP) {
-                                            this.props.onSmallBack && this.props.onSmallBack()
-                                            // this.props.navigation.goBack() 
+                                            // this.props.onSmallBack && this.props.onSmallBack()
+                                            this.props.navigation.goBack()
 
                                         } else { this.changeSmallBox() }
                                     }}
@@ -854,22 +889,22 @@ rePlay=()=>{
                                     <SvgVideoBack height="20" width="20" />
                                 </TouchableOpacity>
                                 {/* 收藏|更多 */}
-                                <View style={{ position: "absolute", top: topContsTop, right: 5, flexWrap: "nowrap", flexDirection: "row", zIndex: 10, }}>
+                                <View style={{ position: "absolute", top: topContsTop, right: smallP ? 5 : this.props.continuous?45: 5, flexWrap: "nowrap", flexDirection: "row", zIndex: 10, }}>
                                     <TouchableOpacity style={{ padding: 8 }}
-                                        onPress={this.props.onStore && this.props.onStore()}
+                                        onPress={this.props.onStore && this.props.onStore}
                                     >
-                                    {
-                                        this.props.storeComponent?this.props.storeComponent():<SvgVideoScang height="20" width="20" />
-                                    }
-                                        
+                                        {
+                                            this.props.storeComponent ? this.props.storeComponent() : <SvgVideoScang height="20" width="20" />
+                                        }
+
                                     </TouchableOpacity>
                                     <TouchableOpacity style={{ padding: 8, marginLeft: 1, }}
                                         onPress={this.props.onMoreFun && this.props.onMoreFun()}
                                     >
-                                    {
-                                        this.props.moreSetting?this.props.moreSetting(): <SvgVideoSetting height="20" width="20" />
-                                    }
-                                       
+                                        {
+                                            this.props.moreSetting ? this.props.moreSetting() : <SvgVideoSetting height="20" width="20" />
+                                        }
+
                                     </TouchableOpacity>
                                 </View>
                             </Animated.View >
@@ -892,7 +927,7 @@ rePlay=()=>{
 
                                     <View style={{ width: this.state.width, flexDirection: "row", flexWrap: "nowrap", zIndex: 10 }}>
                                         {/* 进度条*/}
-                                        <Animated.View ref="speed" style={{ zIndex: 12, width: this.playhideContsDotX === null ? 0 : this.playhideContsDotX, height: Platform.OS==="android"? 2 : 3, backgroundColor: "#e54602" }}></Animated.View>
+                                        <Animated.View ref="speed" style={{ zIndex: 12, width: this.playhideContsDotX === null ? 0 : this.playhideContsDotX, height: Platform.OS === "android" ? 2 : 3, backgroundColor: "#e54602" }}></Animated.View>
 
 
                                     </View>
@@ -901,65 +936,81 @@ rePlay=()=>{
                                 </View>
                             </View>
                     }
+                    {
+                        this.state.showConts&&                                
+                        <LinearGradient colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.1)', 'rgba(0,0,0,0.4)']} style={{ height: LinearGradientHeight, width: this.state.width, position: "absolute", bottom: this.state.smallP ? 0 : -bottomContsBottom }}></LinearGradient>
+
+                    }
 
                     {
                         this.state.showConts ?
-                            <Animated.View style={{ width: this.state.width, bottom: bottomContsBottom, opacity: this.state.opacity, zIndex: 999, position: "absolute", flexDirection: "row", flexWrap: "nowrap" }}>
-                                {/* 播放暂停 */}
-                                {
-                                    this.state.paused || this.props.paused
-                                        ?
-                                        <TouchableOpacity activeOpacity={1} style={{ bottom: 0, left: 5, padding: 10, zIndex: 999, }} onPress={() => {
-                                            if (!showOpenVip) {
-
-                                                if (this.state.isEnd) {
-                                                    this.player.seek(0)
-                                                    setTimeout(() => {
-                                                        this.setState({ paused: false, isEnd: false });
-
-                                                    }, 300)
-
-                                                } else {
-                                                    this.setState({ paused: false });
+                            <Animated.View style={{ width: this.state.width, bottom: bottomContsBottom, opacity: this.state.opacity, zIndex: 99999, position: "absolute",}}>
+                                <View style={{ flexDirection: "row", flexWrap: "nowrap" }}>
+                                    {/* 播放暂停 */}
+                                    {
+                                        !this.props.continuous?(this.state.paused || this.props.paused
+                                            ?
+                                            <TouchableOpacity activeOpacity={1} style={{ bottom: 0, left: 5, padding: 10, zIndex: 999,  }} onPress={() => {
+                                                if (!showOpenVip) {
+                                                    this.rePlay()
                                                 }
+                                            }}>
 
-                                            }
-                                        }}>
+                                                <SvgVideoPlay height="20" width="20" />
+                                            </TouchableOpacity>
+                                            :
+                                            <TouchableOpacity activeOpacity={1} style={{ bottom: 0, left: 5, padding: 10, zIndex: 999, }} onPress={() => { !showOpenVip && this.setState({ paused: true }) }}>
 
-                                            <SvgVideoPlay height="20" width="20" />
-                                        </TouchableOpacity>
+                                                <SvgVideoStop height="20" width="20" />
+                                            </TouchableOpacity>
+                                        )
                                         :
-                                        <TouchableOpacity activeOpacity={1} style={{ bottom: 0, left: 5, padding: 10, zIndex: 999 }} onPress={() => { !showOpenVip && this.setState({ paused: true }) }}>
+                                        smallP&&(this.state.paused || this.props.paused
+                                            ?
+                                            <TouchableOpacity activeOpacity={1} style={{ bottom: 0, left: 5, padding: 10, zIndex: 999, }} onPress={() => {
+                                                if (!showOpenVip) {
 
-                                            <SvgVideoStop height="20" width="20" />
-                                        </TouchableOpacity>
-                                }
+                                                    this.rePlay()
 
-                                {/* 进度条 缓存条*/}
-                                <View style={{ elevation: 10, flex: 1, alignItems: "center", zIndex: 9999, justifyContent: "space-around", flexDirection: "row", flexWrap: "nowrap", bottom: 0 }}>
-                                    <View>
-                                        <Text style={{ color: "#ffffff" }}>{nowTime}</Text>
-                                    </View>
+                                                }
+                                            }}>
 
-                                    <View style={{ width: this.state.width - 180, paddingHorizontal: 10, flexDirection: "row", flexWrap: "nowrap", zIndex: 10, alignItems: "center", position: "relative" }}>
-                                        {/* 进度条*/}
-                                        <Animated.View ref="speed" style={{ zIndex: 12, width: this.state.dotStart ? this.state.dotWidth : (this.playDotX === null ? 0 : this.playDotX), height: 2, backgroundColor: "#e54602" }}></Animated.View>
-                                        {/* 缓存条*/}
-                                        <Animated.View style={{ zIndex: 11, width: this.playBufferX === null ? 0 : this.playBufferX, height: 2, backgroundColor: "rgba(225,225,225,1)", position: "absolute", left: 10 }}></Animated.View>
-                                        {/* 进度条上的点 */}
-                                        <View style={{ zIndex: 9999, padding: 12, left: -14, backgroundColor: "rgba(0,0,0,0)" }} {...this._panSpeeDot.panHandlers}>
-                                            <View ref={"dotspeed"} style={{ height: 10, width: 10, borderRadius: 10, backgroundColor: "#e54602", borderWidth: 4, padding: 4, left: -2, borderColor: "rgba(255,255,255,0)" }}></View>
+                                                <SvgVideoPlay height="20" width="20" />
+                                            </TouchableOpacity>
+                                            :
+                                            <TouchableOpacity activeOpacity={1} style={{ bottom: 0, left: 5, padding: 10, zIndex: 999, }} onPress={() => { !showOpenVip && this.setState({ paused: true }) }}>
+
+                                                <SvgVideoStop height="20" width="20" />
+                                            </TouchableOpacity>
+                                        )
+                                        
+                                    }
+
+                                    {/* 进度条 缓存条*/}
+                                    <View style={{ elevation: 10, flex: 1, alignItems: "center", zIndex: 9999, justifyContent: "center", flexDirection: "row", flexWrap: "nowrap", bottom: 0 }}>
+                                        <View>
+                                            <Text style={{ color: "#ffffff" }}>{nowTime}</Text>
                                         </View>
-                                        {/* 总进度 */}
-                                        <View style={{ height: 2, backgroundColor: "rgba(0,0,0,0.4)", position: "absolute", width: this.state.width - 200, zIndex: 9, left: 10 }}></View>
-                                    </View>
 
-                                    <View style={{}}>
-                                        <Text style={{ color: "#ffffff" }}>{allTime}</Text>
+                                        <View style={{ width: this.state.width - 180, paddingHorizontal: 10, flexDirection: "row", flexWrap: "nowrap", zIndex: 10, alignItems: "center", position: "relative", }}>
+                                            {/* 进度条*/}
+                                            <Animated.View ref="speed" style={{ zIndex: 12, width: this.state.dotStart ? this.state.dotWidth : (this.playDotX === null ? 0 : this.playDotX), height: 2, backgroundColor: "#e54602" }}></Animated.View>
+                                            {/* 缓存条*/}
+                                            <Animated.View style={{ zIndex: 11, width: this.playBufferX === null ? 0 : this.playBufferX, height: 2, backgroundColor: "rgba(225,225,225,1)", position: "absolute", left: 10 }}></Animated.View>
+                                            {/* 进度条上的点 */}
+                                            <View style={{ zIndex: 9999, padding: 12, left: -14, backgroundColor: "rgba(0,0,0,0)" }} {...this._panSpeeDot.panHandlers}>
+                                                <View ref={"dotspeed"} style={{ height: 10, width: 10, borderRadius: 10, backgroundColor: "#e54602", borderWidth: 4, padding: 4, left: -2, borderColor: "rgba(255,255,255,0)" }}></View>
+                                            </View>
+                                            {/* 总进度 */}
+                                            <View style={{ height: 2, backgroundColor: "rgba(0,0,0,0.4)", position: "absolute", width: this.state.width - 200, zIndex: 9, left: 10 }}></View>
+                                        </View>
+
+                                        <View style={{}}>
+                                            <Text style={{ color: "#ffffff" }}>{allTime}</Text>
+                                        </View>
                                     </View>
-                                </View>
-                                {
-                                    this.state.smallP ?
+                                    {
+                                        this.state.smallP ?
                                         <TouchableOpacity
                                             activeOpacity={0.5}
                                             style={{ padding: 10, width: 40, bottom: 0, right: 5, zIndex: 9999, alignSelf: "flex-end", justifyContent: "flex-end" }}
@@ -967,7 +1018,8 @@ rePlay=()=>{
                                         >
                                             <SvgVideoAllBox height="20" width="20" />
                                         </TouchableOpacity >
-                                        :
+                                        :(
+                                            !this.props.continuous&&
                                         <TouchableOpacity
                                             activeOpacity={0.5}
 
@@ -976,10 +1028,77 @@ rePlay=()=>{
                                         >
                                             <SvgVideoSmallBox height="20" width="20" />
                                         </TouchableOpacity >
+                                        )
+                                    }
+                                </View>
+                                {
+                                    !smallP &&
+                                    <View style={{ height: 40, width: this.state.width, paddingHorizontal: 45, flexDirection: "row" }}>
+                                        <View style={{ flexDirection: "row", flex: 1, }}>
+                                            {
+                                                this.props.continuous &&(this.state.paused || this.props.paused
+                                                    ?
+                                                    <TouchableOpacity activeOpacity={1} style={{ bottom: 0, left: 5, padding: 10, zIndex: 999, }} onPress={() => {
+                                                        if (!showOpenVip) {
 
+                                                            this.rePlay()
+
+                                                        }
+                                                    }}>
+
+                                                        <SvgVideoPlay height="20" width="20" />
+                                                    </TouchableOpacity>
+                                                    :
+                                                    <TouchableOpacity activeOpacity={1} style={{ bottom: 0, left: 5, padding: 10, zIndex: 999 }} onPress={() => { !showOpenVip && this.setState({ paused: true }) }}>
+
+                                                        <SvgVideoStop height="20" width="20" />
+                                                    </TouchableOpacity>
+                                                )
+                                            }
+                                            {
+                                                this.props.continuous &&
+                                                <TouchableOpacity
+                                                    activeOpacity={this.props.nextBtnFun?0.5:1}
+
+                                                    style={{ padding: 10, width: 40, bottom: 0, right: 5, zIndex: 9999, alignSelf: "flex-end", marginLeft: 10 }}
+                                                    onPress={() => { this.props.nextBtnFun&& this.props.nextBtnFun() }}
+                                                >
+                                                    <SvgVideoNextBtn height="20" width="22" fill={this.props.nextBtnFun?"#ffffff":"#626262"}/>
+
+
+                                                </TouchableOpacity >
+                                            }
+
+                                        </View>
+                                        <View style={{ flexDirection: "row", flex: 1, justifyContent: "flex-end" }}>
+
+                                            {
+                                                this.props.continuous &&
+                                                <TouchableOpacity
+                                                    activeOpacity={0.5}
+
+                                                    style={{ padding: 10, bottom: 0, right: 5, zIndex: 9999, alignSelf: "flex-end" }}
+                                                    onPress={() => { this.setState({ showConts: false, showChangeList: true }) }}
+                                                >
+                                                    <Text style={{ color: "#fff" }}>选集</Text>
+                                                </TouchableOpacity >
+                                            }
+                                            {
+                                                this.props.continuous &&
+                                            <TouchableOpacity
+                                                activeOpacity={0.5}
+
+                                                style={{ padding: 10, width: 40, bottom: 0, right: 5, zIndex: 9999, alignSelf: "flex-end" }}
+                                                onPress={() => { this.changeSmallBox() }}
+                                            >
+                                                <SvgVideoSmallBox height="20" width="20" />
+                                            </TouchableOpacity >
+                                            }
+                                        </View>
+
+                                    </View>
                                 }
                                 {/* 阴影 */}
-                                <LinearGradient colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.1)', 'rgba(0,0,0,0.4)']} style={{ height: LinearGradientHeight, width: this.state.width, position: "absolute", bottom: this.state.smallP ? 0 : -bottomContsBottom }}></LinearGradient>
                             </Animated.View>
                             :
                             null
@@ -992,13 +1111,14 @@ rePlay=()=>{
 
                 {
                     //拖动进度条展示拖动当前时时间
-                    
+
                     <View
-                    ref={"gotimeSpeed"}
+                        ref={"gotimeSpeed"}
                         style={{
                             left: this.state.width / 2 - 45, position: "absolute",
                             top: 50, bottom: 50, justifyContent: "center",
-                           opacity:0,
+                            opacity: 0,
+                            width: 0
                         }}>
                         <View style={{
                             flexDirection: "row", justifyContent: "center", alignItems: 'center', backgroundColor: "rgba(0,0,0,0.7)", paddingHorizontal: 10,
@@ -1016,10 +1136,10 @@ rePlay=()=>{
                     this.state.showLoading ?
                         <View
                             style={{
-                                
+
                                 left: this.state.width / 2 - 45, position: "absolute",
                                 top: 50, bottom: 50, justifyContent: "center",
-                                zIndex:10
+                                zIndex: 10
                             }}>
                             <View style={
                                 {
@@ -1090,32 +1210,21 @@ rePlay=()=>{
 
                 }
 
-                
+                {
+                    this.state.showChangeList &&
+                    this.props.renderAllSeenList && this.props.renderAllSeenList()
+                }
+
+
 
             </View>
         )
     }
 
+
+
 }
 
-const styles = StyleSheet.create({
-    addStyleDot: { borderColor: "rgba(255,255,255,.5)", borderWidth: 4, padding: 4, left: -2 }
 
-});
 
-const NgxuSetting = {
-    hideAndroidBottom: () => { Platform.OS === "android" && NativeModules.HideBottomNa.hide(); }
-    , showAndroidBottom: () => { Platform.OS === "android" && NativeModules.HideBottomNa.show(); }
-    , SetBrightness: (e, callback) => {
-        Platform.OS === "android" ?
-            NativeModules.AppBrightness.setAppBrightness(e) :
-            SystemSetting.setBrightnessForce(e)
-    }
-    ,getBrightness:(callback)=>{SystemSetting.getBrightness().then((brightness) => {
-        callback(brightness)
-    });
-    }
-}
-
-export { NgxuSetting }
 export default VideoPlayer
