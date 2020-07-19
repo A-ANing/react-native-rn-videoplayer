@@ -11,7 +11,7 @@
 - gif预览 ios 和 android
 
 <img src="https://github.com/ngxu/ngxu.github.io/blob/master/img/ios_demo.gif?raw=true" width=320 height=693/>&nbsp;&nbsp;&nbsp;&nbsp;
-<img src="https://github.com/ngxu/ngxu.github.io/blob/master/img/VEditor_20200514220024.gif?raw=true" width=320 height=693 />
+<img src="https://github.com/ngxu/ngxu.github.io/blob/master/img/android_demo.gif?raw=true" width=320 height=693 />
 
 ## Getting started
 1. 
