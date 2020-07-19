@@ -9,6 +9,8 @@
 
 ### [简书地址](https://www.jianshu.com/p/a6f09d2ab09c)
 
+### [视频预览](https://tiger.cdnja.co/v/zj/ZJk5P.mp4?secure=0v9DIJ16_aohnYQGIiVhRQ&expires=1595161800)
+
 - gif预览 ios 和 android
 
 <img src="https://github.com/ngxu/ngxu.github.io/blob/master/img/ios_demo.gif?raw=true" width=320 height=693/>&nbsp;&nbsp;&nbsp;&nbsp;
