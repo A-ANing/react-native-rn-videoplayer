@@ -20,7 +20,8 @@ npm install react-native-rn-videoplayer --save
 ```
 
 2. 
-- - android
+## - -  android
+
  Open up `android/app/src/main/java/[...]/MainActivity.java`
   
 ```diff 
@@ -41,7 +42,7 @@ public class MainActivity extends ReactActivity {
 }
 ```
 
-- - iOS 
+## - - iOS 
 
 Add the following to your project's `AppDelegate.m`:
 
@@ -62,12 +63,11 @@ Add the following to your project's `AppDelegate.m`:
 ## RN >= 0.60
 
 ### ios
-  `
+  ```
     cd ios 
-  `
-  `
+  
     pod install
-  `
+  ```
 
 ### Android
 
