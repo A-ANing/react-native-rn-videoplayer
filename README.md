@@ -3,8 +3,10 @@
 - 可以上下滑动改变音量、屏幕亮度，拖动进度条显示要改变的时间，全屏切换，缓存进度，双击视频暂停，等功能，基于react-native-video
 - ps：Android改变亮度无需获取高级权限，只改变当前active也就是当前页面的亮度，改变亮度后，返回进入到其他页面会恢复到原来的亮度。
 
-RN>=0.60 | 2.x 
-RN<=0.59 | 1.3.1
+
+- Version 2.x requires react-native >= 0.60.0
+- Version 1.3.1 requires react-native <= 0.59.9
+
 
 <h3><a href="https://www.jianshu.com/p/a6f09d2ab09c" target="_blank">简书地址</a></h3>
 
