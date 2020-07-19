@@ -25,7 +25,7 @@ npm install react-native-rn-videoplayer --save
 2. 
 ```shell
 react-native link react-native-linear-gradient
-react-native link react-native-orientation
+react-native link react-native-orientation-locker
 react-native link react-native-svg
 react-native link react-native-system-setting
 react-native link react-native-video
@@ -76,9 +76,21 @@ public class MainActivity extends ReactActivity {
 
 #### iOS
 
-No need to do anything, because no ios native code is used
-这些功能ios不需要用到原生方法，至少我这个react-native-rn-videoplayer不需要link，但是react-native-videoplayerreact-native-linear-gradient react-native-orientation react-native-svg react-native-system-setting react-native-video这些库你需要自行查看，如果link好这些库，ios是没问题的。
+Add the following to your project's `AppDelegate.m`:
 
+```diff
++#import "Orientation.h"
+
+@implementation AppDelegate
+
+// ...
+
++- (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
++  return [Orientation getOrientation];
++}
+
+@end
+```
 
 
 ## Usage
@@ -87,10 +99,59 @@ import Videoplayer from 'react-native-rn-videoplayer';
 
 <VideoPlayer
 url={"https://xxxxx.mp4"}
-ref={(ref)=>this.player=ref}/>
+navigation={this.props.navigation}//路由 用于小屏屏播放的返回按钮
+ref={(ref)=>this.player=ref}
+poster={"http:XXX.jpg"}//视频封面
+/>
+
 ```
 # api
 - url 视频地址
+
+- continuous 是否开启全屏时的选集功能 适合连续剧 默认 false
+  ```js
+    continuous={true}
+  ```
+
+- renderAllSeenList 点击选集后显示的集数列表
+  ```js
+  ···
+  <VideoPlayer
+    url={"https://xxxxx.mp4"}
+    ref={(ref)=>this.player=ref}
+    renderAllSeenList={this.renderAllSeenList}
+  />
+    
+  ···
+    renderAllSeenList = () => (
+    <View style={{ width: height / 2.5, backgroundColor: "rgba(0,0,0,0.6)", position: "absolute", top: 0, bottom: 0, right: 0, }}>
+        <ScrollView>
+          <Button 
+            onPress={()=>{
+                const newdata = this.state.data
+                      newdata.index = newindex//集数
+                //更新集数 并重新开始播放
+                this.setState({ data: newdata }, () => { this.player.rePlay() })
+            }}
+            
+          />  
+        </ScrollView>      
+
+      </View>
+    )
+
+  ```
+
+- nextBtnFun 全屏时下一集按钮的方法 当是最后一集的时候应将值变为false，将按钮置灰
+  ```js
+  const {data} = this.state
+  //data.index为集数
+  //当当前播放的集数和总集数相同时，将nextBtnFun重置为false
+  nextBtnFun={
+    data.index == data.datalist[data.datalist.length - 1].num - 1 ? false : this.nextBtnFun
+    }
+  ```
+
 - storeComponent 右上角收藏按钮的图标 
   ```javascript
     storeComponent={()=><Image/>}
