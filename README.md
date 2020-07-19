@@ -59,7 +59,7 @@ Add the following to your project's `AppDelegate.m`:
 @end
 ```
 
-## rn>=0.60
+## RN >= 0.60
 
 ### ios
   `
@@ -128,7 +128,7 @@ Add the following to your project's `AppDelegate.m`:
   ```
 
 
-##rn<=0.59
+## RN <= 0.59
 
 
 ```shell
