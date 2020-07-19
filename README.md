@@ -3,8 +3,6 @@
 - 可以上下滑动改变音量、屏幕亮度，拖动进度条显示要改变的时间，全屏切换，缓存进度，双击视频暂停，等功能，基于react-native-video
 - ps：Android改变亮度无需获取高级权限，只改变当前active也就是当前页面的亮度，改变亮度后，返回进入到其他页面会恢复到原来的亮度。
 
-## 目前只支持rn0.60以下的版本
-
 
 <h3><a href="https://www.jianshu.com/p/a6f09d2ab09c" target="_blank">简书地址</a></h3>
 
@@ -16,25 +14,14 @@
 <img src="https://github.com/ngxu/ngxu.github.io/blob/master/img/VEditor_20200514220024.gif?raw=true" width=320 height=693 />
 
 ## Getting started
-
 1. 
 ```shell
 npm install react-native-rn-videoplayer --save
 ```
+
 2. 
-```shell
-react-native link react-native-linear-gradient
-react-native link react-native-orientation-locker
-react-native link react-native-svg
-react-native link react-native-system-setting
-react-native link react-native-video
-```
-
-#### Android
-
-1. Open up `android/app/src/main/java/[...]/MainActivity.java`
-
-- Add 
+- - android
+ Open up `android/app/src/main/java/[...]/MainActivity.java`
   
 ```java
 import android.content.Intent; // <--- import`
@@ -53,27 +40,8 @@ public class MainActivity extends ReactActivity {
     ...
 }
 ```
-  
-2. Append the following lines to `android/settings.gradle`:
-  	``` javascript
-  	include ':react-native-rn-videoplayer'
-  	project(':react-native-rn-videoplayer').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-rn-videoplayer/android')
-  	```
-3. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
-  	```
-      compile project(':react-native-rn-videoplayer')
-  	```
 
-4. Open up `android/app/src/main/java/[...]/MainApplication.java`
-
-	- Add 
-  ```java
-  import com.ngxu.videoplayer.RNVideoplayerPackage;
-
-  new RNVideoplayerPackage() //to the list returned by the `getPackages()` method
- ```
-
-#### iOS
+- - iOS 
 
 Add the following to your project's `AppDelegate.m`:
 
@@ -90,6 +58,111 @@ Add the following to your project's `AppDelegate.m`:
 
 @end
 ```
+
+## rn>=0.60
+
+#### ios
+  `
+    cd ios 
+    pod install
+  `
+
+#### Android
+
+  - settings.gradle
+  ```diff
+    rootProject.name = 'TestPack622'
+    apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
+
+    +include ':react-native-linear-gradient'
+    +project(':react-native-linear-gradient').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-linear-gradient/android')
+    +include ':react-native-svg'
+    +project(':react-native-svg').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-svg/android')
+    +include ':react-native-orientation-locker'
+    +project(':react-native-orientation-locker').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-orientation-locker/android')
+    +include ':react-native-video'
+    +project(':react-native-video').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-video/android-exoplayer')
+    +include ':react-native-system-setting'
+    +project(':react-native-system-setting').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-system-setting/android')
+
+    include ':app'
+  ```
+
+  - MainApplication.java
+
+  ```diff
+
+  +import com.horcrux.svg.SvgPackage;
+  +import com.BV.LinearGradient.LinearGradientPackage; // <--- This!
+  +import org.wonday.orientation.OrientationPackage;
+  +import com.ninty.system.setting.SystemSettingPackage;
+
+    ···
+   @Override
+        protected List<ReactPackage> getPackages() {
+          @SuppressWarnings("UnnecessaryLocalVariable")
+          List<ReactPackage> packages = new PackageList(this).getPackages();
+          // Packages that cannot be autolinked yet can be added manually here, for example:
+          +packages.add(new LinearGradientPackage());
+          +packages.add(new SvgPackage());
+          +packages.add(new OrientationPackage());
+          +packages.add(new SystemSettingPackage());
+          return packages;
+        }
+        ···
+
+```
+
+- build.gradle
+
+  ```diff
+  dependencies {
+    
+    +implementation project(':react-native-svg')
+
+    +implementation project(':react-native-linear-gradient')
+    +implementation project(':react-native-orientation-locker')
+    +implementation project(':react-native-system-setting')
+  }
+
+  ```
+
+
+##rn<=0.59
+
+
+```shell
+react-native link react-native-linear-gradient
+react-native link react-native-orientation-locker
+react-native link react-native-svg
+react-native link react-native-system-setting
+react-native link react-native-video
+```
+
+#### Android
+
+
+  
+1. Append the following lines to `android/settings.gradle`:
+  	``` javascript
+  	include ':react-native-rn-videoplayer'
+  	project(':react-native-rn-videoplayer').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-rn-videoplayer/android')
+  	```
+2. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
+  	```
+      compile project(':react-native-rn-videoplayer')
+  	```
+
+3. Open up `android/app/src/main/java/[...]/MainApplication.java`
+
+	- Add 
+  ```java
+  import com.ngxu.videoplayer.RNVideoplayerPackage;
+
+  new RNVideoplayerPackage() //to the list returned by the `getPackages()` method
+ ```
+
+
 
 
 ## Usage
