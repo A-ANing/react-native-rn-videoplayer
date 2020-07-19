@@ -98,6 +98,8 @@ Add the following to your project's `AppDelegate.m`:
 +  import com.BV.LinearGradient.LinearGradientPackage; // <--- This!
 +  import org.wonday.orientation.OrientationPackage;
 +  import com.ninty.system.setting.SystemSettingPackage;
++  import com.brentvatne.react.ReactVideoPackage;
+
 
     ···
    @Override
@@ -109,6 +111,7 @@ Add the following to your project's `AppDelegate.m`:
 +          packages.add(new SvgPackage());
 +          packages.add(new OrientationPackage());
 +          packages.add(new SystemSettingPackage());
++          packages.add(new ReactVideoPackage());
           return packages;
         }
         ···
@@ -123,6 +126,7 @@ Add the following to your project's `AppDelegate.m`:
 +    implementation project(':react-native-linear-gradient')
 +    implementation project(':react-native-orientation-locker')
 +    implementation project(':react-native-system-setting')
++    implementation project(':react-native-video')
   }
 
   ```
