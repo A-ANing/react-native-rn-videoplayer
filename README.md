@@ -13,7 +13,6 @@
 
 <img src="https://github.com/ngxu/ngxu.github.io/blob/master/img/ios_demo.gif?raw=true" width=320 height=693/>&nbsp;&nbsp;&nbsp;&nbsp;
 <img src="https://github.com/ngxu/ngxu.github.io/blob/master/img/VEditor_20200514220024.gif?raw=true" width=320 height=693 />
-<video controls="" autoplay="" name="media"><source src="https://vfx.mtime.cn/Video/2020/01/13/mp4/200113092021600382_1080.mp4" type="video/mp4"></video>
 
 ## Getting started
 
