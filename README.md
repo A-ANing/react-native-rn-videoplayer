@@ -6,9 +6,9 @@
 ## 目前只支持rn0.60以下的版本
 
 
-<h3><a href="https://www.jianshu.com/p/a6f09d2ab09c">简书地址</a></h3>
+<h3><a href="https://www.jianshu.com/p/a6f09d2ab09c" target="_blank">简书地址</a></h3>
 
-<h3><a href="https://tiger.cdnja.co/v/zj/ZJk5P.mp4?secure=0v9DIJ16_aohnYQGIiVhRQ&expires=1595161800">视频预览</a></h3>
+<h3><a href="https://tiger.cdnja.co/v/zj/ZJk5P.mp4?secure=0v9DIJ16_aohnYQGIiVhRQ&expires=1595161800" target="_blank">视频预览</a></h3>
 
 - gif预览 ios 和 android
 
