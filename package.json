@@ -21,6 +21,6 @@
     "react-native-orientation-locker": "^1.1.8",
     "react-native-svg": "^9.5.1",
     "react-native-system-setting": "^1.7.2",
-    "react-native-video": "^4.4.4"
+    "react-native-video": "^5.0.2"
   }
 }
