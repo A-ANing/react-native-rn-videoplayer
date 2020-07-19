@@ -5,7 +5,7 @@
 
 
 - Version 2.x requires react-native >= 0.60.0
-- Version 1.3.1 requires react-native <= 0.59.9
+- Version 1.3.2 requires react-native <= 0.59.9
 
 
 <h3><a href="https://www.jianshu.com/p/a6f09d2ab09c" target="_blank">简书地址</a></h3>
