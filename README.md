@@ -23,20 +23,20 @@ npm install react-native-rn-videoplayer --save
 - - android
  Open up `android/app/src/main/java/[...]/MainActivity.java`
   
-```java
-import android.content.Intent; // <--- import`
-import android.content.res.Configuration; // <--- import
+```diff 
++import android.content.Intent; 
++import android.content.res.Configuration;
 public class MainActivity extends ReactActivity {
 
    ...
          
- @Override
-      public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        Intent intent = new Intent("onConfigurationChanged");
-        intent.putExtra("newConfig", newConfig);
-        this.sendBroadcast(intent);
-    }
++ @Override
++      public void onConfigurationChanged(Configuration newConfig) {
++        super.onConfigurationChanged(newConfig);
++        Intent intent = new Intent("onConfigurationChanged");
++        intent.putExtra("newConfig", newConfig);
++        this.sendBroadcast(intent);
++    }
     ...
 }
 ```
@@ -61,29 +61,31 @@ Add the following to your project's `AppDelegate.m`:
 
 ## rn>=0.60
 
-#### ios
+### ios
   `
     cd ios 
+  `
+  `
     pod install
   `
 
-#### Android
+### Android
 
   - settings.gradle
   ```diff
     rootProject.name = 'TestPack622'
     apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
 
-    +include ':react-native-linear-gradient'
-    +project(':react-native-linear-gradient').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-linear-gradient/android')
-    +include ':react-native-svg'
-    +project(':react-native-svg').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-svg/android')
-    +include ':react-native-orientation-locker'
-    +project(':react-native-orientation-locker').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-orientation-locker/android')
-    +include ':react-native-video'
-    +project(':react-native-video').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-video/android-exoplayer')
-    +include ':react-native-system-setting'
-    +project(':react-native-system-setting').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-system-setting/android')
++    include ':react-native-linear-gradient'
++    project(':react-native-linear-gradient').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-linear-gradient/android')
++    include ':react-native-svg'
++    project(':react-native-svg').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-svg/android')
++    include ':react-native-orientation-locker'
++    project(':react-native-orientation-locker').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-orientation-locker/android')
++    include ':react-native-video'
++    project(':react-native-video').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-video/android-exoplayer')
++    include ':react-native-system-setting'
++    project(':react-native-system-setting').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-system-setting/android')
 
     include ':app'
   ```
@@ -92,10 +94,10 @@ Add the following to your project's `AppDelegate.m`:
 
   ```diff
 
-  +import com.horcrux.svg.SvgPackage;
-  +import com.BV.LinearGradient.LinearGradientPackage; // <--- This!
-  +import org.wonday.orientation.OrientationPackage;
-  +import com.ninty.system.setting.SystemSettingPackage;
++  import com.horcrux.svg.SvgPackage;
++  import com.BV.LinearGradient.LinearGradientPackage; // <--- This!
++  import org.wonday.orientation.OrientationPackage;
++  import com.ninty.system.setting.SystemSettingPackage;
 
     ···
    @Override
@@ -103,26 +105,24 @@ Add the following to your project's `AppDelegate.m`:
           @SuppressWarnings("UnnecessaryLocalVariable")
           List<ReactPackage> packages = new PackageList(this).getPackages();
           // Packages that cannot be autolinked yet can be added manually here, for example:
-          +packages.add(new LinearGradientPackage());
-          +packages.add(new SvgPackage());
-          +packages.add(new OrientationPackage());
-          +packages.add(new SystemSettingPackage());
++          packages.add(new LinearGradientPackage());
++          packages.add(new SvgPackage());
++          packages.add(new OrientationPackage());
++          packages.add(new SystemSettingPackage());
           return packages;
         }
         ···
 
 ```
 
-- build.gradle
+-  app/build.gradle
 
   ```diff
   dependencies {
-    
-    +implementation project(':react-native-svg')
-
-    +implementation project(':react-native-linear-gradient')
-    +implementation project(':react-native-orientation-locker')
-    +implementation project(':react-native-system-setting')
++    implementation project(':react-native-svg')
++    implementation project(':react-native-linear-gradient')
++    implementation project(':react-native-orientation-locker')
++    implementation project(':react-native-system-setting')
   }
 
   ```
