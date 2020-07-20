@@ -304,7 +304,8 @@ class VideoPlayer extends React.Component {
             this.dotX, // 要变化的动画值
             {
                 toValue: e.currentTime, // 最终的动画值
-                duration: 0
+                duration: 0,
+                useNativeDriver:false
             },
         ).start(); // 开始执行动画
 
@@ -313,7 +314,8 @@ class VideoPlayer extends React.Component {
             this.bufferX, // 要变化的动画值
             {
                 toValue: e.playableDuration, // 最终的动画值
-                duration: 0
+                duration: 0,
+                useNativeDriver:false
             },
         ).start(); // 开始执行动画
 
@@ -328,7 +330,8 @@ class VideoPlayer extends React.Component {
                 toValue: 0, // 最终的动画值
 
                 duration: 300,
-                delay: 5000
+                delay: 5000,
+                useNativeDriver:false
 
 
             },
@@ -341,6 +344,7 @@ class VideoPlayer extends React.Component {
             {
                 toValue: 1, // 最终的动画值
                 duration: 300,
+                useNativeDriver:false
             },
         )
 
@@ -351,6 +355,7 @@ class VideoPlayer extends React.Component {
             {
                 toValue: 0, // 最终的动画值
                 duration: 300,
+                useNativeDriver:false
             },
         )
 
@@ -361,6 +366,7 @@ class VideoPlayer extends React.Component {
             {
                 toValue: 0, // 最终的动画值
                 duration: 0,
+                useNativeDriver:false
             },
         )
 
