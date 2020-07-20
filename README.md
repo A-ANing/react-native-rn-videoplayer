@@ -73,8 +73,8 @@ Add the following to your project's `AppDelegate.m`:
     pod install
   ```
 
-### Android
-
+### Android. 
+#### Most of them are automatically linked. If you can’t find XX, you should link manually
   - settings.gradle
   ```diff
     rootProject.name = 'TestPack622'
