@@ -278,7 +278,6 @@ poster={"http:XXX.jpg"}//视频封面
 
 - ..... 继承全部的react-native-video的方法及属性
 
-# 自己的方法
 - changeWindows() 切换全屏或者小屏
 
 changeWindows(boolean)  true 全屏， false 小屏
@@ -297,13 +296,15 @@ this.player.changeWindows(true); // 全屏
 
 # 显示或者隐藏安卓底部虚拟按键
 ```javascript
-NgxuSetting.hideAndroidBottom()
-NgxuSetting.showAndroidBottom()
+const Setting = new NgxuSetting()
+Setting.hideAndroidBottom()
+Setting.showAndroidBottom()
 ```
 
 # 获取手机系统亮度
 ```javascript
-NgxuSetting.getBrightness((e)=>{consoloe.log(e)})
+const Setting = new NgxuSetting()
+Setting.getBrightness((e)=>{consoloe.log(e)})
 ```
 
 
@@ -312,5 +313,6 @@ NgxuSetting.getBrightness((e)=>{consoloe.log(e)})
  - android仅仅只改变当前active亮度，不会修改系统亮度，修改系统亮度是非常麻烦的事情，需要用户手动打开手机设置，app权限设置，手动打开“允许修改系统设置“的高级权限
  - ios则是改变系统亮度你可以
  ```javascript
-    NgxuSetting.SetBrightness(1)//0-1之间
+    const Setting = new NgxuSetting()
+    Setting.SetBrightness(1)//0-1之间
   ```
