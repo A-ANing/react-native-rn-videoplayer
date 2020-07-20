@@ -280,28 +280,27 @@ poster={"http:XXX.jpg"}//视频封面
 
 - changeWindows() 切换全屏或者小屏
 
-changeWindows(boolean)  true 全屏， false 小屏
+    changeWindows(boolean)  true 全屏， false 小屏
 
-Example:
-```javascript
-<VideoPlayer ref={(ref)=>this.player=ref}/>
-this.player.changeWindows(true); // 全屏
-```
+    Example:
+    ```javascript
+      <VideoPlayer ref={(ref)=>this.player=ref}/>
+      this.player.changeWindows(true); // 全屏
+    ```
 
 
 
 # 暴露方法
 `import {NgxuSetting} from 'react-native-rn-videoplayer'`
-##  你可以不使用NgxuSetting， NgxuSetting是我暴露除了自己封装以及其他库的原生方法如改变音量 显示隐藏Android底部虚拟按键 以及改变屏幕亮度的方法，如果你在其他地方需要用到你可以引用进来。
 
-# 显示或者隐藏安卓底部虚拟按键
+## 显示或者隐藏安卓底部虚拟按键
 ```javascript
 const Setting = new NgxuSetting()
 Setting.hideAndroidBottom()
 Setting.showAndroidBottom()
 ```
 
-# 获取手机系统亮度
+## 获取手机系统亮度
 ```javascript
 const Setting = new NgxuSetting()
 Setting.getBrightness((e)=>{consoloe.log(e)})
@@ -309,7 +308,7 @@ Setting.getBrightness((e)=>{consoloe.log(e)})
 
 
 
-# 改变ios系统亮度 android 当前app亮度
+## 改变ios系统亮度 android 当前app亮度
  - android仅仅只改变当前active亮度，不会修改系统亮度，修改系统亮度是非常麻烦的事情，需要用户手动打开手机设置，app权限设置，手动打开“允许修改系统设置“的高级权限
  - ios则是改变系统亮度你可以
  ```javascript
