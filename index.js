@@ -1209,6 +1209,32 @@ class VideoPlayer extends React.Component {
 
 }
 
-
+export const NgxuSetting = function () {
+    this.hideAndroidBottom = () => {
+        if (Platform.OS == "android")
+            NativeModules.HideBottomNa.hide();
+    }
+    this.showAndroidBottom = () => {
+        if (Platform.OS == "android")
+            NativeModules.HideBottomNa.show();
+    }
+    this.getBrightness = (callback) => {
+        SystemSetting.getBrightness().then((brightness) => {
+            callback(brightness)
+        });
+    }
+    this.SetBrightness = (e) => {
+        Platform.OS === "android" ?
+            NativeModules.AppBrightness.setAppBrightness(e)
+            :
+            SystemSetting.setBrightnessForce(e).then((success) => {
+                !success && Alert.alert('没有权限', '您无权限改变屏幕亮度', [
+                    { 'text': '好的', style: 'cancel' },
+                    { 'text': '打开设置', onPress: () => SystemSetting.grantWriteSettingPermission() }
+                ])
+            });
+    }
+}
 
 export default VideoPlayer
+
