@@ -663,6 +663,7 @@ class VideoPlayer extends React.Component {
     //重置播放
     rePlay = () => {
         if (this.state.isEnd) {
+            console.log("---=-=-=-=",1)
             this.player.seek(0)
             setTimeout(() => {
                 this.setState({ paused: true, isEnd: false, showConts: true }, () => { this.setState({ paused: false }) });
@@ -670,12 +671,14 @@ class VideoPlayer extends React.Component {
             }, 300)
 
         } else {
+            console.log("---=-=-=-=",2)
             if (!this.state.paused) {
                 this.setState({ paused: true }, () => { this.setState({ paused: false }) });
             }
 
         }
-        if (this.state.paused) {
+        if (this.state.paused&&!this.state.isEnd) {
+            console.log("---=-=-=-=",3)
             this.setState({ paused: false });
         }
 
@@ -784,9 +787,6 @@ class VideoPlayer extends React.Component {
 
     //播放完重制播放进度等状态
     reVideo = () => {
-        if (!this.state.paused) {
-            this.props.onEnd && this.props.onEnd()
-        }
 
         !this.props.repeat && this.setState({ showConts: true, opacity: 1, paused: true, isEnd: true }, () => {
             // this.player.seek(0)
@@ -797,7 +797,9 @@ class VideoPlayer extends React.Component {
             //     }
             // })
         })
-
+        if (!this.state.paused) {
+            this.props.onEnd && this.props.onEnd()
+        }
 
     }
 
