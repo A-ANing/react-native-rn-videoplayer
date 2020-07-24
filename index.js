@@ -661,26 +661,33 @@ class VideoPlayer extends React.Component {
     }
 
     //重置播放
-    rePlay = () => {
+    rePlay = (autoPlay=true) => {
         if (this.state.isEnd) {
             console.log("---=-=-=-=",1)
             this.player.seek(0)
             setTimeout(() => {
-                this.setState({ paused: true, isEnd: false, showConts: true }, () => { this.setState({ paused: false }) });
+                if(autoPlay){
+                    this.setState({ paused: true, isEnd: false, showConts: true }, () => { this.setState({ paused: false }) });
+                }else{
+                    this.setState({ isEnd: false, showConts: true });
+                }
 
             }, 300)
 
         } else {
             console.log("---=-=-=-=",2)
             if (!this.state.paused) {
-                
-                this.setState({ paused: true }, () => { this.setState({ paused: false }) });
+                if(autoPlay){
+                    this.setState({ paused: true }, () => { this.setState({ paused: false }) });
+                }else{
+                    this.setState({ paused: true });
+                }
             }
 
         }
         if (this.state.paused&&!this.state.isEnd) {
             console.log("---=-=-=-=",3)
-            this.setState({ paused: false });
+            this.setState({ paused: autoPlay?false:true });
         }
 
     }
@@ -968,7 +975,7 @@ class VideoPlayer extends React.Component {
                                     <View style={{ flexDirection: "row", flexWrap: "nowrap" }}>
                                         {/* 播放暂停 */}
                                         {
-                                            !this.props.continuous ? (this.state.paused || this.props.paused
+                                            !this.props.continuous ? (this.state.paused 
                                                 ?
                                                 <TouchableOpacity activeOpacity={1} style={{ bottom: 0, left: 5, padding: 10, zIndex: 999, }} onPress={() => {
                                                     if (!showOpenVip) {
@@ -985,7 +992,7 @@ class VideoPlayer extends React.Component {
                                                 </TouchableOpacity>
                                             )
                                                 :
-                                                smallP && (this.state.paused || this.props.paused
+                                                smallP && (this.state.paused 
                                                     ?
                                                     <TouchableOpacity activeOpacity={1} style={{ bottom: 0, left: 5, padding: 10, zIndex: 999, }} onPress={() => {
                                                         if (!showOpenVip) {

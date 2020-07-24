@@ -258,6 +258,15 @@ poster={"http:XXX.jpg"}//视频封面
     >
 
   ```
+
+- rePlay 重置进度为0
+  ```javascript
+
+  this.player.reLoad(false)
+  //false 不自动播放
+  //默认为true 自动播放
+  ```
+
 - onSmallBack 当视频是小窗口时 点击返回按钮的回调 可以在此添加返回上个页面的功能  func
 - onStore 点击右上角收藏按钮的回调 func
 - onMoreFun 点击右上角更多按钮的回调 func
