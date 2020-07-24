@@ -673,6 +673,7 @@ class VideoPlayer extends React.Component {
         } else {
             console.log("---=-=-=-=",2)
             if (!this.state.paused) {
+                
                 this.setState({ paused: true }, () => { this.setState({ paused: false }) });
             }
 
@@ -686,6 +687,7 @@ class VideoPlayer extends React.Component {
 
     //暴露方法 设置播放暂停
     setPaused = (e) => {
+        this.adminPaused=true
         if (e) {
             this.setState({
                 paused: true
@@ -867,7 +869,7 @@ class VideoPlayer extends React.Component {
                                 }}
                                 posterResizeMode={"cover"}//封面大小
                                 playWhenInactive={true}//确定当通知或控制中心在视频前面时，媒体是否应继续播放。
-                                paused={this.props.paused ? this.props.paused : this.state.paused}//暂停
+                                paused={this.adminPaused?this.state.paused:(this.props.paused ? this.props.paused : this.state.paused)}//暂停
                                 onLoad={this.onLoad}
                                 onEnd={this.reVideo}
                                 resizeMode={"none"}
