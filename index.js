@@ -29,6 +29,7 @@ import SystemSetting from 'react-native-system-setting'
 import LinearGradient from 'react-native-linear-gradient';
 import Video from 'react-native-video';
 import { Loading } from './view/index'
+import { formatSeconds } from './utils/formatSeconds';
 import { SvgVideoNextBtn, SvgVideoLoading, SvgVideoBrightness, SvgVideoSetting, SvgVideoNoSound, SvgVideoStop, SvgVideoPlay, SvgVideoAllBox, SvgVideoSmallBox, SvgVideoBack, SvgVideoScang, SvgVideoSound } from './component/svg'
 import Orientation from 'react-native-orientation-locker';
 const { height, width } = Dimensions.get('screen');
@@ -278,7 +279,7 @@ class VideoPlayer extends React.Component {
         if (!this.state.showOpenVip && this.props.VIPCONTS) {
             if (e.currentTime >= this.noVipSecond) {
 
-                this.setState({ showOpenVip: true, paused: true, showConts: false }, () => { !this.state.smallP && this.changeSmallBox(); alert("试看结束") })
+                this.setState({ showOpenVip: true, paused: true, showConts: false }, () => { !this.state.smallP && this.changeSmallBox();  })
             }
         }
         if (this.nowTime != parseInt(e.currentTime)) {
@@ -286,12 +287,12 @@ class VideoPlayer extends React.Component {
 
             this.ismoveDot ?
                 this.setState({
-                    nowTime: this.formatSeconds(e.currentTime),
+                    nowTime: formatSeconds(e.currentTime),
 
                 })
                 :
                 this.setState({
-                    nowTime: this.formatSeconds(e.currentTime),
+                    nowTime: formatSeconds(e.currentTime),
                     dotStart: false
                 })
         }
@@ -305,7 +306,7 @@ class VideoPlayer extends React.Component {
             {
                 toValue: e.currentTime, // 最终的动画值
                 duration: 0,
-                useNativeDriver:false
+                useNativeDriver: false
             },
         ).start(); // 开始执行动画
 
@@ -315,7 +316,7 @@ class VideoPlayer extends React.Component {
             {
                 toValue: e.playableDuration, // 最终的动画值
                 duration: 0,
-                useNativeDriver:false
+                useNativeDriver: false
             },
         ).start(); // 开始执行动画
 
@@ -331,7 +332,7 @@ class VideoPlayer extends React.Component {
 
                 duration: 300,
                 delay: 5000,
-                useNativeDriver:false
+                useNativeDriver: false
 
 
             },
@@ -344,7 +345,7 @@ class VideoPlayer extends React.Component {
             {
                 toValue: 1, // 最终的动画值
                 duration: 300,
-                useNativeDriver:false
+                useNativeDriver: false
             },
         )
 
@@ -355,7 +356,7 @@ class VideoPlayer extends React.Component {
             {
                 toValue: 0, // 最终的动画值
                 duration: 300,
-                useNativeDriver:false
+                useNativeDriver: false
             },
         )
 
@@ -366,7 +367,7 @@ class VideoPlayer extends React.Component {
             {
                 toValue: 0, // 最终的动画值
                 duration: 0,
-                useNativeDriver:false
+                useNativeDriver: false
             },
         )
 
@@ -389,7 +390,7 @@ class VideoPlayer extends React.Component {
                 this.startX = evt.nativeEvent.pageX;
 
                 this.startY = evt.nativeEvent.pageY;
-                console.log("startY", this.startY)
+                // console.log("startY", this.startY)
                 //获取当前音量
                 SystemSetting.getVolume().then((volume) => {
                     this.volume = volume
@@ -416,7 +417,7 @@ class VideoPlayer extends React.Component {
 
                     this.recordHandeX.push(evt.nativeEvent.pageX)
                 }
-                console.log("locationY", evt.nativeEvent.pageY)
+                // console.log("locationY", evt.nativeEvent.pageY)
                 this.moveYData = this.startY - evt.nativeEvent.pageY
                 // console.log("moveYData",)
                 this.moveXData = this.startX - evt.nativeEvent.pageX
@@ -442,7 +443,7 @@ class VideoPlayer extends React.Component {
                                     if (this.hideVolumeTime) {
                                         clearTimeout(this.hideVolumeTime)
                                     }
-                                    console.log("音量", this.soundData)
+                                    // console.log("音量", this.soundData)
                                     SystemSetting.setVolume(this.soundData);
                                     if (this.soundData >= 1) {
                                         this.setState({
@@ -608,7 +609,7 @@ class VideoPlayer extends React.Component {
                         showDrTime: false,
                         dotWidth: this.realMarginLeft,
                         //想要拖动快进的时间
-                        goSpeedTime: this.formatSeconds((this.realMarginLeft) / (this.state.width - 200) * this.state.duration)
+                        goSpeedTime: formatSeconds((this.realMarginLeft) / (this.state.width - 200) * this.state.duration)
                     })
                 }
                 // 从成为响应者开始时的累计手势移动距离为gestureState.d{x,y}
@@ -661,40 +662,40 @@ class VideoPlayer extends React.Component {
     }
 
     //重置播放
-    rePlay = (autoPlay=true) => {
+    rePlay = (autoPlay = true) => {
         if (this.state.isEnd) {
-            console.log("---=-=-=-=",1)
+            // console.log("---=-=-=-=", 1)
             this.player.seek(0)
             setTimeout(() => {
-                if(autoPlay){
+                if (autoPlay) {
                     this.setState({ paused: true, isEnd: false, showConts: true }, () => { this.setState({ paused: false }) });
-                }else{
+                } else {
                     this.setState({ isEnd: false, showConts: true });
                 }
 
             }, 300)
 
         } else {
-            console.log("---=-=-=-=",2)
+            // console.log("---=-=-=-=", 2)
             if (!this.state.paused) {
-                if(autoPlay){
+                if (autoPlay) {
                     this.setState({ paused: true }, () => { this.setState({ paused: false }) });
-                }else{
+                } else {
                     this.setState({ paused: true });
                 }
             }
 
         }
-        if (this.state.paused&&!this.state.isEnd) {
-            console.log("---=-=-=-=",3)
-            this.setState({ paused: autoPlay?false:true });
+        if (this.state.paused && !this.state.isEnd) {
+            // console.log("---=-=-=-=", 3)
+            this.setState({ paused: autoPlay ? false : true });
         }
 
     }
 
     //暴露方法 设置播放暂停
     setPaused = (e) => {
-        this.adminPaused=true
+        this.adminPaused = true
         if (e) {
             this.setState({
                 paused: true
@@ -722,19 +723,21 @@ class VideoPlayer extends React.Component {
     }
     //显示控件
     showConts = () => {
-        clearTimeout(this.TimeHideConts)
-        //当提示要vip 暂停播放时 禁止双击暂停播放
-        if (!this.state.showOpenVip) {
-            if (this.lastBackPressed && this.lastBackPressed + 300 >= Date.now()) {
-                clearTimeout(this.Timeout)
-                this.state.paused ? this.rePlay() : this.setState({ paused: true, showConts: true })
-                this.state.opacity.setValue(1)
-                return
-            } else {
-                this.lastBackPressed = Date.now();
+        try {
+            clearTimeout(this.TimeHideConts)
+            //当提示要vip 暂停播放时 禁止双击暂停播放
+            if (!this.state.showOpenVip) {
+                if (this.lastBackPressed && this.lastBackPressed + 300 >= Date.now()) {
+                    // clearTimeout(this.Timeout)
+                    this.state.paused ? this.rePlay() : this.setState({ paused: true, showConts: true })
+                    this.state.opacity.setValue(1)
+                    return 
+                } else {
+                    this.lastBackPressed = Date.now();
+                }
             }
-        }
-        this.Timeout = setTimeout(() => {
+            // this.Timeout = setTimeout(() => {
+
             if (this.state.showConts) {//立即消失
                 this.hide.stop()
                 this.fastHideConts()
@@ -743,33 +746,28 @@ class VideoPlayer extends React.Component {
                 //点击视频显示控件
                 this.AnimatedOp.start(() => { this.setState({ showConts: true, showChangeList: false }); this.hide.stop(); this.AnimatedOp.stop(); this.fastHide && this.fastHide.stop(); }); // 开始执行动画
             }
-        }, 300)
 
+            // }, 300)
 
-        this.activateAutoHide()//激活控件自动隐藏
-    }
+            this.activateAutoHide()//激活控件自动隐藏
+        } catch (error) {
 
-    formatSeconds = (value) => {
-        let result = parseInt(value)
-        let h = Math.floor(result / 3600) < 10 ? '0' + Math.floor(result / 3600) : Math.floor(result / 3600)
-        let m = Math.floor((result / 60 % 60)) < 10 ? '0' + Math.floor((result / 60 % 60)) : Math.floor((result / 60 % 60))
-        let s = Math.floor((result % 60)) < 10 ? '0' + Math.floor((result % 60)) : Math.floor((result % 60))
-        if (Math.floor(result / 3600) === 0) {
-            result = `${m}:${s}`
-        } else {
-            result = `${h}:${m}:${s}`
         }
 
-        return result
+
+
+
     }
+
+
 
 
     onLoad = (data) => {
-        console.log("onload", data)
+        // console.log("onload", data)
         this.props.onLoad && this.props.onLoad(data)
         //console.log("总", this.formatSeconds(data.duration))
         //视频总长度
-        this.setState({ duration: data.duration, allTime: this.formatSeconds(data.duration), showChangeList: false });
+        this.setState({ duration: data.duration, allTime: formatSeconds(data.duration), showChangeList: false });
         //进度条动画
         this.playDotX = this.dotX.interpolate({
             inputRange: [0, data.duration],
@@ -837,7 +835,7 @@ class VideoPlayer extends React.Component {
     }
 
     render() {
-        console.log("调用次数")
+        // console.log("调用次数")
         const spin = this.spinValue.interpolate({
             inputRange: [0, 1],//输入值
             outputRange: ["0deg", "360deg"] //输出值
@@ -861,7 +859,7 @@ class VideoPlayer extends React.Component {
                             activeOpacity={1}
                         >
                             <Video
-
+                                    
                                 source={{ uri: this.props.url }}
                                 ref={(ref) => {
                                     this.player = ref
@@ -876,7 +874,7 @@ class VideoPlayer extends React.Component {
                                 }}
                                 posterResizeMode={"cover"}//封面大小
                                 playWhenInactive={true}//确定当通知或控制中心在视频前面时，媒体是否应继续播放。
-                                paused={this.adminPaused?this.state.paused:(this.props.paused ? this.props.paused : this.state.paused)}//暂停
+                                paused={this.adminPaused ? this.state.paused : (this.props.paused ? this.props.paused : this.state.paused)}//暂停
                                 onLoad={this.onLoad}
                                 onEnd={this.reVideo}
                                 resizeMode={"none"}
@@ -891,6 +889,7 @@ class VideoPlayer extends React.Component {
                                 onBuffer={(e) => this.animatedonBuffer(e)}                // Callback when remote video is buffering
                                 onError={this.videoError}
                                 width={this.props.width ? this.props.width : this.state.width}
+                                
                                 // Callback when video cannot be loaded
                                 style={{ height: this.state.height, backgroundColor: "#000000" }} />
 
@@ -975,7 +974,7 @@ class VideoPlayer extends React.Component {
                                     <View style={{ flexDirection: "row", flexWrap: "nowrap" }}>
                                         {/* 播放暂停 */}
                                         {
-                                            !this.props.continuous ? (this.state.paused 
+                                            !this.props.continuous ? (this.state.paused
                                                 ?
                                                 <TouchableOpacity activeOpacity={1} style={{ bottom: 0, left: 5, padding: 10, zIndex: 999, }} onPress={() => {
                                                     if (!showOpenVip) {
@@ -992,7 +991,7 @@ class VideoPlayer extends React.Component {
                                                 </TouchableOpacity>
                                             )
                                                 :
-                                                smallP && (this.state.paused 
+                                                smallP && (this.state.paused
                                                     ?
                                                     <TouchableOpacity activeOpacity={1} style={{ bottom: 0, left: 5, padding: 10, zIndex: 999, }} onPress={() => {
                                                         if (!showOpenVip) {
@@ -1063,7 +1062,7 @@ class VideoPlayer extends React.Component {
                                         <View style={{ height: 40, width: this.state.width, paddingHorizontal: 45, flexDirection: "row" }}>
                                             <View style={{ flexDirection: "row", flex: 1, }}>
                                                 {
-                                                    this.props.continuous && (this.state.paused || this.props.paused
+                                                    this.props.continuous && (this.state.paused
                                                         ?
                                                         <TouchableOpacity activeOpacity={1} style={{ bottom: 0, left: 5, padding: 10, zIndex: 999, }} onPress={() => {
                                                             if (!showOpenVip) {
