@@ -906,8 +906,8 @@ class VideoPlayer extends React.Component {
                                         //如果是全屏 点击返回键是切换到小屏  反之返回上个页面
                                         onPress={() => {
                                             if (this.state.smallP) {
-                                                // this.props.onSmallBack && this.props.onSmallBack()
-                                                this.props.navigation.goBack()
+                                                this.props.onSmallBack && this.props.onSmallBack()
+                                                // this.props.navigation.goBack()
 
                                             } else { this.changeSmallBox() }
                                         }}
