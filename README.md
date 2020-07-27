@@ -179,9 +179,10 @@ import Videoplayer from 'react-native-rn-videoplayer';
 
 <VideoPlayer
 url={"https://xxxxx.mp4"}
-navigation={this.props.navigation}//路由 用于小屏屏播放的返回按钮
-ref={(ref)=>this.player=ref}
 poster={"http:XXX.jpg"}//视频封面
+ref={(ref)=>this.player=ref}
+moreSetting={() => null}//右上角更多按钮 输出null则不显示
+onSmallBack={()=>{this.props.navigation.goBack()}}
 />
 
 ```

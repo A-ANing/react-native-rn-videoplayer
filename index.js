@@ -87,24 +87,12 @@ class VideoPlayer extends React.Component {
                 showDrTime: false,//拖动进度条时显示的时间进度
                 showChangeList: false,//控制是否显示全屏选集
             }
-        this.goLogin = this.goLogin.bind(this)
         this.animatedonBuffer = this.animatedonBuffer.bind(this)
 
 
     }
 
-    _press = (name) => {
 
-        this.props.navigation.navigate('Detail', { transition: 'default', name: name })
-    }
-
-    goLogin(goPage) {
-
-        this.props.navigation.navigate(goPage, {
-            transition: 'default'
-        })
-
-    }
 
     componentWillUnmount() {
 
