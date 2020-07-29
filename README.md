@@ -190,49 +190,15 @@ onSmallBack={()=>{this.props.navigation.goBack()}}
 # api
 - url 视频地址
 
-- continuous 是否开启全屏时的选集功能 适合连续剧 默认 false
-  ```js
-    continuous={true}
-  ```
+- changeWindows() 切换全屏或者小屏
 
-- renderAllSeenList 点击选集后显示的集数列表
-  ```js
-  ···
-  <VideoPlayer
-    url={"https://xxxxx.mp4"}
-    ref={(ref)=>this.player=ref}
-    renderAllSeenList={this.renderAllSeenList}
-  />
-    
-  ···
-    renderAllSeenList = () => (
-    <View style={{ width: height / 2.5, backgroundColor: "rgba(0,0,0,0.6)", position: "absolute", top: 0, bottom: 0, right: 0, }}>
-        <ScrollView>
-          <Button 
-            onPress={()=>{
-                const newdata = this.state.data
-                      newdata.index = newindex//集数
-                //更新集数 并重新开始播放
-                this.setState({ data: newdata }, () => { this.player.rePlay() })
-            }}
-            
-          />  
-        </ScrollView>      
+    changeWindows(boolean)  true 全屏， false 小屏
 
-      </View>
-    )
-
-  ```
-
-- nextBtnFun 全屏时下一集按钮的方法 当是最后一集的时候应将值变为false，将按钮置灰
-  ```js
-  const {data} = this.state
-  //data.index为集数
-  //当当前播放的集数和总集数相同时，将nextBtnFun重置为false
-  nextBtnFun={
-    data.index == data.datalist[data.datalist.length - 1].num - 1 ? false : this.nextBtnFun
-    }
-  ```
+    Example:
+    ```javascript
+      <VideoPlayer ref={(ref)=>this.player=ref}/>
+      this.player.changeWindows(true); // 全屏
+    ```
 
 - storeComponent 右上角收藏按钮的图标 
   ```javascript
@@ -280,6 +246,50 @@ onSmallBack={()=>{this.props.navigation.goBack()}}
     >
 
   ```
+  
+- continuous 是否开启全屏时的选集功能 适合连续剧 默认 false
+  ```js
+    continuous={true}
+  ```
+
+- renderAllSeenList 点击选集后显示的集数列表
+  ```js
+  ···
+  <VideoPlayer
+    url={"https://xxxxx.mp4"}
+    ref={(ref)=>this.player=ref}
+    renderAllSeenList={this.renderAllSeenList}
+  />
+    
+  ···
+    renderAllSeenList = () => (
+    <View style={{ width: height / 2.5, backgroundColor: "rgba(0,0,0,0.6)", position: "absolute", top: 0, bottom: 0, right: 0, }}>
+        <ScrollView>
+          <Button 
+            onPress={()=>{
+                const newdata = this.state.data
+                      newdata.index = newindex//集数
+                //更新集数 并重新开始播放
+                this.setState({ data: newdata }, () => { this.player.rePlay() })
+            }}
+            
+          />  
+        </ScrollView>      
+
+      </View>
+    )
+
+  ```
+
+- nextBtnFun 全屏时下一集按钮的方法 当是最后一集的时候应将值变为false，将按钮置灰
+  ```js
+  const {data} = this.state
+  //data.index为集数
+  //当当前播放的集数和总集数相同时，将nextBtnFun重置为false
+  nextBtnFun={
+    data.index == data.datalist[data.datalist.length - 1].num - 1 ? false : this.nextBtnFun
+    }
+  ```
 
 - onLoad 视频加载成功可以开始播放的回调 继承react-native-veideo
 - onSeek 调整进度后的回调 继承react-native-video的onSeek
@@ -289,15 +299,7 @@ onSmallBack={()=>{this.props.navigation.goBack()}}
 
 - ..... 继承全部的react-native-video的方法及属性
 
-- changeWindows() 切换全屏或者小屏
 
-    changeWindows(boolean)  true 全屏， false 小屏
-
-    Example:
-    ```javascript
-      <VideoPlayer ref={(ref)=>this.player=ref}/>
-      this.player.changeWindows(true); // 全屏
-    ```
 
 
 

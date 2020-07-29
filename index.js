@@ -150,7 +150,7 @@ class VideoPlayer extends React.Component {
             extrapolate: 'clamp'
         })
         this.props.navigation && this.props.navigation.setParams({ enableGestures: false });
-        this.dotspeed.setdotStart(false)
+        this.dotspeed&&this.dotspeed.setdotStart(false)
         this.setState({
             width: height + 0,//StatusBar.currentHeight
             height: width,
@@ -187,7 +187,7 @@ class VideoPlayer extends React.Component {
             extrapolate: 'clamp'
         })
         this.props.navigation && this.props.navigation.setParams({ enableGestures: true });
-        this.dotspeed.setdotStart(false)
+        this.dotspeed&&this.dotspeed.setdotStart(false)
         this.setState({
             width: width,
             height: width * 210 / 375,
