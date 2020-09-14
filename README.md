@@ -22,6 +22,13 @@
 <img src="https://github.com/ngxu/ngxu.github.io/blob/master/img/ios_demo.gif?raw=true" width=320 height=693/>&nbsp;&nbsp;&nbsp;&nbsp;
 <img src="https://github.com/ngxu/ngxu.github.io/blob/master/img/android_demo.gif?raw=true" width=320 height=693 />
 
+# 增加功能
+## v2.0.6 增加锁定视频控件，锁定用户操作（调节音量/亮度，展示隐藏控件）
+<img src="https://github.com/ngxu/ngxu.github.io/blob/master/img/unlock.jpg?raw=true" width=260 />&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="https://github.com/ngxu/ngxu.github.io/blob/master/img/locking.jpg?raw=true" width=260  />	
+  - lockControl (true/false 默认关闭)
+
+
 ## Getting started
 1. 
 ```shell
@@ -186,6 +193,7 @@ import Videoplayer from 'react-native-rn-videoplayer';
 url={"https://xxxxx.mp4"}
 poster={"http:XXX.jpg"}//视频封面
 ref={(ref)=>this.player=ref}
+lockControl={true}//控件锁定功能 v2.0.6增加
 moreSetting={() => null}//右上角更多按钮 输出null则不显示
 onSmallBack={()=>{this.props.navigation.goBack()}}
 />
