@@ -13,11 +13,11 @@
 - Version 1.3.2 requires react-native <= 0.59.9
 
 
-<h3><a href="https://www.jianshu.com/p/a6f09d2ab09c" target="_blank">简书地址</a></h3>
+<h3><a href="https://www.jianshu.com/p/a6f09d2ab09c" target="_blank">点我进入简书地址</a></h3>
 
-<h3><a href="https://streamja.com/embed/ZJk5P" target="_blank">视频预览</a></h3>
+<h3><a href="https://streamja.com/embed/ZJk5P" target="_blank">点我进入视频预览</a></h3>
 
-- gif预览 ios 和 android
+# gif预览 ios 和 android
 
 <img src="https://github.com/ngxu/ngxu.github.io/blob/master/img/ios_demo.gif?raw=true" width=320 height=693/>&nbsp;&nbsp;&nbsp;&nbsp;
 <img src="https://github.com/ngxu/ngxu.github.io/blob/master/img/android_demo.gif?raw=true" width=320 height=693 />
