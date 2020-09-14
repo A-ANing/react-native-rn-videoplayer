@@ -29,7 +29,7 @@
    lockControl (true/false 默认关闭)
    ` 
    
-<img src="https://github.com/ngxu/ngxu.github.io/blob/master/img/unlock.jpg?raw=true" width=260 />&nbsp;&nbsp;&nbsp;&nbsp;
+   <img src="https://github.com/ngxu/ngxu.github.io/blob/master/img/unlock.jpg?raw=true" width=260 />&nbsp;&nbsp;&nbsp;&nbsp;
 <img src="https://github.com/ngxu/ngxu.github.io/blob/master/img/locking.jpg?raw=true" width=260  />	
  
 
