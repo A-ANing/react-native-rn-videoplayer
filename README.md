@@ -24,9 +24,10 @@
 
 # 增加功能
 -  v2.0.6 增加锁定视频控件，锁定用户操作（调节音量/亮度，展示隐藏控件）
+
    ` lockControl (true/false 默认关闭) `
-  <img src="https://github.com/ngxu/ngxu.github.io/blob/master/img/unlock.jpg?raw=true" width=260 />&nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="https://github.com/ngxu/ngxu.github.io/blob/master/img/locking.jpg?raw=true" width=260  />	
+<img src="https://github.com/ngxu/ngxu.github.io/blob/master/img/unlock.jpg?raw=true" width=260 />&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="https://github.com/ngxu/ngxu.github.io/blob/master/img/locking.jpg?raw=true" width=260  />	
  
 
 ## Getting started
