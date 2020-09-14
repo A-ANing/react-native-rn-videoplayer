@@ -27,7 +27,7 @@ import {
 import SystemSetting from 'react-native-system-setting'
 import LinearGradient from 'react-native-linear-gradient';
 import Video from 'react-native-video';
-import { Loading, TipsPaused, Brightness, Volume, BottomSpeed, Speed, Header, SpeedTipTime } from './view/index'
+import { Loading, TipsPaused, Brightness, Volume, BottomSpeed, Speed, Header, SpeedTipTime, Lock } from './view/index'
 import { formatSeconds } from './utils/formatSeconds';
 import { SvgVideoNextBtn, SvgVideoLoading, SvgVideoBrightness, SvgVideoSetting, SvgVideoNoSound, SvgVideoStop, SvgVideoPlay, SvgVideoAllBox, SvgVideoSmallBox, SvgVideoBack, SvgVideoScang, SvgVideoSound } from './component/svg'
 import Orientation from 'react-native-orientation-locker';
@@ -81,6 +81,7 @@ class VideoPlayer extends React.Component {
                 showConts: true,
                 showDrTime: false,//拖动进度条时显示的时间进度
                 showChangeList: false,//控制是否显示全屏选集
+                showLockCont:false//锁的显示状态
             }
         this.animatedonBuffer = this.animatedonBuffer.bind(this)
     }
@@ -148,6 +149,7 @@ class VideoPlayer extends React.Component {
             statusBarH: 0,
             smallP: false,
             showConts: false,
+            showLockCont:false,
             LinearGradientHeight: 100,
             topContsTop: 30,
             bottomContsBottom: this.props.continuous ? 30 : 0,
@@ -185,6 +187,7 @@ class VideoPlayer extends React.Component {
             statusBarH: 0,//
             smallP: true,
             showConts: false,
+            showLockCont:false,
             LinearGradientHeight: 60,
             topContsTop: 0,
             bottomContsBottom: 0,
@@ -342,13 +345,12 @@ class VideoPlayer extends React.Component {
         // 上下滑动 调节音量 以及屏幕亮度
         this._panResponder = PanResponder.create({
             // 要求成为响应者：
-            onStartShouldSetPanResponder: (evt, gestureState) => true,
+            onStartShouldSetPanResponder: (evt, gestureState) => true,//锁定控件时 禁用手势
             onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
             onMoveShouldSetPanResponder: (evt, gestureState) => true,
             onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
 
             onPanResponderGrant: (evt, gestureState) => {
-
                 clearTimeout(this.TimeHideConts)//拖动时禁止隐藏控件
 
                 //初始化 记录滑动的xy值
@@ -379,7 +381,6 @@ class VideoPlayer extends React.Component {
 
             },
             onPanResponderMove: (evt, gestureState) => {
-
                 if (this.recordHandeY.length < 10) {
                     this.recordHandeY.push(evt.nativeEvent.pageY)
 
@@ -387,6 +388,7 @@ class VideoPlayer extends React.Component {
                 }
                 // console.log("locationY", evt.nativeEvent.pageY)
                 this.moveYData = this.startY - evt.nativeEvent.pageY
+                if(this.LockRef&&this.LockRef.state.lock) return//锁定控件时 禁用手势
                 // console.log("moveYData",)
                 this.moveXData = this.startX - evt.nativeEvent.pageX
                 this.soundDataY = (this.startY + 30 - gestureState.moveY) / (this.state.height)
@@ -469,9 +471,14 @@ class VideoPlayer extends React.Component {
             },
             onPanResponderTerminationRequest: (evt, gestureState) => true,
             onPanResponderRelease: (evt, gestureState) => {
+                 //如果滑动距离小于2 就是展示或隐藏控件
+                 if (Math.abs(this.moveYData) < 10) {
+                    this.showConts()
+                }
                 // this.props.navigation.setParams({ enableGestures: true });
+                
 
-                this.activateAutoHide()//激活自动隐藏
+                // this.activateAutoHide()//激活自动隐藏
                 //调节完音量后隐藏音量显示器
                 if (this.state.showVolume) {
                     this.hideVolumeTime = setTimeout(() => { this.setState({ showVolume: false }) }, 800)
@@ -481,10 +488,7 @@ class VideoPlayer extends React.Component {
                     this.hideBrightnessTime = setTimeout(() => { this.setState({ showBrightness: false }) }, 800)
                 }
 
-                //如果滑动距离小于2 就是展示隐藏空间
-                if (Math.abs(this.moveYData) < 5) {
-                    this.showConts()
-                }
+               
 
                 if (this.brightnessData >= 1) {
                     this.brightnessData = 1
@@ -514,7 +518,7 @@ class VideoPlayer extends React.Component {
 
             onPanResponderGrant: (evt, gestureState) => {
                 // this.props.navigation.setParams({ enableGestures: false });
-
+                
                 if (this.state.showOpenVip) return//需要权限时停止不允许滑动进度条
                 this.dotspeed.setNativeProps({
                     style: { borderColor: "rgba(255,255,255,0.5)" }
@@ -595,7 +599,7 @@ class VideoPlayer extends React.Component {
 
     //快速隐藏控件
     fastHideConts = () => {
-        this.fastHide.start(() => { this.setState({ showConts: false }) })
+        this.fastHide.start(() => { this.setState({ showConts: false,showLockCont:false }) })
     }
 
     //激活自动隐藏
@@ -666,6 +670,7 @@ class VideoPlayer extends React.Component {
             if (!this.state.showOpenVip) {
                 if (this.lastBackPressed && this.lastBackPressed + 300 >= Date.now()) {
                     // clearTimeout(this.Timeout)
+                    if(this.LockRef&&this.LockRef.state.lock) return//锁定控件时 禁用手势
                     this.state.paused ? this.rePlay() : this.setState({ paused: true, })
                     this.state.opacity.setValue(1)
                     return
@@ -674,13 +679,23 @@ class VideoPlayer extends React.Component {
                 }
             }
             // this.Timeout = setTimeout(() => {
-            if (this.state.showConts) {//立即消失
+            if (this.state.showConts||this.state.showLockCont) {//立即消失
                 this.hide.stop()
                 this.fastHideConts()
             } else {
                 this.hide.stop();
                 //点击视频显示控件
-                this.AnimatedOp.start(() => { this.setState({ showConts: true, showChangeList: false }); this.hide.stop(); this.AnimatedOp.stop(); this.fastHide && this.fastHide.stop(); }); // 开始执行动画
+              if(this.LockRef&&!this.LockRef.state.lock){
+                this.AnimatedOp.start(() => { this.setState({showLockCont:true, showConts: true, showChangeList: false }); this.hide.stop(); this.AnimatedOp.stop(); this.fastHide && this.fastHide.stop(); }); // 开始执行动画
+
+              }else{
+                !this.LockRef
+                ?
+                this.AnimatedOp.start(() => { this.setState({showLockCont:true, showConts: true, showChangeList: false }); this.hide.stop(); this.AnimatedOp.stop(); this.fastHide && this.fastHide.stop(); }) // 开始执行动画
+                :
+                this.AnimatedOp.start(() => { this.setState({showLockCont:true}); this.hide.stop(); this.AnimatedOp.stop(); this.fastHide && this.fastHide.stop(); }); // 开始执行动画
+
+              }
             }
             // }, 300)
             this.activateAutoHide()//激活控件自动隐藏
@@ -764,6 +779,7 @@ class VideoPlayer extends React.Component {
             inputRange: [0, 1],//输入值
             outputRange: ["0deg", "360deg"] //输出值
         })
+        
 
         const { smallP, allTime,  LinearGradientHeight, showOpenVip, topContsTop, bottomContsBottom } = this.state
         return (
@@ -802,7 +818,7 @@ class VideoPlayer extends React.Component {
                                 style={{ height: this.state.height, backgroundColor: "#000000" }} />
                         </View>
                         {
-                            this.state.showConts ?
+                         this.state.showConts ?
                                 <Animated.View
                                     style={{ position: "absolute", left: 0, right: 0, top: 0, opacity: this.state.opacity, height: 30 }}
                                 >
@@ -855,6 +871,17 @@ class VideoPlayer extends React.Component {
                                     {...this.state}
                                 />
                         }
+
+                        {
+                            this.props.lockControl&&
+                            <Lock
+                            ref={(ref)=>this.LockRef=ref}
+                            showContsfun={(e)=>{this.setState({showConts:e})}}
+                            {...this.state}
+                            />
+                        }
+
+
                         {
                             this.state.showConts &&
                             <LinearGradient colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.1)', 'rgba(0,0,0,0.4)']} style={{ height: LinearGradientHeight, width: this.state.width, position: "absolute", bottom: this.state.smallP ? 0 : -bottomContsBottom }}></LinearGradient>

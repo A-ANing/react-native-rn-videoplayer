@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
     Text,
     StyleSheet,
+    TouchableOpacity,
     View,
     Dimensions,
     Animated,
@@ -10,8 +11,9 @@ import {
     SafeAreaView
 } from 'react-native';
 import { formatSeconds } from '../utils/formatSeconds'
-import { SvgVideoNextBtn, SvgVideoLoading, SvgVideoBrightness, SvgVideoSetting, SvgVideoNoSound, SvgVideoStop, SvgVideoPlay, SvgVideoAllBox, SvgVideoSmallBox, SvgVideoBack, SvgVideoScang, SvgVideoSound } from '../component/svg'
+import { SvgVideoUnlock, SvgVideoLocking, SvgVideoNextBtn, SvgVideoLoading, SvgVideoBrightness, SvgVideoSetting, SvgVideoNoSound, SvgVideoStop, SvgVideoPlay, SvgVideoAllBox, SvgVideoSmallBox, SvgVideoBack, SvgVideoScang, SvgVideoSound } from '../component/svg'
 const { height, width } = Dimensions.get('screen');
+
 
 
 
@@ -50,6 +52,54 @@ export const Loading = (props) => {
         </>
 
     )
+
+}
+
+
+//锁定
+export class Lock extends Component {
+    state = {
+        lock: false
+    }
+    onChangeLock = () => {
+        console.log(this.props)
+            this.props.showContsfun(this.state.lock)
+      
+        this.setState({
+            lock: !this.state.lock
+        })
+    }
+    render() {
+        const { props } = this
+        const { lock } = this.state
+        if (props.showLockCont) {
+            return (
+                <Animated.View 
+                    style={{
+                        opacity:props.opacity,
+                        left: props.smallP ? 5 : 45, position: "absolute",
+                        top: props.height / 2 - 35,
+                        justifyContent: "center",
+                        zIndex: 10
+                    }}>
+                    <TouchableOpacity
+                    activeOpacity={1}
+                        style={{
+                            padding: 10,
+                        }}
+                        onPress={this.onChangeLock}
+                    >
+                        {
+                            lock ? <SvgVideoLocking width="28" height="28" /> : <SvgVideoUnlock width="30" height="30" />
+                        }
+                    </TouchableOpacity>
+                </Animated.View >
+            )
+        } else {
+            return null
+        }
+
+    }
 
 }
 
@@ -151,7 +201,7 @@ export class Brightness extends Component {
 
 export class Volume extends Component {
     state = {
-        soundWidth: 0
+        soundWidth: 0.1
     }
 
     setsoundWidth = (soundWidth) => {
