@@ -60,9 +60,6 @@ export const TipsPaused = (props) => {
     const [animater, setAnimater] = React.useState(new Animated.Value(0))
     const [show, setShow] = React.useState(true)
 
-
-
-
     React.useEffect(() => {
 
         tipsPausedFun();
@@ -110,56 +107,84 @@ export const TipsPaused = (props) => {
 
 
 //亮度
-export const Brightness = (props) => {
+export class Brightness extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            brightnessWidth: 0
+        }
+    }
 
-    return (
-        <View
-            style={{
-                left: props.width / 2 - 80, position: "absolute",
-                top: 0, bottom: 0, justifyContent: "center",
-            }}>
-            <View style={
-                {
-                    flexDirection: "row", flexWrap: "nowrap", justifyContent: "center", alignItems: 'center', backgroundColor: "rgba(0,0,0,0.7)", paddingHorizontal: 10,
-                    paddingVertical: 11, borderRadius: 6,
+    setBrightnessWidthFun = (data) => {
+        this.setState({
+            brightnessWidth: data
+        })
+    }
+    render() {
+        const { props } = this
+        const { brightnessWidth } = this.state
+        return (
+            <View
+                style={{
+                    left: props.width / 2 - 80, position: "absolute",
+                    top: 0, bottom: 0, justifyContent: "center",
+                }}>
+                <View style={
+                    {
+                        flexDirection: "row", flexWrap: "nowrap", justifyContent: "center", alignItems: 'center', backgroundColor: "rgba(0,0,0,0.7)", paddingHorizontal: 10,
+                        paddingVertical: 11, borderRadius: 6,
 
 
-                }
-            }>
-                <SvgVideoBrightness width="20" height="20" />
-                <View style={{ backgroundColor: "rgba(255,255,255,0.5)", height: 2, width: 100, marginLeft: 8 }}>
-                    <Animated.View style={{ backgroundColor: "#ea7a99", width: props.brightnessWidth && props.brightnessWidth, zIndex: 99999, height: 2 }}></Animated.View>
+                    }
+                }>
+                    <SvgVideoBrightness width="20" height="20" />
+                    <View style={{ backgroundColor: "rgba(255,255,255,0.5)", height: 2, width: 100, marginLeft: 8 }}>
+                        <Animated.View style={{ backgroundColor: "#ea7a99", width: brightnessWidth && brightnessWidth, zIndex: 99999, height: 2 }}></Animated.View>
+                    </View>
                 </View>
             </View>
-        </View>
-    )
+        )
+    }
 }
-
 
 //音量
 
-export const Volume = (props) => {
+export class Volume extends Component {
+    state = {
+        soundWidth: 0
+    }
 
-    return (
-        <View
-            style={{
-                left: props.width / 2 - 80, position: "absolute",
-                top: 0, bottom: 0, justifyContent: "center",
-            }}>
-            <View style={{
-                flexDirection: "row", flexWrap: "nowrap", justifyContent: "center", alignItems: 'center', backgroundColor: "rgba(0,0,0,0.7)", paddingHorizontal: 10,
-                paddingVertical: 11, borderRadius: 6,
-            }}>
-                {
-                    props.soundWidth > 0 ? <SvgVideoSound width="20" height="20" /> : <SvgVideoNoSound width="20" height="20" />
-                }
-                <View style={{ backgroundColor: "rgba(255,255,255,0.5)", height: 2, width: 100, marginLeft: 8 }}>
-                    <Animated.View style={{ backgroundColor: "#ea7a99", width: props.soundWidth && props.soundWidth, zIndex: 99999, height: 2 }}></Animated.View>
+    setsoundWidth = (soundWidth) => {
+        this.setState({
+            soundWidth
+        })
+    }
+    render() {
+        const { props } = this
+        const { soundWidth } = this.state
+
+        return (
+            <View
+                style={{
+                    left: props.width / 2 - 80, position: "absolute",
+                    top: 0, bottom: 0, justifyContent: "center",
+                }}>
+                <View style={{
+                    flexDirection: "row", flexWrap: "nowrap", justifyContent: "center", alignItems: 'center', backgroundColor: "rgba(0,0,0,0.7)", paddingHorizontal: 10,
+                    paddingVertical: 11, borderRadius: 6,
+                }}>
+                    {
+                        soundWidth > 0 ? <SvgVideoSound width="20" height="20" /> : <SvgVideoNoSound width="20" height="20" />
+                    }
+                    <View style={{ backgroundColor: "rgba(255,255,255,0.5)", height: 2, width: 100, marginLeft: 8 }}>
+                        <Animated.View style={{ backgroundColor: "#ea7a99", width: soundWidth && soundWidth, zIndex: 99999, height: 2 }}></Animated.View>
+                    </View>
                 </View>
             </View>
-        </View>
-    )
+        )
+    }
 }
+
 
 
 export const BottomSpeed = (props) => {
@@ -206,9 +231,14 @@ export class Speed extends Component {
         allTime: "00:00",//总时长
         nowTime: "00:00",//当前播放时长
         dotStart: false,//是否按住了进度条上的点
+        dotWidth: 0
     }
     setNativeProps = (data) => {
         this.refs.dotspeed.setNativeProps(data)
+    }
+
+    setdotWidth = (dotWidth) => {
+        this.setState({ dotWidth })
     }
 
     setSpeed = (e) => {
@@ -241,16 +271,16 @@ export class Speed extends Component {
 
     render() {
         const { props } = this
-        const { nowTime, dotStart } = this.state
+        const { nowTime, dotStart, dotWidth } = this.state
         return (
             <View style={{ elevation: 10, flex: 1, alignItems: "center", zIndex: 9999, justifyContent: "center", flexDirection: "row", flexWrap: "nowrap", bottom: 0 }}>
                 <View>
-                    <Text style={{ color: "#ffffff" }}>{nowTime}</Text>
+                    <Text style={{ color: "#ffffff" }}>{nowTime == "00:00" ? props.nowTime : nowTime}</Text>
                 </View>
 
                 <View style={{ width: props.width - 180, paddingHorizontal: 10, flexDirection: "row", flexWrap: "nowrap", zIndex: 10, alignItems: "center", position: "relative", }}>
                     {/* 进度条*/}
-                    <Animated.View style={{ zIndex: 12, width: dotStart ? props.dotWidth : (props.playDotX === null ? 0 : props.playDotX), height: 2, backgroundColor: "#e54602" }}></Animated.View>
+                    <Animated.View style={{ zIndex: 12, width: dotStart ? dotWidth : (props.playDotX === null ? 0 : props.playDotX), height: 2, backgroundColor: "#e54602" }}></Animated.View>
                     {/* 缓存条*/}
                     <Animated.View style={{ zIndex: 11, width: props.playBufferX === null ? 0 : props.playBufferX, height: 2, backgroundColor: "rgba(225,225,225,1)", position: "absolute", left: 10 }}></Animated.View>
                     {/* 进度条上的点 */}
@@ -269,6 +299,41 @@ export class Speed extends Component {
     }
 }
 
+/* 拖动进度条展示拖动当前时时间 */
+export class SpeedTipTime extends Component {
+    state = {
+        goSpeedTime: "00:00",//想要拖动改变的进度时常 
+
+
+    }
+
+    setgoSpeedTime = (goSpeedTime) => {
+        this.setState({ goSpeedTime })
+    }
+
+    render() {
+        const { props } = this
+        return (
+            <View
+                ref={"gotimeSpeed"}
+                style={{
+                    left: props.width / 2 - 45, position: "absolute",
+                    top: 50, bottom: 50, justifyContent: "center",
+                    opacity: 0,
+                    width: 0
+                }}>
+                <View style={{
+                    flexDirection: "row", justifyContent: "center", alignItems: 'center', backgroundColor: "rgba(0,0,0,0.7)", paddingHorizontal: 10,
+                    paddingVertical: 6, borderRadius: 4,
+                }}>
+                    <View><Text style={{ color: "#fff" }}>{this.state.goSpeedTime}</Text></View>
+                    <View><Text style={{ color: "#fff" }}>/</Text></View>
+                    <View><Text style={{ color: "#fff" }}>{props.allTime}</Text></View>
+                </View>
+            </View>
+        )
+    }
+}
 
 
 
