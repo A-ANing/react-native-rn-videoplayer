@@ -32,6 +32,15 @@
 <img src="https://github.com/ngxu/ngxu.github.io/blob/master/img/locking.jpg?raw=true" width=260  />	
  
 
+-  v2.0.7 自定义小屏状态栏 类型fun
+    默认状态栏为沉浸式，黑底白字，有状态栏高度，可查看view/index.js 的Header组件
+   ```
+   <VideoPlayer
+   statusBar={()=>null}//不使用默认状态栏 跟当前app保持一致
+   statusBar={()=><Component/>}//自定义
+   />
+   ```
+
 ## Getting started
 1. 
 ```shell
