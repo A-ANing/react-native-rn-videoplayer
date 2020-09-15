@@ -62,9 +62,9 @@ export class Lock extends Component {
         lock: false
     }
     onChangeLock = () => {
-        console.log(this.props)
-            this.props.showContsfun(this.state.lock)
-      
+
+        this.props.showContsfun(this.state.lock)
+
         this.setState({
             lock: !this.state.lock
         })
@@ -74,16 +74,16 @@ export class Lock extends Component {
         const { lock } = this.state
         if (props.showLockCont) {
             return (
-                <Animated.View 
+                <Animated.View
                     style={{
-                        opacity:props.opacity,
+                        opacity: props.opacity,
                         left: props.smallP ? 5 : 45, position: "absolute",
                         top: props.height / 2 - 35,
                         justifyContent: "center",
                         zIndex: 10
                     }}>
                     <TouchableOpacity
-                    activeOpacity={1}
+                        activeOpacity={1}
                         style={{
                             padding: 10,
                         }}
@@ -269,7 +269,7 @@ export const Header = (props) => {
                     :
                     <SafeAreaView style={{ backgroundColor: "#000" }} />
             }
-            <StatusBar barStyle={"light-content"} />
+            <StatusBar translucent={true} barStyle={"light-content"} />
         </>
     )
 
