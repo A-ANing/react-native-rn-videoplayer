@@ -784,7 +784,7 @@ class VideoPlayer extends React.Component {
         const { smallP, allTime,  LinearGradientHeight, showOpenVip, topContsTop, bottomContsBottom } = this.state
         return (
             <>
-                {this.props.statusBar?(smallP&&this.props.statusBar()):<Header width={this.state.width} />}
+                {this.props.statusBar?(smallP&&this.props.statusBar()):<Header width={this.state.width}/>}
                 <View ref={ref => this.videoBox = ref} style={{ backgroundColor: "#000", position: 'relative' }}>
 
                     <View style={{}}>
