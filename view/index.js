@@ -267,9 +267,9 @@ export const Header = (props) => {
                 props.width === width && Platform.OS === "android" ?
                     <View style={{ height: StatusBar.currentHeight, backgroundColor: "#000" }}></View>
                     :
-                    <SafeAreaView style={{ backgroundColor: "#000" }} />
+                    <SafeAreaView style={{ backgroundColor: "#000" }}/>
             }
-            <StatusBar translucent={true} barStyle={"light-content"} />
+            <StatusBar translucent={true} barStyle={"light-content"}/>
         </>
     )
 
