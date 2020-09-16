@@ -1,12 +1,12 @@
 {
   "name": "react-native-rn-videoplayer",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "A customisable React Native video player for Android and IOS",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  
+ 
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ngxu/react-native-rn-videoplayer.git"
