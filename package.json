@@ -9,6 +9,10 @@
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/@ngxu"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ngxu/react-native-rn-videoplayer.git"
+  },
   "keywords": [
     "react-native",
     "react-native-video",
