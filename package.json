@@ -1,6 +1,6 @@
 {
   "name": "react-native-rn-videoplayer",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "description": "A customisable React Native video player for Android and IOS",
   "main": "index.js",
   "scripts": {
@@ -16,9 +16,17 @@
     "react-native-video",
     "videoplayer",
     "video",
-    "player"
+    "player",
+    "gesture",
+    "control",
+    "volume",
+    "brightness",
+    "progress"
   ],
-  "author": "",
+  "author": {
+    "name": "ngxu",
+    "email": "839650216@qq.com"
+  },
   "license": "",
   "homepage": "https://github.com/ngxu/react-native-rn-videoplayer#readme",
   "dependencies": {

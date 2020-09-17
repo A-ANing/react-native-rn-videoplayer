@@ -767,7 +767,7 @@ class VideoPlayer extends React.Component {
                 ?
                 this.AnimatedOp.start(() => { this.setState({ showLockCont: true, showConts: true, showChangeList: false }); this.hide.stop(); this.AnimatedOp.stop(); this.fastHide && this.fastHide.stop(); }) // 开始执行动画
                 :
-                this.AnimatedOp.start(() => { this.setState({ showLockCont: true }); this.hide.stop(); this.AnimatedOp.stop(); this.fastHide && this.fastHide.stop(); }); // 开始执行动画
+                this.AnimatedOp.start(() => { this.setState({ showLockCont: true,showChangeList: false }); this.hide.stop(); this.AnimatedOp.stop(); this.fastHide && this.fastHide.stop(); }); // 开始执行动画
 
         }
     }
@@ -1112,7 +1112,7 @@ class VideoPlayer extends React.Component {
                                                         activeOpacity={0.5}
 
                                                         style={{ padding: 10, bottom: 0, right: 5, zIndex: 9999, alignSelf: "flex-end" }}
-                                                        onPress={() => { this.setState({ showConts: false, showChangeList: true }) }}
+                                                        onPress={() => { this.setState({ showConts: false, showChangeList: true , showLockCont:false }) }}
                                                     >
                                                         <Text style={{ color: "#fff" }}>选集</Text>
                                                     </TouchableOpacity >
