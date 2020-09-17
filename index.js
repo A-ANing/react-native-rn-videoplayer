@@ -534,7 +534,7 @@ class VideoPlayer extends React.Component {
             },
             onPanResponderTerminationRequest: (evt, gestureState) => true,
             onPanResponderRelease: (evt, gestureState) => {
-                //如果滑动距离小于2 就是展示或隐藏控件
+              
 
                 // this.props.navigation.setParams({ enableGestures: true });
                 if (this.LockRef && this.LockRef.state.lock) return false//锁定控件时 禁用手势
@@ -549,10 +549,12 @@ class VideoPlayer extends React.Component {
 
                 speedB = this.speedalltime
                 if (speedB) {
+                    
                     speedB >= this.state.duration ?
                         this.player.seek(speedB - 2)
                         :
                         this.player.seek(speedB);
+                        this.speedalltime='';
                 }
 
 
