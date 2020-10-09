@@ -201,7 +201,7 @@ react-native link react-native-video
 
 ## Usage
 ```javascript
-import Videoplayer from 'react-native-rn-videoplayer';
+import VideoPlayer from 'react-native-rn-videoplayer';
 
 <VideoPlayer
 url={"https://xxxxx.mp4"}
