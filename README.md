@@ -204,7 +204,7 @@ react-native link react-native-video
 import VideoPlayer from 'react-native-rn-videoplayer';
 
 <VideoPlayer
-url={"https://xxxxx.mp4"}
+url={"xxxxx.mp4"}
 poster={"http:XXX.jpg"}//视频封面
 ref={(ref)=>this.player=ref}
 lockControl={true}//控件锁定功能 v2.0.6增加
