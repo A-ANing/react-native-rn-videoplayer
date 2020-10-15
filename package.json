@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ngxu/react-native-rn-videoplayer.git"
+    "url": "git+https://github.com/A-ANing/react-native-rn-videoplayer.git"
   },
   "keywords": [
     "react-native",
@@ -23,11 +23,11 @@
     "progress"
   ],
   "author": {
-    "name": "ngxu",
+    "name": "A-ANing",
     "email": "839650216@qq.com"
   },
   "license": "",
-  "homepage": "https://github.com/ngxu/react-native-rn-videoplayer#readme",
+  "homepage": "https://github.com/A-ANing/react-native-rn-videoplayer#readme",
   "dependencies": {
     "react-native-linear-gradient": "^2.5.6",
     "react-native-orientation-locker": "^1.1.8",

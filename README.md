@@ -43,6 +43,8 @@
 
 -  v2.2.1 增加手势左右滑动视频区域(非进度条上的点)来调整视频进度
 
+-  v2.2.5 autoPlay={false}是否自动播放，默认为true
+
 ## Getting started
 1. 
 ```shell
@@ -205,7 +207,8 @@ import VideoPlayer from 'react-native-rn-videoplayer';
 
 <VideoPlayer
 url={"xxxxx.mp4"}
-poster={"http:XXX.jpg"}//视频封面
+autoPlay={false}//是否自动播放，默认为true v2.2.5增加
+poster={"http://XXX.jpg"}//视频封面
 ref={(ref)=>this.player=ref}
 lockControl={true}//控件锁定功能 v2.0.6增加
 moreSetting={() => null}//右上角更多按钮 输出null则不显示

@@ -218,10 +218,13 @@ class VideoPlayer extends React.Component {
 
     componentDidMount() {
         this.spin()
-        this.setState({
-            paused: false
-        })
-
+        if(this.props.autoPlay){
+            this.setState({
+                paused: false
+            })
+    
+        }
+       
         // Orientation.lockToLandscape();
         // Orientation.addOrientationListener(this._orientationDidChange);//监听屏幕方向
     }
@@ -705,6 +708,7 @@ class VideoPlayer extends React.Component {
 
     //重置播放
     rePlay = (autoPlay = true) => {
+        this.adminPaused=true;
         if (this.state.isEnd) {
             // console.log("---=-=-=-=", 1)
             this.player.seek(0)
@@ -783,6 +787,7 @@ class VideoPlayer extends React.Component {
                 if (this.lastBackPressed && this.lastBackPressed + 300 >= Date.now()) {
                     // clearTimeout(this.Timeout)
                     if (this.LockRef && this.LockRef.state.lock) return//锁定控件时 禁用手势
+                    this.adminPaused=true
                     this.state.paused ? this.rePlay() : this.setState({ paused: true, })
                     this.state.opacity.setValue(1)
                     return
@@ -865,6 +870,7 @@ class VideoPlayer extends React.Component {
     }
 
     videoError = (e) => {
+        
         this.props.onError && this.props.onError(e)
         this.setState({ showLoading: false, paused: true })
         this.onError = true
@@ -877,12 +883,20 @@ class VideoPlayer extends React.Component {
         }
     }
 
+    btnPasuedfun=()=>{
+        
+        !this.state.showOpenVip &&(this.adminPaused=true,this.setState({ paused: true })) 
+
+    }
+
     render() {
         const spin = this.spinValue.interpolate({
             inputRange: [0, 1],//输入值
             outputRange: ["0deg", "360deg"] //输出值
         })
-
+        var propsObj = {...this.props}
+        delete(propsObj["paused"])
+        
 
         const { smallP, allTime, LinearGradientHeight, showOpenVip, topContsTop, bottomContsBottom } = this.state
         return (
@@ -903,7 +917,7 @@ class VideoPlayer extends React.Component {
                                     source={{ uri: this.props.url }}
                                     ref={(ref) => { this.player = ref }}
                                     continuous={this.props.continuous ? true : false}//是否是连续剧，用来全屏展示选集，下一集按钮    重新加载Video标签，防止出现上个视频和下个视频分辨率不切换的问题　
-                                    {...this.props}
+                                    {...propsObj}
                                     repeat={this.props.repeat ? this.props.repeat : false}
                                     onSeek={(e) => {
                                         this.props.onSeek && this.props.onSeek(e)
@@ -911,7 +925,7 @@ class VideoPlayer extends React.Component {
                                     }}
                                     posterResizeMode={"cover"}//封面大小
                                     playWhenInactive={true}//确定当通知或控制中心在视频前面时，媒体是否应继续播放。
-                                    paused={this.adminPaused ? this.state.paused : (this.props.paused ? this.props.paused : this.state.paused)}//暂停
+                                    paused={this.adminPaused ? this.state.paused : (this.props.autoPlay ? false : true)}//暂停
                                     onLoad={this.onLoad}
                                     onEnd={this.reVideo}
                                     resizeMode={"none"}
@@ -1014,7 +1028,7 @@ class VideoPlayer extends React.Component {
                                                     <SvgVideoPlay height="20" width="20" />
                                                 </TouchableOpacity>
                                                 :
-                                                <TouchableOpacity activeOpacity={1} style={{ bottom: 0, left: 5, padding: 10, zIndex: 999, }} onPress={() => { !showOpenVip && this.setState({ paused: true }) }}>
+                                                <TouchableOpacity activeOpacity={1} style={{ bottom: 0, left: 5, padding: 10, zIndex: 999, }} onPress={this.btnPasuedfun}>
 
                                                     <SvgVideoStop height="20" width="20" />
                                                 </TouchableOpacity>
@@ -1033,7 +1047,7 @@ class VideoPlayer extends React.Component {
                                                         <SvgVideoPlay height="20" width="20" />
                                                     </TouchableOpacity>
                                                     :
-                                                    <TouchableOpacity activeOpacity={1} style={{ bottom: 0, left: 5, padding: 10, zIndex: 999, }} onPress={() => { !showOpenVip && this.setState({ paused: true }) }}>
+                                                    <TouchableOpacity activeOpacity={1} style={{ bottom: 0, left: 5, padding: 10, zIndex: 999, }} onPress={this.btnPasuedfun}>
 
                                                         <SvgVideoStop height="20" width="20" />
                                                     </TouchableOpacity>
@@ -1155,7 +1169,7 @@ class VideoPlayer extends React.Component {
                         <Loading {...this.state} spin={spin} />
                     }
                     {
-                        this.state.paused && <TipsPaused {...this.state} />
+                       this.adminPaused && this.state.paused && <TipsPaused {...this.state} />
                     }
 
                     {/* 音量 this.state.height / 2 - 20 + this.state.statusBarH / 2*/}
@@ -1181,7 +1195,9 @@ class VideoPlayer extends React.Component {
         )
     }
 
-
+    static defaultProps = {
+        autoPlay:true
+      }
 
 }
 
