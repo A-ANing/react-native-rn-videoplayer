@@ -513,7 +513,7 @@ class VideoPlayer extends React.Component {
                                 this.realMarginLeft = this.state.width - 200
                             }
 
-                            this.speedtime = (this.realMarginLeft) / (this.state.width) * this.state.duration//快进的时长 单位s
+                            this.speedtime = (this.realMarginLeft) // / (this.state.width) * this.state.duration//快进的时长 单位s
 
                             this.speedalltime = getMaxdata(this.nowCurrentTime + this.speedtime, this.state.duration)
                             this.SpeedTipTimeRef && this.SpeedTipTimeRef.setgoSpeedTime(formatSeconds(
