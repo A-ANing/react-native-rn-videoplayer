@@ -53,7 +53,7 @@ class VideoPlayer extends React.Component {
         this.speedDataX = 0
         this.BrightnessData = 0//亮度
         this.BrightnessY = 0
-        this.nowTime = ""
+        this.nowTime = "00:00"
         this.nowCurrentTime = 0//当前播放秒数
         this.dotX = new Animated.Value(0),
             this.bufferX = new Animated.Value(0),
@@ -65,6 +65,7 @@ class VideoPlayer extends React.Component {
             this.recordHandeX = [],//记录滑动x值
             this.state = {
                 duration: 0.0,
+                admRePlay: false,//重置视频进度状态
                 opacity: new Animated.Value(1),
                 paused: true,
                 width: width,
@@ -218,13 +219,13 @@ class VideoPlayer extends React.Component {
 
     componentDidMount() {
         this.spin()
-        if(this.props.autoPlay){
+        if (this.props.autoPlay) {
             this.setState({
                 paused: false
             })
-    
+
         }
-       
+
         // Orientation.lockToLandscape();
         // Orientation.addOrientationListener(this._orientationDidChange);//监听屏幕方向
     }
@@ -262,6 +263,7 @@ class VideoPlayer extends React.Component {
     //播放进度  包含进度条  以及当前播放时间
     animatedDot = (e) => {
         this.props.onProgress && this.props.onProgress(e)
+
         if (!this.ismoveDot) {
             this.nowCurrentTime = e.currentTime
         }
@@ -494,7 +496,7 @@ class VideoPlayer extends React.Component {
                     } else {
                         //console.log("左右滑动调节播放进度")
                         if (Math.abs(this.moveXData) > 0) {
-                            
+
 
                             !this.ismoveDot && this.dotspeed && this.dotspeed.setNativeProps({
                                 style: { borderColor: "rgba(255,255,255,0.5)" }
@@ -507,7 +509,7 @@ class VideoPlayer extends React.Component {
 
                             this.changeSpeedTip({ opacity: 1, display: null, width: null })
                             clearTimeout(this.TimeHideConts)//拖动进度条时禁止隐藏控件
-                            
+
                             this.realMarginLeft = this.speedDataX / 2; //2为快进退的手势速度 必须大于0
                             if (this.realMarginLeft >= this.state.width - 200) {
                                 this.realMarginLeft = this.state.width - 200
@@ -537,7 +539,7 @@ class VideoPlayer extends React.Component {
             },
             onPanResponderTerminationRequest: (evt, gestureState) => true,
             onPanResponderRelease: (evt, gestureState) => {
-              
+
 
                 // this.props.navigation.setParams({ enableGestures: true });
                 if (this.LockRef && this.LockRef.state.lock) return false//锁定控件时 禁用手势
@@ -552,12 +554,12 @@ class VideoPlayer extends React.Component {
 
                 speedB = this.speedalltime
                 if (speedB) {
-                    
+
                     speedB >= this.state.duration ?
                         this.player.seek(speedB - 2)
                         :
                         this.player.seek(speedB);
-                        this.speedalltime='';
+                    this.speedalltime = '';
                 }
 
 
@@ -708,32 +710,36 @@ class VideoPlayer extends React.Component {
 
     //重置播放
     rePlay = (autoPlay = true) => {
-        this.adminPaused=true;
+        this.adminPaused = true;
+
+        //admRePlay//重置当前播放时间
+
+        const GSTATE = { admRePlay: true, showChangeList: false }
+
         if (this.state.isEnd) {
-            // console.log("---=-=-=-=", 1)
+
             this.player.seek(0)
             setTimeout(() => {
-                if (autoPlay) {
-                    this.setState({ paused: true, isEnd: false, showConts: true }, () => { this.setState({ paused: false }) });
-                } else {
-                    this.setState({ isEnd: false, showConts: true });
-                }
+                autoPlay
+                    ?
+                    this.setState({ paused: true, isEnd: false, showConts: true, ...GSTATE }, () => { this.setState({ paused: false }) })
+                    :
+                    this.setState({ isEnd: false, showConts: true, ...GSTATE });
             }, 300)
 
         } else {
-            // console.log("---=-=-=-=", 2)
+
+
             if (!this.state.paused) {
-                if (autoPlay) {
-                    this.setState({ paused: true }, () => { this.setState({ paused: false }) });
-                } else {
-                    this.setState({ paused: true });
-                }
+                this.setState({ paused: true, ...GSTATE }, () => { autoPlay && this.setState({ paused: false }) });
             }
         }
+
         if (this.state.paused && !this.state.isEnd) {
-            // console.log("---=-=-=-=", 3)
-            this.setState({ paused: autoPlay ? false : true });
+
+            this.setState({ paused: autoPlay ? false : true, ...GSTATE });
         }
+
 
     }
 
@@ -773,7 +779,7 @@ class VideoPlayer extends React.Component {
                 ?
                 this.AnimatedOp.start(() => { this.setState({ showLockCont: true, showConts: true, showChangeList: false }); this.hide.stop(); this.AnimatedOp.stop(); this.fastHide && this.fastHide.stop(); }) // 开始执行动画
                 :
-                this.AnimatedOp.start(() => { this.setState({ showLockCont: true,showChangeList: false }); this.hide.stop(); this.AnimatedOp.stop(); this.fastHide && this.fastHide.stop(); }); // 开始执行动画
+                this.AnimatedOp.start(() => { this.setState({ showLockCont: true, showChangeList: false }); this.hide.stop(); this.AnimatedOp.stop(); this.fastHide && this.fastHide.stop(); }); // 开始执行动画
 
         }
     }
@@ -787,7 +793,7 @@ class VideoPlayer extends React.Component {
                 if (this.lastBackPressed && this.lastBackPressed + 300 >= Date.now()) {
                     // clearTimeout(this.Timeout)
                     if (this.LockRef && this.LockRef.state.lock) return//锁定控件时 禁用手势
-                    this.adminPaused=true
+                    this.adminPaused = true
                     this.state.paused ? this.rePlay() : this.setState({ paused: true, })
                     this.state.opacity.setValue(1)
                     return
@@ -813,10 +819,10 @@ class VideoPlayer extends React.Component {
 
 
     onLoad = (data) => {
-        this.props.onLoad && this.props.onLoad(data)
 
+        this.props.onLoad && this.props.onLoad(data)
         //视频总长度
-        this.setState({ duration: data.duration, allTime: formatSeconds(data.duration), showChangeList: false });
+        this.setState({ duration: data.duration, allTime: formatSeconds(data.duration), showChangeList: false, admRePlay: false });
         //进度条动画
         this.playDotX = this.dotX.interpolate({
             inputRange: [0, data.duration],
@@ -870,7 +876,7 @@ class VideoPlayer extends React.Component {
     }
 
     videoError = (e) => {
-        
+
         this.props.onError && this.props.onError(e)
         this.setState({ showLoading: false, paused: true })
         this.onError = true
@@ -883,9 +889,9 @@ class VideoPlayer extends React.Component {
         }
     }
 
-    btnPasuedfun=()=>{
-        
-        !this.state.showOpenVip &&(this.adminPaused=true,this.setState({ paused: true })) 
+    btnPasuedfun = () => {
+
+        !this.state.showOpenVip && (this.adminPaused = true, this.setState({ paused: true }))
 
     }
 
@@ -894,9 +900,9 @@ class VideoPlayer extends React.Component {
             inputRange: [0, 1],//输入值
             outputRange: ["0deg", "360deg"] //输出值
         })
-        var propsObj = {...this.props}
-        delete(propsObj["paused"])
-        
+        var propsObj = { ...this.props }
+        delete (propsObj["paused"])
+
 
         const { smallP, allTime, LinearGradientHeight, showOpenVip, topContsTop, bottomContsBottom } = this.state
         return (
@@ -992,6 +998,7 @@ class VideoPlayer extends React.Component {
                             this.state.showConts ? null :
                                 <BottomSpeed
                                     playhideContsDotX={this.playhideContsDotX}
+                                    admRePlay={this.state.admRePlay}
                                     {...this.state}
                                 />
                         }
@@ -1058,6 +1065,7 @@ class VideoPlayer extends React.Component {
                                         {/* 进度条 缓存条*/}
                                         <Speed
                                             {...this.state}
+                                            admRePlay={this.state.admRePlay}
                                             nowTime={this.nowTime}
                                             panHandlers={this._panSpeeDot.panHandlers}
                                             allTime={allTime}
@@ -1128,7 +1136,7 @@ class VideoPlayer extends React.Component {
                                                         activeOpacity={0.5}
 
                                                         style={{ padding: 10, bottom: 0, right: 5, zIndex: 9999, alignSelf: "flex-end" }}
-                                                        onPress={() => { this.setState({ showConts: false, showChangeList: true , showLockCont:false }) }}
+                                                        onPress={() => { this.setState({ showConts: false, showChangeList: true, showLockCont: false }) }}
                                                     >
                                                         <Text style={{ color: "#fff" }}>选集</Text>
                                                     </TouchableOpacity >
@@ -1169,7 +1177,7 @@ class VideoPlayer extends React.Component {
                         <Loading {...this.state} spin={spin} />
                     }
                     {
-                       this.adminPaused && this.state.paused && <TipsPaused {...this.state} />
+                        this.adminPaused && this.state.paused && <TipsPaused {...this.state} />
                     }
 
                     {/* 音量 this.state.height / 2 - 20 + this.state.statusBarH / 2*/}
@@ -1196,8 +1204,8 @@ class VideoPlayer extends React.Component {
     }
 
     static defaultProps = {
-        autoPlay:true
-      }
+        autoPlay: true
+    }
 
 }
 
