@@ -10,8 +10,17 @@ import {
     Platform,
     SafeAreaView
 } from 'react-native';
+import {
+    SvgVideoUnlock,
+    SvgVideoLocking,
+    SvgVideoLoading,
+    SvgVideoBrightness,
+    SvgVideoNoSound,
+    SvgVideoStop,
+    SvgVideoSound
+} from '../component/svg'
 import { formatSeconds } from '../utils/formatSeconds'
-import { SvgVideoUnlock, SvgVideoLocking, SvgVideoNextBtn, SvgVideoLoading, SvgVideoBrightness, SvgVideoSetting, SvgVideoNoSound, SvgVideoStop, SvgVideoPlay, SvgVideoAllBox, SvgVideoSmallBox, SvgVideoBack, SvgVideoScang, SvgVideoSound } from '../component/svg'
+
 const { height, width } = Dimensions.get('screen');
 
 
@@ -246,7 +255,7 @@ export const BottomSpeed = (props) => {
 
                 <View style={{ width: props.width, flexDirection: "row", flexWrap: "nowrap", zIndex: 10 }}>
                     {/* 进度条*/}
-                    <Animated.View style={{ zIndex: 12, width: props.playhideContsDotX === null ? 0 :(props.admRePlay?0: props.playhideContsDotX), height: Platform.OS === "android" ? 2 : 3, backgroundColor: "#e54602" }}></Animated.View>
+                    <Animated.View style={{ zIndex: 12, width: props.playhideContsDotX === null ? 0 : (props.admRePlay ? 0 : props.playhideContsDotX), height: Platform.OS === "android" ? 2 : 3, backgroundColor: "#e54602" }}></Animated.View>
 
 
                 </View>
@@ -267,9 +276,9 @@ export const Header = (props) => {
                 props.width === width && Platform.OS === "android" ?
                     <View style={{ height: StatusBar.currentHeight, backgroundColor: "#000" }}></View>
                     :
-                    <SafeAreaView style={{ backgroundColor: "#000" }}/>
+                    <SafeAreaView style={{ backgroundColor: "#000" }} />
             }
-            <StatusBar translucent={true} barStyle={"light-content"}/>
+            <StatusBar translucent={true} barStyle={"light-content"} />
         </>
     )
 
@@ -291,7 +300,7 @@ export class Speed extends Component {
         this.setState({ dotWidth })
     }
 
-   
+
 
 
     setSpeed = (e) => {
@@ -328,14 +337,14 @@ export class Speed extends Component {
         return (
             <View style={{ elevation: 10, flex: 1, alignItems: "center", zIndex: 9999, justifyContent: "center", flexDirection: "row", flexWrap: "nowrap", bottom: 0 }}>
                 <View>
-                    <Text style={{ color: "#ffffff" }}>{props.admRePlay?"00:00":(nowTime == "00:00" ? props.nowTime : nowTime)}</Text>
+                    <Text style={{ color: "#ffffff" }}>{props.admRePlay ? "00:00" : (nowTime == "00:00" ? props.nowTime : nowTime)}</Text>
                 </View>
 
                 <View style={{ width: props.width - 180, paddingHorizontal: 10, flexDirection: "row", flexWrap: "nowrap", zIndex: 10, alignItems: "center", position: "relative", }}>
                     {/* 进度条*/}
-                    <Animated.View style={{ zIndex: 12, width: dotStart ? dotWidth :props.admRePlay?0: (props.playDotX === null ? 0 : props.playDotX), height: 2, backgroundColor: "#e54602" }}></Animated.View>
+                    <Animated.View style={{ zIndex: 12, width: dotStart ? dotWidth : props.admRePlay ? 0 : (props.playDotX === null ? 0 : props.playDotX), height: 2, backgroundColor: "#e54602" }}></Animated.View>
                     {/* 缓存条*/}
-                    <Animated.View style={{ zIndex: 11, width: props.playBufferX === null ? 0 :props.admRePlay?0: props.playBufferX, height: 2, backgroundColor: "rgba(225,225,225,1)", position: "absolute", left: 10 }}></Animated.View>
+                    <Animated.View style={{ zIndex: 11, width: props.playBufferX === null ? 0 : props.admRePlay ? 0 : props.playBufferX, height: 2, backgroundColor: "rgba(225,225,225,1)", position: "absolute", left: 10 }}></Animated.View>
                     {/* 进度条上的点 */}
                     <View style={{ zIndex: 9999, padding: 12, left: -14, backgroundColor: "rgba(0,0,0,0)" }} {...props.panHandlers}>
                         <View ref={"dotspeed"} style={{ height: 10, width: 10, borderRadius: 10, backgroundColor: "#e54602", borderWidth: 4, padding: 4, left: -2, borderColor: "rgba(255,255,255,0)" }}></View>
@@ -345,7 +354,7 @@ export class Speed extends Component {
                 </View>
 
                 <View style={{}}>
-                    <Text style={{ color: "#ffffff" }}>{props.allTime}</Text>
+                    <Text style={{ color: "#ffffff" }}>{props.admRePlay ? "00:00" : props.allTime}</Text>
                 </View>
             </View>
         )
