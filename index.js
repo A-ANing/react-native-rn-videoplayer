@@ -47,8 +47,14 @@ const { height, width } = Dimensions.get('screen');
 
 class VideoPlayer extends React.Component {
     static defaultProps = {
-        autoPlay: false,
-        showSmallCont: true
+        autoPlay: true,
+        showSmallCont: true,
+        speedColor:"#e54602",
+        dotColor:"#e54602",
+        dotBorderColor:"rgba(255,255,255,0.3)",
+        bottomSpeedColor:"#e54602",
+        cachColor:"#ffffff",
+        allSpeedColor:"rgba(0,0,0,0.4)"
     }
     constructor(props) {
         super(props)
@@ -589,7 +595,7 @@ class VideoPlayer extends React.Component {
 
                 if (this.state.showOpenVip || !this.state.onload) return//需要权限 或者视频还不可以播放时停止不允许滑动进度条
                 this.dotspeed.setNativeProps({
-                    style: { borderColor: "rgba(255,255,255,0.5)" }
+                    style: { borderColor:this.props.dotBorderColor }
                 })
                 this.changeSpeedTip({ opacity: 1, display: null, width: null })
                 clearTimeout(this.TimeHideConts)//拖动进度条时禁止隐藏控件
@@ -871,6 +877,7 @@ class VideoPlayer extends React.Component {
         }
         this.url = this.props.url
         const { smallP, allTime, LinearGradientHeight, showOpenVip, topContsTop, bottomContsBottom } = this.state
+        const preShowSmallCont = smallP?(this.props.showSmallCont?true:false):true
         return (
             <>
                 {this.props.statusBar ? (smallP && this.props.statusBar()) : <Header width={this.state.width} />}
@@ -921,8 +928,8 @@ class VideoPlayer extends React.Component {
                                 {/* 阴影 */}
                                 <LinearGradient colors={['rgba(0,0,0,0.4)', 'rgba(0,0,0,0.1)', 'rgba(0,0,0,0)']} style={{ height: LinearGradientHeight, width: this.state.width }}></LinearGradient>
                                 {/* 返回键 */}
-                                {<TouchableOpacity 
-                                style={{display:this.state.smallP?(this.props.showSmallCont?"flex":"none"):"flex", position: "absolute", top: topContsTop, left: smallP ? 5 : this.props.continuous ? 45 : 5, padding: 10, zIndex: 999, }}
+                                {preShowSmallCont&&<TouchableOpacity 
+                                style={{position: "absolute", top: topContsTop, left: smallP ? 5 : this.props.continuous ? 45 : 5, padding: 10, zIndex: 999, }}
                                     //如果是全屏 点击返回键是切换到小屏  反之返回上个页面
                                     onPress={() => {
                                         if (this.state.smallP) {
@@ -955,6 +962,7 @@ class VideoPlayer extends React.Component {
                         {//控件隐藏时候，最下面显示的进度
                             this.state.showConts ? null :
                                 <BottomSpeed
+                                    bottomSpeedColor={this.props.bottomSpeedColor}
                                     playhideContsDotX={this.playhideContsDotX}
                                     admRePlay={this.state.admRePlay}
                                     {...this.state}
@@ -1024,6 +1032,11 @@ class VideoPlayer extends React.Component {
                                         {/* 进度条 缓存条*/}
                                         <Speed
                                             {...this.state}
+                                            color={this.props.speedColor}
+                                            cachColor={this.props.cachColor}
+                                            dotColor={this.props.dotColor}
+                                            dotBorderColor={this.props.dotBorderColor}
+                                            allSpeedColor={this.props.allSpeedColor}
                                             admRePlay={this.state.admRePlay}
                                             nowTime={this.nowTime}
                                             panHandlers={this._panSpeeDot.panHandlers}

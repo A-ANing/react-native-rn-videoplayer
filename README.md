@@ -43,9 +43,9 @@
 
 -  v2.2.1 增加手势左右滑动视频区域(非进度条上的点)来调整视频进度
 
--  v2.2.5 autoPlay={false}是否自动播放，默认为true (v2.2.8 默认为false)
+-  v2.2.5 autoPlay={false}是否自动播放，默认为true
 
--  v2.2.8 showSmallCont={false}小屏是否显示返回按钮，默认为true
+-  v2.2.9 showSmallCont={false}小屏是否显示返回按钮，默认为true; 自定义进度条颜色(见api)
 ## Getting started
 1. 
 ```shell
@@ -227,7 +227,7 @@ onSmallBack={()=>{this.props.navigation.goBack()}}
 ```
 # api
 - url 视频地址
-
+- showSmallCont={bool} 小屏是否隐藏返回按钮 默认false;
 - changeWindows() 切换全屏或者小屏
 
     changeWindows(boolean)  true 全屏， false 小屏
@@ -246,6 +246,20 @@ onSmallBack={()=>{this.props.navigation.goBack()}}
   ```javascript
     moreSetting={()=><Image/>}
   ```
+
+- speedColor 当前播放进度条颜色 "#e54602"
+
+- dotColor 进度条上的圆点颜色 "#e54602"
+
+- dotBorderColor 进度条上的圆点被按下时的边框颜色 "rgba(255,255,255,0.3)"
+
+- bottomSpeedColor 最底部播放进度的颜色 "#e54602"
+
+- cachColor 缓冲进度条颜色 "#ffffff"
+
+- allSpeedColor 整个进度条颜色 "rgba(0,0,0,0.4)
+
+
 - setPaused 播放暂停   
   ```javascript
     this.player.setPaused(true)//true暂停；false播放；
