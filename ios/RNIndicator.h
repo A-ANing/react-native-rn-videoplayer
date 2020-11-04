@@ -1,3 +1,4 @@
+
 #if __has_include("RCTBridgeModule.h")
 #import "RCTBridgeModule.h"
 #else
@@ -8,11 +9,9 @@
 
 
 
-
-@interface IndicatorView : UIViewController
-@property BOOL prefersAutoHidden;
+@interface HomeIndicatorView : UIViewController
+@property BOOL refsAutoHidden;
 @end
-
 
 @interface RNIndicator : NSObject <RCTBridgeModule>
 @end

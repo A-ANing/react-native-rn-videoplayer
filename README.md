@@ -45,6 +45,7 @@
 
 -  v2.2.5 autoPlay={false}是否自动播放，默认为true
 
+-  v2.2.8 showSmallCont={false}小屏是否显示返回按钮，默认为true
 ## Getting started
 1. 
 ```shell
@@ -80,6 +81,7 @@ Add the following to your project's `AppDelegate.m`:
 
 ```diff
 +#import "Orientation.h"
++#import <RNIndicator.h>
 
 @implementation AppDelegate
 
@@ -88,6 +90,13 @@ Add the following to your project's `AppDelegate.m`:
 +- (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
 +  return [Orientation getOrientation];
 +}
+
+//找到这行
+-UIViewController *rootViewController = [UIViewController new];
+
+//改为
++UIViewController *rootViewController = [HomeIndicatorView new];
+
 
 @end
 ```

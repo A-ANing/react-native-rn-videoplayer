@@ -1,38 +1,37 @@
 #import "RNIndicator.h"
 
-
-@implementation IndicatorView
+@implementation HomeIndicatorView
 
 - (BOOL)prefersHomeIndicatorAutoHidden {
-    return self.prefersAutoHidden;
+    return self.refsAutoHidden;
 }
 
 @end
 
 
-@implementation RNHomeIndicator
+@implementation RNIndicator
 
 - (id) init {
-    [self setHidden:NO];
+    [self setrefsAutoHidden:NO];
     return [super init];
 }
 
-- (void) setHidden: (BOOL) newValue {
-    IndicatorView *rootViewController = [self getIndicatorView];
+- (void) setrefsAutoHidden: (BOOL) newValue {
+    HomeIndicatorView *rootViewController = [self getHomeIndicatorView];
 
-    rootViewController.prefersAutoHidden = newValue;
+    rootViewController.refsAutoHidden = newValue;
     if (@available(iOS 11.0, *)) {
         [rootViewController setNeedsUpdateOfHomeIndicatorAutoHidden];
     }
 }
 
-- (IndicatorView*) getIndicatorView {
+- (HomeIndicatorView*) getHomeIndicatorView {
     UIViewController *rootViewController = [UIApplication sharedApplication].delegate.window.rootViewController;
     NSAssert(
-        [rootViewController isKindOfClass:[IndicatorView class]],
-        @"rootViewController is not of type IndicatorView as expected."
+        [rootViewController isKindOfClass:[HomeIndicatorView class]],
+        @"rootViewController is not of type HomeIndicatorView as expected."
     );
-    return (IndicatorView*) rootViewController;
+    return (HomeIndicatorView*) rootViewController;
 }
 
 - (dispatch_queue_t)methodQueue {
@@ -46,11 +45,11 @@
 RCT_EXPORT_MODULE()
 
 RCT_EXPORT_METHOD(alwaysVisible) {
-    [self setHidden:NO];
+    [self setrefsAutoHidden:NO];
 }
 
 RCT_EXPORT_METHOD(autoHidden) {
-    [self setHidden:YES];
+    [self setrefsAutoHidden:YES];
 }
 
 @end

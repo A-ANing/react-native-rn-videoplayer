@@ -47,7 +47,8 @@ const { height, width } = Dimensions.get('screen');
 
 class VideoPlayer extends React.Component {
     static defaultProps = {
-        autoPlay: true
+        autoPlay: false,
+        showSmallCont: true
     }
     constructor(props) {
         super(props)
@@ -100,8 +101,12 @@ class VideoPlayer extends React.Component {
         this.animatedonBuffer = this.animatedonBuffer.bind(this)
     }
 
+
     componentWillUnmount() {
         Orientation.lockToPortrait();
+        Platform.OS === "android" 
+        ? NativeModules.HideBottomNa.show()
+        : NativeModules.RNIndicator.alwaysVisible();
         // Orientation.removeOrientationListener(this._orientationDidChange);
         //离开该页面 还原屏幕亮度
         if (this.adminBrightness) {
@@ -130,7 +135,9 @@ class VideoPlayer extends React.Component {
     //全屏
     changeAllBox = () => {
         this.setAll()
-        Platform.OS === "android" && NativeModules.HideBottomNa.hide();
+        Platform.OS === "android" 
+        ? NativeModules.HideBottomNa.hide()
+        : NativeModules.RNIndicator.autoHidden();
         Orientation.lockToLandscape()
         this.props.onWindowChange && this.props.onWindowChange("full")
     }
@@ -139,7 +146,9 @@ class VideoPlayer extends React.Component {
         this.setSmall()
         Orientation.lockToPortrait()
         this.props.onWindowChange && this.props.onWindowChange("small")
-        Platform.OS === "android" && NativeModules.HideBottomNa.show();
+        Platform.OS === "android" 
+        ? NativeModules.HideBottomNa.show()
+        : NativeModules.RNIndicator.alwaysVisible();
     }
 
 
@@ -234,7 +243,7 @@ class VideoPlayer extends React.Component {
     animatedonBuffer(event) {
         this.props.onBuffer && this.props.onBuffer(event)
         this.setState({
-            showLoading: Platform.OS === "android" ? (event.isBuffering ? true : false) : true
+            showLoading: Platform.OS === "android" ? (event.isBuffering ? true : false) :(!this.state.paused&&true) 
         })
     }
 
@@ -912,7 +921,8 @@ class VideoPlayer extends React.Component {
                                 {/* 阴影 */}
                                 <LinearGradient colors={['rgba(0,0,0,0.4)', 'rgba(0,0,0,0.1)', 'rgba(0,0,0,0)']} style={{ height: LinearGradientHeight, width: this.state.width }}></LinearGradient>
                                 {/* 返回键 */}
-                                <TouchableOpacity style={{ position: "absolute", top: topContsTop, left: smallP ? 5 : this.props.continuous ? 45 : 5, padding: 10, zIndex: 999, }}
+                                {<TouchableOpacity 
+                                style={{display:this.state.smallP?(this.props.showSmallCont?"flex":"none"):"flex", position: "absolute", top: topContsTop, left: smallP ? 5 : this.props.continuous ? 45 : 5, padding: 10, zIndex: 999, }}
                                     //如果是全屏 点击返回键是切换到小屏  反之返回上个页面
                                     onPress={() => {
                                         if (this.state.smallP) {
@@ -922,7 +932,7 @@ class VideoPlayer extends React.Component {
                                     }}
                                 >
                                     <SvgVideoBack height="20" width="20" />
-                                </TouchableOpacity>
+                                </TouchableOpacity>}
                                 {/* 收藏|更多 */}
                                 <View style={{ position: "absolute", top: topContsTop, right: smallP ? 5 : this.props.continuous ? 45 : 5, flexWrap: "nowrap", flexDirection: "row", zIndex: 10, }}>
                                     <TouchableOpacity style={{ padding: 8 }}
