@@ -43,7 +43,7 @@
 
 -  v2.2.1 增加手势左右滑动视频区域(非进度条上的点)来调整视频进度
 
--  v2.2.5 autoPlay={false}是否自动播放，默认为true
+-  v2.2.5 autoPlay={false}是否自动播放，默认为true (v2.2.8 默认为false)
 
 -  v2.2.8 showSmallCont={false}小屏是否显示返回按钮，默认为true
 ## Getting started
