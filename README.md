@@ -92,10 +92,10 @@ Add the following to your project's `AppDelegate.m`:
 +}
 
 //找到这行
--UIViewController *rootViewController = [UIViewController new];
+UIViewController *rootViewController = [UIViewController new];
 
 //改为
-+UIViewController *rootViewController = [HomeIndicatorView new];
+UIViewController *rootViewController = [HomeIndicatorView new];
 
 
 @end
