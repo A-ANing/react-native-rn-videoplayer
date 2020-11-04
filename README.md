@@ -45,6 +45,8 @@
 
 -  v2.2.5 autoPlay={false}是否自动播放，默认为true
 
+-  v2.2.8 当ios设备为iPhone X以上,全屏时隐藏底部小横条
+
 -  v2.2.9 showSmallCont={false}小屏是否显示返回按钮，默认为true; 自定义进度条颜色(见api)
 ## Getting started
 1. 
