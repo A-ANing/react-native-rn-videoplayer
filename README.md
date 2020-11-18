@@ -7,7 +7,7 @@
 - 视频上下滑动调节音量、屏幕亮度，视频左右滑动以及拖动进度条调节视频进度，视频控件锁定，全屏切换，缓存进度，双击视频暂停，等功能，基于react-native-video
 - ps：Android改变亮度无需获取高级权限，只改变当前active也就是当前页面的亮度，改变亮度后，返回进入到其他页面会恢复到原来的亮度。
 
-- 如果你的视频没有居中，参考[问题2046](https://github.com/react-native-community/react-native-video/issues/2046)
+- 如果你的视频全屏后尺寸没发生改变，参考[全屏尺寸问题18](https://github.com/A-ANing/react-native-rn-videoplayer/issues/18)
 
 - Version 2.x requires react-native >= 0.60.0
 - Version 1.3.2 requires react-native <= 0.59.9
