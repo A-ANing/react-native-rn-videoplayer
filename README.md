@@ -18,8 +18,8 @@
 
 ## gif预览 ios 和 android
 
-<img src="https://github.com/ngxu/ngxu.github.io/blob/master/img/ios_demo.gif?raw=true" width=320 height=693/>&nbsp;&nbsp;&nbsp;&nbsp;
-<img src="https://github.com/ngxu/ngxu.github.io/blob/master/img/android2.2.3.gif?raw=true" width=320 height=693 />
+<img src="https://vkceyugu.cdn.bspapp.com/VKCEYUGU-imgbed/43621fcd-e016-4f94-967e-47000082529c.gif" width=320 height=693/>&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="https://vkceyugu.cdn.bspapp.com/VKCEYUGU-imgbed/683885c8-fcfd-4434-88b3-f52e90ccfc7f.gif" width=320 height=693 />
 
 # 增加功能
 -  v2.0.6 增加锁定视频控件，锁定用户操作（调节音量/亮度，展示隐藏控件）
