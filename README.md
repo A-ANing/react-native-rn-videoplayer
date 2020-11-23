@@ -13,7 +13,7 @@
 - Version 1.3.2 requires react-native <= 0.59.9
 
 
-<h3><a href="https://www.jianshu.com/p/a6f09d2ab09c" target="_blank">进入简书地址</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://streamja.com/embed/QpQ9V" target="_blank">进入视频预览</a></h3>
+<h3><a href="https://www.jianshu.com/p/a6f09d2ab09c" target="_blank">进入简书地址</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://vkceyugu.cdn.bspapp.com/VKCEYUGU-imgbed/0e4e32ad-a8ec-475e-8868-9245a76901f5.mp4" target="_blank">进入视频预览</a></h3>
 
 
 ## gif预览 ios 和 android
