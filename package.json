@@ -1,6 +1,6 @@
 {
   "name": "react-native-rn-videoplayer",
-  "version": "2.2.9",
+  "version": "2.2.10",
   "description": "A customisable React Native video player for Android and IOS",
   "main": "index.js",
   "scripts": {
