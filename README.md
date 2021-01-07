@@ -23,7 +23,7 @@
 
 # 增加功能
 
--  v2.3.0 支持左右两边长按快进退 自定义加载文字 暂停文字  快进退的文字 返回按钮右边显示视频名字
+-  v2.2.10 支持左右两边长按快进退 自定义加载文字 暂停文字  快进退的文字 返回按钮右边显示视频名字
 <img src="https://github.com/ngxu/ngxu.github.io/blob/master/img/right.jpg?raw=true" width=260 />&nbsp;&nbsp;&nbsp;&nbsp;
 <img src="https://github.com/ngxu/ngxu.github.io/blob/master/img/left.jpg?raw=true" width=260  />	
 
