@@ -23,7 +23,8 @@ import {
     Speed,
     Header,
     SpeedTipTime,
-    Lock
+    Lock,
+    AnFastSvg
 } from './view/index';
 import {
     SvgVideoNextBtn,
@@ -33,7 +34,8 @@ import {
     SvgVideoAllBox,
     SvgVideoSmallBox,
     SvgVideoBack,
-    SvgVideoScang
+    SvgVideoScang,
+    SvgVideoFastSpeed
 } from './component/svg';
 import SystemSetting from 'react-native-system-setting';
 import LinearGradient from 'react-native-linear-gradient';
@@ -49,12 +51,12 @@ class VideoPlayer extends React.Component {
     static defaultProps = {
         autoPlay: true,
         showSmallCont: true,
-        speedColor:"#e54602",
-        dotColor:"#e54602",
-        dotBorderColor:"rgba(255,255,255,0.3)",
-        bottomSpeedColor:"#e54602",
-        cachColor:"#ffffff",
-        allSpeedColor:"rgba(0,0,0,0.4)"
+        speedColor: "#e54602",
+        dotColor: "#e54602",
+        dotBorderColor: "rgba(255,255,255,0.3)",
+        bottomSpeedColor: "#e54602",
+        cachColor: "#ffffff",
+        allSpeedColor: "rgba(0,0,0,0.4)"
     }
     constructor(props) {
         super(props)
@@ -70,6 +72,10 @@ class VideoPlayer extends React.Component {
         this.BrightnessY = 0
         this.nowTime = "00:00"
         this.nowCurrentTime = 0//当前播放秒数
+        this.defSpeed = 1
+        this.speedTouchScale = 5//长按快进快退的宽度 跟屏幕宽度的比例  
+        this.speedFastValue = 3 //长按视频右边的快进速率
+        this.speedSlowValue = 3
         this.dotX = new Animated.Value(0),
             this.bufferX = new Animated.Value(0),
             this.soundAnima = new Animated.Value(0),//音量
@@ -78,7 +84,9 @@ class VideoPlayer extends React.Component {
             this.playBufferX = null,
             this.recordHandeY = [],//记录滑动y值
             this.recordHandeX = [],//记录滑动x值
+
             this.state = {
+                videoRate: this.defSpeed,//播放速率
                 duration: 0.0,
                 onload: false,//视频加载状态
                 admRePlay: false,//重置视频进度状态
@@ -104,15 +112,16 @@ class VideoPlayer extends React.Component {
                 showChangeList: false,//控制是否显示全屏选集
                 showLockCont: false//锁的显示状态
             }
+
         this.animatedonBuffer = this.animatedonBuffer.bind(this)
     }
 
 
     componentWillUnmount() {
         Orientation.lockToPortrait();
-        Platform.OS === "android" 
-        ? NativeModules.HideBottomNa.show()
-        : NativeModules.RNIndicator.alwaysVisible();
+        Platform.OS === "android"
+            ? NativeModules.HideBottomNa.show()
+            : NativeModules.RNIndicator.alwaysVisible();
         // Orientation.removeOrientationListener(this._orientationDidChange);
         //离开该页面 还原屏幕亮度
         if (this.adminBrightness) {
@@ -141,9 +150,9 @@ class VideoPlayer extends React.Component {
     //全屏
     changeAllBox = () => {
         this.setAll()
-        Platform.OS === "android" 
-        ? NativeModules.HideBottomNa.hide()
-        : NativeModules.RNIndicator.autoHidden();
+        Platform.OS === "android"
+            ? NativeModules.HideBottomNa.hide()
+            : NativeModules.RNIndicator.autoHidden();
         Orientation.lockToLandscape()
         this.props.onWindowChange && this.props.onWindowChange("full")
     }
@@ -152,9 +161,9 @@ class VideoPlayer extends React.Component {
         this.setSmall()
         Orientation.lockToPortrait()
         this.props.onWindowChange && this.props.onWindowChange("small")
-        Platform.OS === "android" 
-        ? NativeModules.HideBottomNa.show()
-        : NativeModules.RNIndicator.alwaysVisible();
+        Platform.OS === "android"
+            ? NativeModules.HideBottomNa.show()
+            : NativeModules.RNIndicator.alwaysVisible();
     }
 
 
@@ -249,7 +258,7 @@ class VideoPlayer extends React.Component {
     animatedonBuffer(event) {
         this.props.onBuffer && this.props.onBuffer(event)
         this.setState({
-            showLoading: Platform.OS === "android" ? (event.isBuffering ? true : false) :(!this.state.paused&&true) 
+            showLoading: Platform.OS === "android" ? (event.isBuffering ? true : false) : (!this.state.paused && true)
         })
     }
 
@@ -294,6 +303,82 @@ class VideoPlayer extends React.Component {
             },
         ).start(); // 开始执行动画
     }
+
+
+
+    speedLongTouch = (evt) => {
+        var speedStartX = evt.nativeEvent.pageX
+        var speedTouchWidth = this.state.width / 4
+        if ( speedStartX >= this.state.width - speedTouchWidth) {
+            
+            this.setState({
+                videoRate: this.speedFastValue,
+                speedTouch:true
+            }, () => {
+                this.rightSpeedRef.setNativeProps({
+                    style: {
+                        opacity: 1
+                    }
+                })
+            })
+        }
+
+
+        if(speedStartX <= speedTouchWidth ){
+            
+            
+            this.isSolTouch=true
+            this.setState({
+                speedTouch:true
+            })
+            this.nowCurrentTime&&this.player.seek(this.nowCurrentTime-5)
+            this.sloSpeedTime=setInterval(()=>{
+                
+                this.nowCurrentTime&&this.player.seek(this.nowCurrentTime-5)
+            },500)
+            this.leftSpeedRef.setNativeProps({
+                style: {
+                    opacity: 1
+                }
+            })
+        }
+    }
+
+
+    speedLongTouchOut = (evt) => {
+        this.setState({
+            speedTouch:false
+        })
+        
+        var speedStartX = evt.nativeEvent.pageX
+        var speedTouchWidth = this.state.width / 4
+        if (speedStartX <= speedTouchWidth) {
+            this.sloSpeedTime&&clearInterval(this.sloSpeedTime)
+            this.isSolTouch=false
+            this.leftSpeedRef.setNativeProps({
+                style: {
+                    opacity: 0
+                }
+            })
+
+        }
+
+        if (speedStartX >= this.state.width - speedTouchWidth) {
+            this.setState({
+                videoRate: this.defSpeed
+            }, () => {
+                this.rightSpeedRef.setNativeProps({
+                    style: {
+                        opacity: 0
+                    }
+                })
+            })
+        }
+
+
+
+    }
+
 
     componentWillMount() {
 
@@ -347,17 +432,23 @@ class VideoPlayer extends React.Component {
 
         // 上下滑动 调节音量 以及屏幕亮度
         this._panResponder = PanResponder.create({
-            // 要求成为响应者：
             onStartShouldSetPanResponder: (evt, gestureState) => true,//锁定控件时 禁用手势
             onStartShouldSetPanResponderCapture: (evt, gestureState) => false,
             onMoveShouldSetPanResponder: (evt, gestureState) => {
+                if(this.state.speedTouch){
+                    return false
+                }
                 return Math.abs(gestureState.dx) > 2 || Math.abs(gestureState.dy) > 2
             },
             onMoveShouldSetPanResponderCapture: (evt, gestureState) => {
+                if(this.state.speedTouch){
+                    return false
+                }
                 return Math.abs(gestureState.dx) > 2 || Math.abs(gestureState.dy) > 2
             },
 
             onPanResponderGrant: (evt, gestureState) => {
+
                 clearTimeout(this.TimeHideConts)//拖动时禁止隐藏控件
 
                 //初始化 记录滑动的xy值
@@ -400,7 +491,7 @@ class VideoPlayer extends React.Component {
                 }
                 // console.log("locationY", evt.nativeEvent.pageY)
                 this.moveYData = this.startY - evt.nativeEvent.pageY
-                if (this.LockRef && this.LockRef.state.lock) return//锁定控件时 禁用手势
+                if (this.LockRef && this.LockRef.state.lock||this.speedTouch) return//锁定控件时 禁用手势
                 // console.log("moveYData",)
                 this.moveXData = evt.nativeEvent.pageX - this.startX
 
@@ -480,8 +571,9 @@ class VideoPlayer extends React.Component {
                             }
                         }
                     } else {
-                        //console.log("左右滑动调节播放进度")
+                        //"左右滑动调节播放进度"
                         if (this.state.onload && Math.abs(this.moveXData) > 0) {
+                            
                             const { duration, width } = this.state
 
                             !this.ismoveDot && this.dotspeed && this.dotspeed.setNativeProps({
@@ -515,7 +607,7 @@ class VideoPlayer extends React.Component {
             onPanResponderTerminationRequest: (evt, gestureState) => true,
             onPanResponderRelease: (evt, gestureState) => {
 
-
+                this.speedLongTouchOut(evt)
                 // this.props.navigation.setParams({ enableGestures: true });
                 if (this.LockRef && this.LockRef.state.lock) return false//锁定控件时 禁用手势
 
@@ -565,7 +657,7 @@ class VideoPlayer extends React.Component {
                 }
             },
             onPanResponderTerminate: (evt, gestureState) => {
-
+                this.speedLongTouchOut(evt)
                 this.activateAutoHide()//激活自动隐藏
                 this.dotspeed && this.dotspeed.setNativeProps({
                     style: { borderColor: "rgba(255,255,255,0)" }
@@ -584,7 +676,6 @@ class VideoPlayer extends React.Component {
 
         // 左右拖动进度条
         this._panSpeeDot = PanResponder.create({
-            // 要求成为响应者：
             onStartShouldSetPanResponder: (evt, gestureState) => true,
             onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
             onMoveShouldSetPanResponder: (evt, gestureState) => true,
@@ -592,10 +683,9 @@ class VideoPlayer extends React.Component {
 
             onPanResponderGrant: (evt, gestureState) => {
                 // this.props.navigation.setParams({ enableGestures: false });
-
                 if (this.state.showOpenVip || !this.state.onload) return//需要权限 或者视频还不可以播放时停止不允许滑动进度条
                 this.dotspeed.setNativeProps({
-                    style: { borderColor:this.props.dotBorderColor }
+                    style: { borderColor: this.props.dotBorderColor }
                 })
                 this.changeSpeedTip({ opacity: 1, display: null, width: null })
                 clearTimeout(this.TimeHideConts)//拖动进度条时禁止隐藏控件
@@ -610,8 +700,6 @@ class VideoPlayer extends React.Component {
                 // gestureState.{x,y} 现在会被设置为0
             },
             onPanResponderMove: (evt, gestureState) => {
-                // 最近一次的移动距离为gestureState.move{X,Y}
-
                 if (this.state.showOpenVip || !this.state.onload) return//需要权限 或者视频还不可以播放时停止不允许滑动进度条
                 this.realMarginLeft = gestureState.moveX - this.touchX - 85;
                 if (this.realMarginLeft >= this.state.width - 200) {
@@ -630,7 +718,6 @@ class VideoPlayer extends React.Component {
                     this.SpeedTipTimeRef && this.SpeedTipTimeRef.setgoSpeedTime(formatSeconds((this.realMarginLeft) / (this.state.width - 200) * this.state.duration))
                     this.dotspeed.setdotWidth(evt.nativeEvent.pageX - 100 >= this.state.width - 200 ? this.state.width - 200 : evt.nativeEvent.pageX - 100)
                 }
-                // 从成为响应者开始时的累计手势移动距离为gestureState.d{x,y}
             },
             onPanResponderTerminationRequest: (evt, gestureState) => true,
             onPanResponderRelease: (evt, gestureState) => {
@@ -876,24 +963,31 @@ class VideoPlayer extends React.Component {
             this.onchangeUrl()
         }
         this.url = this.props.url
-        const { smallP, allTime, LinearGradientHeight, showOpenVip, topContsTop, bottomContsBottom } = this.state
-        const preShowSmallCont = smallP?(this.props.showSmallCont?true:false):true
+        const { videoRate, smallP, allTime,speedTouch, LinearGradientHeight, showOpenVip, topContsTop, bottomContsBottom } = this.state
+        const stateHeight = this.state.height
+        const stateWidth = this.state.width
+        const preShowSmallCont = smallP ? (this.props.showSmallCont ? true : false) : true
+        const speedLoToWidth = stateWidth / this.speedTouchScale
         return (
             <>
-                {this.props.statusBar ? (smallP && this.props.statusBar()) : <Header width={this.state.width} />}
+                {this.props.statusBar ? (smallP && this.props.statusBar()) : <Header width={stateWidth} />}
                 <View ref={ref => this.videoBox = ref} style={{ backgroundColor: "#000", position: 'relative' }}>
 
                     <View style={{}}>
 
-                        <View  {...this._panResponder.panHandlers} style={{ height: this.state.height, width: this.state.width, }}
+                        <View  {...this._panResponder.panHandlers} style={{ height: stateHeight, width: stateWidth, }}
                             activeOpacity={1}
                         >
                             <TouchableOpacity
                                 activeOpacity={1}
                                 onPress={this.showConts}
+                                onLongPress={this.speedLongTouch}
+                                onPressOut={this.speedLongTouchOut}
+                                style={{ overflow: "hidden" }}
                             >
                                 <Video
                                     key={this.url}
+                                    rate={videoRate}
                                     source={{ uri: this.props.url }}
                                     ref={(ref) => { this.player = ref }}
                                     continuous={this.props.continuous ? true : false}//是否是连续剧，用来全屏展示选集，下一集按钮    重新加载Video标签，防止出现上个视频和下个视频分辨率不切换的问题　
@@ -916,8 +1010,32 @@ class VideoPlayer extends React.Component {
                                     onProgress={this.animatedDot}
                                     onBuffer={(e) => this.animatedonBuffer(e)}
                                     onError={this.videoError}
-                                    width={this.props.width ? this.props.width : this.state.width}
-                                    style={{ height: this.state.height, backgroundColor: "#000000" }} />
+                                    width={this.props.width ? this.props.width : stateWidth}
+                                    style={{ height: stateHeight, backgroundColor: "#000000" }} />
+                                <View style={{ position: 'absolute', left: 0, right: 0, bottom: 0, top: 0, flexDirection: "row", justifyContent: 'space-between', }}>
+                                    <View ref={(e) => this.leftSpeedRef = e} style={{ opacity: 0, width: stateHeight * 2, backgroundColor: "rgba(0,0,0,0.5)", borderRadius: stateHeight * 2, right: stateHeight * 2 - speedLoToWidth, height: stateHeight * 2, top: -stateHeight / 2 }}></View>
+                                    <View ref={(e) => this.rightSpeedRef = e} style={{ opacity: 0, width: stateHeight * 2, backgroundColor: "rgba(0,0,0,0.5)", borderRadius: stateHeight * 2, right: stateHeight * 2 - stateWidth + speedLoToWidth, height: stateHeight * 2, top: -stateHeight / 2 }}></View>
+                                    {
+                                        speedTouch  &&
+                                        <View
+                                            style={{ position: "absolute", top: topContsTop + 20, width: stateWidth, alignItems: "center" }}
+                                        >
+                                            <View
+                                                style={{ justifyContent: 'center', flexDirection: 'row', backgroundColor: "rgba(0,0,0,0.6)", paddingVertical: 4, paddingHorizontal: 8, borderRadius: 4 }}
+                                            >
+                                                <AnFastSvg 
+                                                isSolTouch={this.isSolTouch}
+                                                videoRate={videoRate}
+                                                solText={this.props.solText}
+                                                fastText={this.props.fastText}
+                                                />
+                                    
+                                            </View>
+
+                                        </View>
+                                    }
+                                </View>
+
                             </TouchableOpacity>
                         </View>
 
@@ -926,10 +1044,10 @@ class VideoPlayer extends React.Component {
                                 style={{ position: "absolute", left: 0, right: 0, top: 0, opacity: this.state.opacity, height: 30 }}
                             >
                                 {/* 阴影 */}
-                                <LinearGradient colors={['rgba(0,0,0,0.4)', 'rgba(0,0,0,0.1)', 'rgba(0,0,0,0)']} style={{ height: LinearGradientHeight, width: this.state.width }}></LinearGradient>
+                                <LinearGradient colors={['rgba(0,0,0,0.4)', 'rgba(0,0,0,0.1)', 'rgba(0,0,0,0)']} style={{ height: LinearGradientHeight, width: stateWidth }}></LinearGradient>
                                 {/* 返回键 */}
-                                {preShowSmallCont&&<TouchableOpacity 
-                                style={{position: "absolute", top: topContsTop, left: smallP ? 5 : this.props.continuous ? 45 : 5, padding: 10, zIndex: 999, }}
+                                {preShowSmallCont && <TouchableOpacity
+                                    style={{ position: "absolute", top: topContsTop, left: smallP ? 5 : this.props.continuous ? 45 : 5, padding: 10, zIndex: 999, flexDirection: 'row' }}
                                     //如果是全屏 点击返回键是切换到小屏  反之返回上个页面
                                     onPress={() => {
                                         if (this.state.smallP) {
@@ -939,6 +1057,12 @@ class VideoPlayer extends React.Component {
                                     }}
                                 >
                                     <SvgVideoBack height="20" width="20" />
+                                    <Text
+                                        style={{ color: "#fff", fontSize: 15, paddingLeft: 10, maxWidth: smallP ? width / 3 : height / 3, ...this.props.backVideoNameStyle }}
+                                        numberOfLines={1}
+                                    >
+                                        {this.props.backVideoName ? this.props.backVideoName : ''}
+                                    </Text>
                                 </TouchableOpacity>}
                                 {/* 收藏|更多 */}
                                 <View style={{ position: "absolute", top: topContsTop, right: smallP ? 5 : this.props.continuous ? 45 : 5, flexWrap: "nowrap", flexDirection: "row", zIndex: 10, }}>
@@ -982,14 +1106,14 @@ class VideoPlayer extends React.Component {
                             this.state.showConts &&
                             <LinearGradient
                                 colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.1)', 'rgba(0,0,0,0.4)']}
-                                style={{ height: LinearGradientHeight, width: this.state.width, position: "absolute", bottom: this.state.smallP ? 0 : -bottomContsBottom }}
+                                style={{ height: LinearGradientHeight, width: stateWidth, position: "absolute", bottom: this.state.smallP ? 0 : -bottomContsBottom }}
                             ></LinearGradient>
                         }
 
                         {
                             this.state.showConts ?
                                 <Animated.View
-                                    style={{ width: this.state.width, bottom: bottomContsBottom, opacity: this.state.opacity, zIndex: 99999, position: "absolute", }}>
+                                    style={{ width: stateWidth, bottom: bottomContsBottom, opacity: this.state.opacity, zIndex: 99999, position: "absolute", }}>
                                     <View style={{ flexDirection: "row", flexWrap: "nowrap" }}>
                                         {/* 播放暂停 */}
                                         {
@@ -1070,7 +1194,7 @@ class VideoPlayer extends React.Component {
                                     </View>
                                     {
                                         !smallP &&
-                                        <View style={{ height: 40, width: this.state.width, paddingHorizontal: 45, flexDirection: "row" }}>
+                                        <View style={{ height: 40, width: stateWidth, paddingHorizontal: 45, flexDirection: "row" }}>
                                             <View style={{ flexDirection: "row", flex: 1, }}>
                                                 {
                                                     this.props.continuous && (this.state.paused
@@ -1141,10 +1265,10 @@ class VideoPlayer extends React.Component {
 
                     {
                         /* loading */
-                        <Loading {...this.state} spin={spin} />
+                        <Loading {...this.state} spin={spin} loadingText={this.props.loadingText} loadingIcon={this.props.loadingIcon} />
                     }
                     {
-                        this.adminPaused && this.state.paused && <TipsPaused {...this.state} />
+                        this.adminPaused && this.state.paused && <TipsPaused {...this.state} pausedTipText={this.props.pausedTipText} />
                     }
 
                     {/* 音量 this.state.height / 2 - 20 + this.state.statusBarH / 2*/}

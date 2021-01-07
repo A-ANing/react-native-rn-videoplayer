@@ -22,15 +22,19 @@
 <img src="https://github.com/ngxu/ngxu.github.io/blob/master/img/android2.2.3.gif?raw=true" width=320 height=693 />
 
 # 增加功能
--  v2.0.6 增加锁定视频控件，锁定用户操作（调节音量/亮度，展示隐藏控件）
 
-   `
-   lockControl (true/false 默认关闭)
-   ` 
-   
-<img src="https://github.com/ngxu/ngxu.github.io/blob/master/img/unlock.jpg?raw=true" width=260 />&nbsp;&nbsp;&nbsp;&nbsp;
-<img src="https://github.com/ngxu/ngxu.github.io/blob/master/img/locking.jpg?raw=true" width=260  />	
- 
+-  v2.3.0 支持左右两边长按快进退 自定义加载文字 暂停文字  快进退的文字 返回按钮右边显示视频名字
+<img src="https://github.com/ngxu/ngxu.github.io/blob/master/img/right.jpg?raw=true" width=260 />&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="https://github.com/ngxu/ngxu.github.io/blob/master/img/left.jpg?raw=true" width=260  />	
+
+
+-  v2.2.9 showSmallCont={false}小屏是否显示返回按钮，默认为true; 自定义进度条颜色(见api)
+
+-  v2.2.8 当ios设备为iPhone X以上,全屏时隐藏底部小横条
+
+-  v2.2.5 autoPlay={false}是否自动播放，默认为true
+
+-  v2.2.1 增加手势左右滑动视频区域(非进度条上的点)来调整视频进度
 
 -  v2.0.8 自定义小屏状态栏 类型fun
     默认状态栏为沉浸式，黑底白字，有状态栏高度，可查看view/index.js 的Header组件
@@ -41,13 +45,28 @@
    />
    ```
 
--  v2.2.1 增加手势左右滑动视频区域(非进度条上的点)来调整视频进度
+-  v2.0.6 增加锁定视频控件，锁定用户操作（调节音量/亮度，展示隐藏控件）
 
--  v2.2.5 autoPlay={false}是否自动播放，默认为true
+   `
+   lockControl (true/false 默认关闭)
+   ` 
+   
+<img src="https://github.com/ngxu/ngxu.github.io/blob/master/img/unlock.jpg?raw=true" width=260 />&nbsp;&nbsp;&nbsp;&nbsp;
+<img src="https://github.com/ngxu/ngxu.github.io/blob/master/img/locking.jpg?raw=true" width=260  />	
+ 
 
--  v2.2.8 当ios设备为iPhone X以上,全屏时隐藏底部小横条
 
--  v2.2.9 showSmallCont={false}小屏是否显示返回按钮，默认为true; 自定义进度条颜色(见api)
+
+
+
+
+
+
+
+
+
+
+
 ## Getting started
 1. 
 ```shell
@@ -260,6 +279,18 @@ onSmallBack={()=>{this.props.navigation.goBack()}}
 - cachColor 缓冲进度条颜色 "#ffffff"
 
 - allSpeedColor 整个进度条颜色 "rgba(0,0,0,0.4)
+
+- backVideoName 返回按钮旁的文字 string
+
+- pausedTipText 已暂停的文字 string
+
+- loadingText 正在缓冲的文字 string
+
+- loadingIcon 加载的图标 loadingIcon={<Text>123</Text>}
+
+- solText 快退中的文字 string
+
+- fastText 快进中的文字 string
 
 
 - setPaused 播放暂停   

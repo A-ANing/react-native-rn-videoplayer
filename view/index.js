@@ -17,7 +17,8 @@ import {
     SvgVideoBrightness,
     SvgVideoNoSound,
     SvgVideoStop,
-    SvgVideoSound
+    SvgVideoSound,
+    SvgVideoFastSpeed
 } from '../component/svg'
 import { formatSeconds } from '../utils/formatSeconds'
 
@@ -49,10 +50,16 @@ export const Loading = (props) => {
                             }
                         }>
                             <Animated.View style={{ transform: [{ rotate: props.spin }] }} >
-                                <SvgVideoLoading height="30" width="30" />
+                                {
+                                    props.loadingIcon
+                                        ?
+                                        props.loadingIcon
+                                        :
+                                        <SvgVideoLoading height="30" width="30" />
+                                }
                             </Animated.View>
 
-                            <View><Text style={{ color: "#fff" }}>正在缓冲...</Text></View>
+                            <View><Text style={{ color: "#fff" }}>{props.loadingText ? props.loadingText : "正在缓冲..."}</Text></View>
                         </View>
                     </View>
                     :
@@ -154,7 +161,7 @@ export const TipsPaused = (props) => {
     if (show) {
         return <Animated.View style={[styles.TipsPausedBox, { opacity: animater, left: props.width / 2 - 37, top: props.height / 2 - 15, }]}>
             <SvgVideoStop height="16" width="16" />
-            <Text style={styles.TipsPausedText}>已暂停</Text>
+            <Text style={styles.TipsPausedText}>{props.pausedTipText ? props.pausedTipText : "已暂停"}</Text>
         </Animated.View>
     } else {
         return null
@@ -255,7 +262,7 @@ export const BottomSpeed = (props) => {
 
                 <View style={{ width: props.width, flexDirection: "row", flexWrap: "nowrap", zIndex: 10 }}>
                     {/* 进度条*/}
-                    <Animated.View style={{ zIndex: 12, width: props.playhideContsDotX === null ? 0 : (props.admRePlay ? 0 : props.playhideContsDotX), height: Platform.OS === "android" ? 2 : 3, backgroundColor:props.bottomSpeedColor }}></Animated.View>
+                    <Animated.View style={{ zIndex: 12, width: props.playhideContsDotX === null ? 0 : (props.admRePlay ? 0 : props.playhideContsDotX), height: Platform.OS === "android" ? 2 : 3, backgroundColor: props.bottomSpeedColor }}></Animated.View>
 
 
                 </View>
@@ -281,6 +288,77 @@ export const Header = (props) => {
             <StatusBar translucent={true} barStyle={"light-content"} />
         </>
     )
+
+}
+
+var animationT = 0;
+var animationN = 5;
+var animationM = 2;
+export class AnFastSvg extends Component {
+   
+    state={
+        fV:new Animated.Value(0),
+        sV:new Animated.Value(0)
+        
+    }
+   
+
+    componentDidMount() {
+        animationT = 0;
+        this.anmin = requestAnimationFrame(this.loopAnimation);
+        
+      }
+
+      componentWillUnmount(){
+          this.cancelAnim()
+      }
+
+    
+
+
+    loopAnimation = () => {
+        
+        var t0 = animationT, t1 = t0 + 10
+        var v1 = Number(Math.cos(t0).toFixed(2)) * animationN + animationM;
+        var v2 = Number(Math.cos(t1).toFixed(2)) * animationN + animationM;
+        
+        this.setState({
+            fV: v1,
+            sV: v2,
+            
+            
+        });
+        animationT += 0.25;
+        this.anmin&&cancelAnimationFrame(this.anmin)
+        this.anmin = requestAnimationFrame(this.loopAnimation);
+    }
+
+    cancelAnim() {
+        cancelAnimationFrame(this.anmin)
+    }
+    
+    render() {
+        const {fV , sV} =this.state
+        const {isSolTouch,videoRate,solText="快退中...",fastText="快进中..."} = this.props
+        return (
+            <>
+                <View style={{ flexDirection: 'row',position:"relative",width:30 ,alignItems:'center',justifyContent:'center'}}>
+                    
+                    <Animated.View style={{position:'absolute',left:sV,width:20,height:20,alignItems:'center',justifyContent:'center',transform: [{rotateY:isSolTouch?'180deg':"0deg"}]}}>
+
+                        <SvgVideoFastSpeed width="16" height="16" />
+                    </Animated.View>
+                    <Animated.View style={{position:'absolute',left:fV,width:20,height:20,alignItems:'center',justifyContent:'center',transform: [{rotateY:isSolTouch?'180deg':"0deg"}]}}>
+                        <SvgVideoFastSpeed width="20" height="20" fill="#e6e6e6"/>
+
+                    </Animated.View>
+                    
+                </View>
+                <Text style={{ color: "#fff", fontSize: 12 }}>{isSolTouch?solText:`${videoRate}x ${fastText}`}</Text>
+            </>
+        )
+    }
+
 
 }
 
@@ -342,15 +420,15 @@ export class Speed extends Component {
 
                 <View style={{ width: props.width - 180, paddingHorizontal: 10, flexDirection: "row", flexWrap: "nowrap", zIndex: 10, alignItems: "center", position: "relative", }}>
                     {/* 进度条*/}
-                    <Animated.View style={{ zIndex: 12, width: dotStart ? dotWidth : props.admRePlay ? 0 : (props.playDotX === null ? 0 : props.playDotX), height: 2, backgroundColor:props.color }}></Animated.View>
+                    <Animated.View style={{ zIndex: 12, width: dotStart ? dotWidth : props.admRePlay ? 0 : (props.playDotX === null ? 0 : props.playDotX), height: 2, backgroundColor: props.color }}></Animated.View>
                     {/* 缓存条*/}
-                    <Animated.View style={{ zIndex: 11, width: props.playBufferX === null ? 0 : props.admRePlay ? 0 : props.playBufferX, height: 2, backgroundColor:props.cachColor, position: "absolute", left: 10 }}></Animated.View>
+                    <Animated.View style={{ zIndex: 11, width: props.playBufferX === null ? 0 : props.admRePlay ? 0 : props.playBufferX, height: 2, backgroundColor: props.cachColor, position: "absolute", left: 10 }}></Animated.View>
                     {/* 进度条上的点 */}
                     <View style={{ zIndex: 9999, padding: 12, left: -14, backgroundColor: "rgba(0,0,0,0)" }} {...props.panHandlers}>
                         <View ref={"dotspeed"} style={{ height: 10, width: 10, borderRadius: 10, backgroundColor: props.dotColor, borderWidth: 4, padding: 4, left: -2, borderColor: "rgba(255,255,255,0)" }}></View>
                     </View>
                     {/* 总进度 */}
-                    <View style={{ height: 2, backgroundColor:props.allSpeedColor, position: "absolute", width: props.width - 200, zIndex: 9, left: 10 }}></View>
+                    <View style={{ height: 2, backgroundColor: props.allSpeedColor, position: "absolute", width: props.width - 200, zIndex: 9, left: 10 }}></View>
                 </View>
 
                 <View style={{}}>
