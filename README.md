@@ -4,7 +4,7 @@
 <a href="https://www.npmjs.com/package/react-native-rn-videoplayer"><img src="https://img.shields.io/npm/v/react-native-rn-videoplayer.svg?style=flat-square"></a>
 <a href="https://www.npmjs.com/package/react-native-rn-videoplayer"><img src="https://img.shields.io/npm/dm/react-native-rn-videoplayer.svg?style=flat-square"></a>
 
-- 视频上下滑动调节音量、屏幕亮度，视频左右滑动以及拖动进度条调节视频进度，视频控件锁定，全屏切换，缓存进度，双击视频暂停，等功能，基于react-native-video
+- 视频上下滑动调节音量、屏幕亮度、长按左右两边快进退、左右滑动以及拖动进度条调节视频进度，视频控件锁定，全屏切换，缓存进度，双击视频暂停，等功能，基于react-native-video
 - ps：Android改变亮度无需获取高级权限，只改变当前active也就是当前页面的亮度，改变亮度后，返回进入到其他页面会恢复到原来的亮度。
 
 - 如果你的视频全屏后尺寸没发生改变，参考[全屏尺寸问题18](https://github.com/A-ANing/react-native-rn-videoplayer/issues/18)
@@ -16,14 +16,14 @@
 <h3><a href="https://www.jianshu.com/p/a6f09d2ab09c" target="_blank">进入简书地址</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://vkceyugu.cdn.bspapp.com/VKCEYUGU-imgbed/0e4e32ad-a8ec-475e-8868-9245a76901f5.mp4" target="_blank">免VPN视频预览</a></h3>
 
 
-## gif预览 [ios](https://vkceyugu.cdn.bspapp.com/VKCEYUGU-imgbed/43621fcd-e016-4f94-967e-47000082529c.gif) 和 [android](https://vkceyugu.cdn.bspapp.com/VKCEYUGU-imgbed/683885c8-fcfd-4434-88b3-f52e90ccfc7f.gif)
+## gif预览 [ios](https://vkceyugu.cdn.bspapp.com/VKCEYUGU-imgbed/43621fcd-e016-4f94-967e-47000082529c.gif) 和 [android](https://vkceyugu.cdn.bspapp.com/VKCEYUGU-imgbed/683885c8-fcfd-4434-88b3-f52e90ccfc7f.gif)  不是最新版
 
 <img src="https://github.com/ngxu/ngxu.github.io/blob/master/img/ios_demo.gif?raw=true" width=320 height=693/>&nbsp;&nbsp;&nbsp;&nbsp;
 <img src="https://github.com/ngxu/ngxu.github.io/blob/master/img/android2.2.3.gif?raw=true" width=320 height=693 />
 
 # 增加功能
 
--  v2.2.10 支持左右两边长按快进退 返回按钮右边显示视频名字 自定义加载文字 暂停文字  快进退的文字 
+-  v2.2.10 支持左右两边长按快进退，返回按钮右边显示视频名字、自定义缓冲提示图标和文字、暂停文字、快进退的文字！
 
 <img src="https://github.com/ngxu/ngxu.github.io/blob/master/img/right.jpg?raw=true" width=260 />&nbsp;&nbsp;&nbsp;&nbsp;
 <img src="https://github.com/ngxu/ngxu.github.io/blob/master/img/left.jpg?raw=true" width=260  />	
