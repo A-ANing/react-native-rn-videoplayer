@@ -287,7 +287,7 @@ onSmallBack={()=>{this.props.navigation.goBack()}}
 
 - loadingText 正在缓冲的文字 string
 
-- loadingIcon 加载的图标 loadingIcon={<Text>123</Text>}
+- loadingIcon 加载的图标 loadingIcon={<></>}
 
 - solText 快退中的文字 string
 
