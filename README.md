@@ -381,7 +381,7 @@ onSmallBack={()=>{this.props.navigation.goBack()}}
 - onSeek 调整进度后的回调 继承react-native-video的onSeek
 - onEnd  播放完的回调 继承react-native-video的onSeek
 - onBuffer 是否处于等待加载时 这里可以取到视频卡住展示loading或者是视频可以播放隐藏loading的回调 继承react-native-video的onBuffer
-- poster 视频封面图 视频还不能播放的时候展示的封面图 并不是loading框  继承react-native-video的poster eg:poster={"http://i1.hdslb.com/bfs/archive/784013a39c59aede1ee9e775ec271790dfd7dc4b.jpg@320w_200h.jpg"}
+- poster 视频封面图 视频还不能播放的时候展示的封面图 并不是loading框  继承react-native-video的poster eg:poster={"http://xudaxianer.cn/artcover/2020-12-11/1607675992959.jpg"}
 
 - ..... 继承全部的react-native-video的方法及属性
 
