@@ -13,7 +13,7 @@
 - Version 1.3.2 requires react-native <= 0.59.9
 
 
-<h3><a href="https://www.jianshu.com/p/a6f09d2ab09c" target="_blank">进入简书地址</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://vkceyugu.cdn.bspapp.com/VKCEYUGU-imgbed/0e4e32ad-a8ec-475e-8868-9245a76901f5.mp4" target="_blank">免VPN视频预览</a></h3>
+<h3><a href="http://xudaxianer.cn/article/17" target="_blank">博客文档地址</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://vkceyugu.cdn.bspapp.com/VKCEYUGU-imgbed/0e4e32ad-a8ec-475e-8868-9245a76901f5.mp4" target="_blank">免VPN视频预览</a></h3>
 
 
 ## gif预览 [ios](https://vkceyugu.cdn.bspapp.com/VKCEYUGU-imgbed/43621fcd-e016-4f94-967e-47000082529c.gif) 和 [android](https://vkceyugu.cdn.bspapp.com/VKCEYUGU-imgbed/683885c8-fcfd-4434-88b3-f52e90ccfc7f.gif)  不是最新版
