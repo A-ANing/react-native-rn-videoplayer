@@ -31,8 +31,8 @@
   "dependencies": {
     "react-native-linear-gradient": "^2.5.6",
     "react-native-orientation-locker": "^1.1.8",
-    "react-native-svg": "^9.5.1",
+    "react-native-svg": "^12.1.1",
     "react-native-system-setting": "^1.7.2",
-    "react-native-video": "^5.0.2"
+    "react-native-video": "^5.1.1"
   }
 }

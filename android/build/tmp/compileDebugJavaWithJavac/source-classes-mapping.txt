@@ -1,0 +1,17 @@
+com/ngxu/videoplayer/RNVideoplayerModule.java
+ com.ngxu.videoplayer.RNVideoplayerModule
+com/ngxu/videoplayer/SetAppBrightness.java
+ com.ngxu.videoplayer.SetAppBrightness
+ com.ngxu.videoplayer.SetAppBrightness$1
+com/ngxu/videoplayer/BuildConfig.java
+ com.ngxu.videoplayer.BuildConfig
+com/ngxu/videoplayer/AppBrightness.java
+ com.ngxu.videoplayer.AppBrightness
+com/ngxu/videoplayer/RNVideoplayerPackage.java
+ com.ngxu.videoplayer.RNVideoplayerPackage
+com/ngxu/videoplayer/HideBottomNa.java
+ com.ngxu.videoplayer.HideBottomNa
+com/ngxu/videoplayer/HeidBottomBtn.java
+ com.ngxu.videoplayer.HeidBottomBtn
+ com.ngxu.videoplayer.HeidBottomBtn$1
+ com.ngxu.videoplayer.HeidBottomBtn$2

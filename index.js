@@ -50,6 +50,8 @@ const { height, width } = Dimensions.get('screen');
 class VideoPlayer extends React.Component {
     static defaultProps = {
         autoPlay: true,
+        resizeMode:"contain",
+        posterResizeMode:"cover",
         showSmallCont: true,
         speedColor: "#e54602",
         dotColor: "#e54602",
@@ -997,12 +999,12 @@ class VideoPlayer extends React.Component {
                                         this.props.onSeek && this.props.onSeek(e)
                                         this.setState({ isEnd: false })
                                     }}
-                                    posterResizeMode={"cover"}//封面大小
+                                    // posterResizeMode={"cover"}//封面大小
                                     playWhenInactive={true}//确定当通知或控制中心在视频前面时，媒体是否应继续播放。
                                     paused={this.adminPaused ? this.state.paused : (this.props.autoPlay ? false : true)}//暂停
                                     onLoad={this.onLoad}
                                     onEnd={this.reVideo}
-                                    resizeMode={"none"}
+                                    // resizeMode={this.props.resizeMode}
                                     onReadyForDisplay={(e) => {
                                         this.props.onReadyForDisplay && this.props.onReadyForDisplay(e)
                                     }}
